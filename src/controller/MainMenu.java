@@ -3,12 +3,14 @@ package controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -28,9 +30,9 @@ public class MainMenu {
     public void addAppt(ActionEvent actionEvent) throws IOException {
         System.out.println("Add Appointment initialized.");
 
-        FXMLLoader fxmlLoader = new FXMLLoader(MainMenu.class.getResource("add-appointment.fxml"));
+        Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/add-appointment.fxml"))));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(fxmlLoader.load(), 560, 625);
+        Scene scene = new Scene(root, 560, 625);
         stage.setScene(scene);
         stage.show();
         stage.centerOnScreen();
@@ -44,9 +46,9 @@ public class MainMenu {
     public void updateAppt(ActionEvent actionEvent) throws IOException {
         System.out.println("Modify Appointment initialized.");
 
-        FXMLLoader fxmlLoader = new FXMLLoader(MainMenu.class.getResource("modify-appointment.fxml"));
+        Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/modify-appointment.fxml"))));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(fxmlLoader.load(), 560, 625);
+        Scene scene = new Scene(root, 560, 625);
         stage.setScene(scene);
         stage.show();
         stage.centerOnScreen();
@@ -60,9 +62,9 @@ public class MainMenu {
     public void addCustomer(ActionEvent actionEvent) throws IOException {
         System.out.println("Add Customer initialized.");
 
-        FXMLLoader fxmlLoader = new FXMLLoader(MainMenu.class.getResource("add-customer.fxml"));
+        Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/add-customer.fxml"))));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(fxmlLoader.load(), 500, 475);
+        Scene scene = new Scene(root, 500, 475);
         stage.setScene(scene);
         stage.show();
         stage.centerOnScreen();
@@ -77,9 +79,9 @@ public class MainMenu {
     public void updateCustomer(ActionEvent actionEvent) throws IOException {
         System.out.println("Modify Customer initialized.");
 
-        FXMLLoader fxmlLoader = new FXMLLoader(MainMenu.class.getResource("modify-customer.fxml"));
+        Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/modify-customer.fxml"))));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(fxmlLoader.load(), 500, 475);
+        Scene scene = new Scene(root, 500, 475);
         stage.setScene(scene);
         stage.show();
         stage.centerOnScreen();
@@ -110,9 +112,9 @@ public class MainMenu {
     public void toReports(ActionEvent actionEvent) throws IOException {
         System.out.println("Reports initialized.");
 
-        FXMLLoader fxmlLoader = new FXMLLoader(MainMenu.class.getResource("reports.fxml"));
+        Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/reports.fxml"))));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(fxmlLoader.load(), 1108, 620);
+        Scene scene = new Scene(root, 1108, 620);
         stage.setScene(scene);
         stage.show();
         stage.centerOnScreen();

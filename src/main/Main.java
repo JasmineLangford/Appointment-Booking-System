@@ -3,8 +3,11 @@ package main;
 import DAO.JDBC;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+import java.util.Objects;
 
 /**
  * This class creates the scheduler appointment.
@@ -18,10 +21,9 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("login.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 600, 380);
-        primaryStage.setTitle("Scheduling System");
-        primaryStage.setScene(scene);
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/Login.fxml")));
+        primaryStage.setScene(new Scene(root,600,380));
+        primaryStage.setTitle("Appointment Scheduler");
         primaryStage.show();
         primaryStage.setResizable(false);
     }
@@ -31,8 +33,8 @@ public class Main extends Application {
      */
     public static void main(String[] args) {
         JDBC.openConnection();
-        JDBC.closeConnection();
         launch();
+        JDBC.closeConnection();
     }
 
 }
