@@ -26,7 +26,7 @@ public class ModifyCustomer {
      * @param actionEvent Cancel button is clicked.
      * */
     public void onCancel(ActionEvent actionEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(AddAppointment.class.getResource("main-menu.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(AddAppointment.class.getResource("/view/main-menu.fxml"));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(fxmlLoader.load(), 1108, 620);
         stage.setScene(scene);
