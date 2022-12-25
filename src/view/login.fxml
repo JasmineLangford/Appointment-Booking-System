@@ -11,12 +11,12 @@
             <Font name="Gill Sans MT Bold" size="29.0" />
         </font>
     </Label>
-    <Label layoutX="353.0" layoutY="77.0" text="User ID" textFill="#fcfefc">
+    <Label layoutX="353.0" layoutY="77.0" text="Username" textFill="#fcfefc">
         <font>
             <Font name="Gill Sans MT" size="14.0" />
         </font>
     </Label>
-    <PasswordField fx:id="userIDLogin" layoutX="351.0" layoutY="100.0" prefHeight="25.0" prefWidth="197.0" />
+    <PasswordField fx:id="username" layoutX="351.0" layoutY="100.0" prefHeight="25.0" prefWidth="197.0" />
     <Label layoutX="354.0" layoutY="132.0" text="Password" textFill="#fcfefc">
         <font>
             <Font name="Gill Sans MT" size="14.0" />

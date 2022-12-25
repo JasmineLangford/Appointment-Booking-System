@@ -6,7 +6,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
@@ -21,9 +20,6 @@ import java.util.ResourceBundle;
  * Time Zone will automatically be determined by the user's location.
  * */
 public class Login implements Initializable {
-
-    public PasswordField userIDLogin;
-    public PasswordField passwordLogin;
 
     @Override
 
