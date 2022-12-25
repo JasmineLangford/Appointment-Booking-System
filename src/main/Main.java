@@ -7,7 +7,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.Locale;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 /**
  * This class creates the scheduler appointment.
@@ -34,6 +36,13 @@ public class Main extends Application {
     public static void main(String[] args) {
         JDBC.openConnection();
         launch();
+
+        ResourceBundle rb = ResourceBundle.getBundle("Resource Bundle 'Nat'", Locale.getDefault());
+
+        // checks default locale to see if it matches any locales in file
+        if(Locale.getDefault().getLanguage().equals("fr") || Locale.getDefault().getLanguage().equals("en")){
+            System.out.println(rb.getString("user-id"));
+        }
         JDBC.closeConnection();
     }
 
