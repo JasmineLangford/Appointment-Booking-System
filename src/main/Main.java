@@ -34,16 +34,17 @@ public class Main extends Application {
      * This is called to run the program.
      */
     public static void main(String[] args) {
-        JDBC.openConnection();
+        //JDBC.openConnection();
         launch();
 
-        ResourceBundle rb = ResourceBundle.getBundle("Resource Bundle 'Nat'", Locale.getDefault());
+        ResourceBundle rb = ResourceBundle.getBundle("Nat", Locale.getDefault());
 
         // checks default locale to see if it matches any locales in file
         if(Locale.getDefault().getLanguage().equals("fr") || Locale.getDefault().getLanguage().equals("en")){
-            System.out.println(rb.getString("user-id"));
+            System.out.println(rb.getString("usernameLabel"));
         }
-        JDBC.closeConnection();
+
+        //JDBC.closeConnection();
     }
 
 }
