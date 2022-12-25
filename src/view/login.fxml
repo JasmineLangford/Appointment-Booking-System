@@ -6,7 +6,7 @@
 <?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="380.0" prefWidth="600.0" style="-fx-background-color: #373436;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Login">
-    <Label fx:id="signInLabel" layoutX="403.0" layoutY="25.0" text="Sign In" textFill="#fcfefc">
+    <Label fx:id="signInLabel" alignment="CENTER" layoutX="349.0" layoutY="25.0" prefHeight="34.0" prefWidth="197.0" text="Sign In" textAlignment="CENTER" textFill="#fcfefc">
         <font>
             <Font name="Gill Sans MT Bold" size="29.0" />
         </font>
@@ -23,7 +23,7 @@
         </font>
     </Label>
     <PasswordField fx:id="passwordLogin" layoutX="351.0" layoutY="154.0" prefHeight="25.0" prefWidth="197.0" />
-    <Button layoutX="391.0" layoutY="211.0" mnemonicParsing="false" onAction="#loginButton" prefHeight="25.0" prefWidth="116.0" style="-fx-background-color: #50add7;" text="Login" textFill="#fcfefc">
+    <Button fx:id="loginButtonLabel" layoutX="391.0" layoutY="211.0" mnemonicParsing="false" onAction="#loginButton" prefHeight="25.0" prefWidth="116.0" style="-fx-background-color: #50add7;" text="Login" textFill="#fcfefc">
         <font>
             <Font name="Gill Sans MT Bold" size="13.0" />
         </font>
@@ -58,7 +58,7 @@
                 <Font name="Brush Script MT Italic" size="69.0" />
             </font>
         </Label>
-        <Label fx:id="logoTagline" layoutX="85.0" layoutY="235.0" text="GLOBAL CONSULTING" textFill="#373436">
+        <Label fx:id="logoTagline" alignment="CENTER" layoutX="50.0" layoutY="235.0" prefHeight="15.0" prefWidth="199.0" text="GLOBAL CONSULTING" textAlignment="CENTER" textFill="#373436">
             <font>
                 <Font name="Lucida Bright" size="12.0" />
             </font>
