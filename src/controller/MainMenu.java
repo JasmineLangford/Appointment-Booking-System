@@ -1,27 +1,129 @@
 package controller;
 
+import DAO.AppointmentDAO;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import model.Appointment;
+
 import java.io.IOException;
+import java.net.URL;
+import java.sql.SQLException;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 /**
  * This class contains a tableview for appointments and customers.
- * Users are able to add, modify and delete appointments and customers.
- * Users can also navigate to a report for this data.
+ * Users are able to navigate to other screens by buttons to add, modify and delete appointments and customers.
+ * Users can also navigate to a report view.
  */
 public class MainMenu {
 
-    public TableView apptView;
-    public TableView customerView;
+    // Radio Buttons for Appointment View
+    public ToggleGroup apptViewToggle;
+    public RadioButton viewByMonth;
+    public RadioButton viewByWeek;
+    public RadioButton viewAllAppts;
+
+    // Appointment Table
+    @FXML
+    private TableView<Appointment> mainApptTable;
+    @FXML
+    private TableColumn<Appointment, String > mainApptID;
+    @FXML
+    private TableColumn<Appointment, String> mainApptTitle;
+    @FXML
+    private TableColumn<Appointment, String>  mainApptDesc;
+    @FXML
+    private TableColumn<Appointment, String>  mainApptLocation;
+    @FXML
+    private TableColumn<Appointment, String> mainApptContact;
+    @FXML
+    private TableColumn<Appointment, String>  mainApptType;
+    @FXML
+    private TableColumn<Appointment, String> mainApptStart;
+    @FXML
+    private TableColumn<Appointment, String> mainApptEnd;
+    @FXML
+    private TableColumn<Appointment, String> mainApptCust;
+    @FXML
+    private TableColumn<Appointment, String>  mainApptUser;
+
+    // Customers Table
+    @FXML
+    private TableView<Appointment> customerView;
+    @FXML
+    private TableColumn<Appointment, String> customerIdCol;
+    @FXML
+    private TableColumn<Appointment, String> customerNameCol;
+    @FXML
+    private TableColumn<Appointment, String> customerAddressCol;
+    @FXML
+    private TableColumn<Appointment, String> customerPhoneCol;
+    @FXML
+    private TableColumn<Appointment, String>  customerCountryCol;
+    @FXML
+    private TableColumn<Appointment, String>  customerStateCol;
+    @FXML
+    private TableColumn<Appointment, String> customerPostalCol;
+
+
+    public void initialize() throws SQLException{
+        System.out.println("Main Menu initialized!");
+
+        // Appointment table columns
+        mainApptID.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
+        mainApptTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+        mainApptDesc.setCellValueFactory(new PropertyValueFactory<>("description"));
+        mainApptLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
+        mainApptContact.setCellValueFactory(new PropertyValueFactory<>("contactID"));
+        mainApptType.setCellValueFactory(new PropertyValueFactory<>("type"));
+        mainApptStart.setCellValueFactory(new PropertyValueFactory<>("start"));
+        mainApptEnd.setCellValueFactory(new PropertyValueFactory<>("end"));
+        mainApptCust.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        mainApptUser.setCellValueFactory(new PropertyValueFactory<>("userID"));
+
+        // Appointment table appears on screen load
+        ObservableList<Appointment> allAppointments = AppointmentDAO.getAllAppointments();
+        mainApptTable.setItems(allAppointments);
+
+        // Customer table columns
+        customerIdCol.setCellValueFactory(new PropertyValueFactory<>("custId"));
+        customerNameCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+        customerAddressCol.setCellValueFactory(new PropertyValueFactory<>("customerAddress"));
+        customerPhoneCol.setCellValueFactory(new PropertyValueFactory<>("customerPhone"));
+        customerCountryCol.setCellValueFactory(new PropertyValueFactory<>("customerCountry"));
+        customerStateCol.setCellValueFactory(new PropertyValueFactory<>("customerStateProv"));
+        customerPostalCol.setCellValueFactory(new PropertyValueFactory<>("customerPostal"));
+    }
+
+    public void changeToMonth(ActionEvent actionEvent) {
+
+    }
+
+    public void changeToWeek(ActionEvent actionEvent) {
+    }
+
+    // Show all appointments if All Appointments radio button selected
+    public void changeToAllAppts(ActionEvent actionEvent) {
+        try{
+            ObservableList<Appointment> allAppointments = AppointmentDAO.getAllAppointments();
+            for(Appointment ignored : allAppointments){
+                mainApptTable.setItems(allAppointments);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * This will take the user to the Add Appointment screen where they can add a new appointment.
