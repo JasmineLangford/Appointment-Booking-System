@@ -6,7 +6,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -28,23 +27,21 @@ public class Main extends Application {
         primaryStage.setTitle("Appointment Scheduler");
         primaryStage.show();
         primaryStage.setResizable(false);
+
+        // translation based on default language in user's language setting
+        ResourceBundle rb = ResourceBundle.getBundle("Nat", Locale.getDefault());
+        primaryStage.setTitle(rb.getString("loginScreenHeader"));
     }
 
     /**
      * This is called to run the program.
      */
     public static void main(String[] args) {
-        //JDBC.openConnection();
+
+        JDBC.openConnection();
         launch();
+        JDBC.closeConnection();
 
-        ResourceBundle rb = ResourceBundle.getBundle("Nat", Locale.getDefault());
-
-        // checks default locale to see if it matches any locales in file
-        if(Locale.getDefault().getLanguage().equals("fr") || Locale.getDefault().getLanguage().equals("en")){
-            System.out.println(rb.getString("usernameLabel"));
-        }
-
-        //JDBC.closeConnection();
     }
 
 }
