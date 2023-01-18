@@ -3,6 +3,9 @@ package DAO;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+/**
+ * This class is connects to the database.
+ */
 public abstract class JDBC {
     private static final String protocol = "jdbc";
     private static final String vendor = ":mysql:";
@@ -23,7 +26,6 @@ public abstract class JDBC {
         }
         catch(Exception e)
         {
-            e.printStackTrace();
             System.out.println("Error:" + e.getMessage());
         }
     }
