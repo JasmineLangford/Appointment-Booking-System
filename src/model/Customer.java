@@ -4,39 +4,43 @@ package model;
  * This class is the model class for customer.
  */
 public class Customer {
-    private int custId;
+    private int customerId;
     private String customerName;
     private String customerAddress;
     private String customerPhone;
     private String customerCountry;
-    private String customerStateProv;
+    private int countryId;
+    private int divisionId;
+    private String division;
     private String customerPostal;
 
     /**
      * Constructor
      */
-    public Customer(int custId,String customerName, String customerAddress, String customerPostal, String customerPhone, String customerCountry,String customerStateProv){
-        this.custId = custId;
+    public Customer(int customerId, String customerName, String customerAddress, String customerPhone, String customerCountry, int countryId, int divisionId, String division, String customerPostal){
+        this.customerId = customerId;
         this.customerName = customerName;
         this.customerAddress = customerAddress;
         this.customerPhone = customerPhone;
         this.customerCountry = customerCountry;
-        this.customerStateProv = customerStateProv;
+        this.countryId= countryId;
+        this.divisionId = divisionId;
+        this.division = division;
         this.customerPostal = customerPostal;
     }
 
     /**
      * @return the custID
      */
-    public int getCustId() {
-        return custId;
+    public int getCustomerId() {
+        return customerId;
     }
 
     /**
-     * @param custId to set
+     * @param customerId to set
      */
-    public void setCustId(int custId) {
-        this.custId = custId;
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
     }
 
     /**
@@ -96,17 +100,44 @@ public class Customer {
     }
 
     /**
-     * return the customer state and province
+     @return the country ID
      */
-    public String getCustomerStateProv() {
-        return customerStateProv;
+    public int getCountryId() {
+        return countryId;
     }
 
     /**
-     * @param customerStateProv to set
+     @param countryId to set */
+    public void setCountryId(int countryId) {
+        this.countryId = countryId;
+    }
+
+    /**
+     * @return the division ID
      */
-    public void setCustomerStateProv(String customerStateProv) {
-        this.customerStateProv = customerStateProv;
+    public int getDivisionId() {
+        return divisionId;
+    }
+
+    /**
+     * @param divisionId to set
+     */
+    public void setDivisionId(int divisionId) {
+        this.divisionId = divisionId;
+    }
+
+    /**
+     * @return the division
+     */
+    public String getDivision() {
+        return division;
+    }
+
+    /**
+     * @param division to set
+     */
+    public void setDivision(String division) {
+        this.division = division;
     }
 
     /**
@@ -122,4 +153,7 @@ public class Customer {
     public void setCustomerPostal(String customerPostal) {
         this.customerPostal = customerPostal;
     }
+
+
+
 }
