@@ -1,11 +1,12 @@
 package controller;
 
 import DAO.AppointmentDAO;
+import DAO.CustomerDAO;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,13 +14,13 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Appointment;
+import model.Customer;
 
 import java.io.IOException;
-import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.ResourceBundle;
 
 /**
  * This class contains a tableview for appointments and customers.
@@ -60,7 +61,7 @@ public class MainMenu {
 
     // Customers Table
     @FXML
-    private TableView<Appointment> customerView;
+    private TableView<Customer> mainCustomerTable;
     @FXML
     private TableColumn<Appointment, String> customerIdCol;
     @FXML
@@ -92,31 +93,51 @@ public class MainMenu {
         mainApptCust.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         mainApptUser.setCellValueFactory(new PropertyValueFactory<>("userID"));
 
-        // Appointment table appears on screen load
-        ObservableList<Appointment> allAppointments = AppointmentDAO.getAllAppointments();
+        // All appointments appear on Appointment table on screen load
+        ObservableList<Appointment> allAppointments = AppointmentDAO.allAppointments();
         mainApptTable.setItems(allAppointments);
 
         // Customer table columns
-        customerIdCol.setCellValueFactory(new PropertyValueFactory<>("custId"));
+        customerIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         customerNameCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         customerAddressCol.setCellValueFactory(new PropertyValueFactory<>("customerAddress"));
         customerPhoneCol.setCellValueFactory(new PropertyValueFactory<>("customerPhone"));
         customerCountryCol.setCellValueFactory(new PropertyValueFactory<>("customerCountry"));
-        customerStateCol.setCellValueFactory(new PropertyValueFactory<>("customerStateProv"));
+        customerStateCol.setCellValueFactory(new PropertyValueFactory<>("Division"));
         customerPostalCol.setCellValueFactory(new PropertyValueFactory<>("customerPostal"));
+
+        // All customers appear on Customer table on screen load
+        ObservableList<Customer> allcustomers = CustomerDAO.allCustomers();
+        mainCustomerTable.setItems(allcustomers);
     }
 
     public void changeToMonth(ActionEvent actionEvent) {
 
     }
 
-    public void changeToWeek(ActionEvent actionEvent) {
+    public void changeToWeek(ActionEvent actionEvent) throws SQLException {
+        try{
+            ObservableList<Appointment> allAppointments = AppointmentDAO.allAppointments();
+            ObservableList<Appointment> apptByWeek = FXCollections.observableArrayList();
+
+            LocalDateTime start = LocalDateTime.now().minusWeeks(1);
+            LocalDateTime end = LocalDateTime.now().plusWeeks(1);
+
+            allAppointments.forEach(appointment -> {
+                if (appointment.getEnd().isAfter(start) && appointment.getEnd().isBefore(end)) {
+                    apptByWeek.add(appointment);
+                }
+                mainApptTable.setItems(apptByWeek);
+            });
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
     // Show all appointments if All Appointments radio button selected
     public void changeToAllAppts(ActionEvent actionEvent) {
         try{
-            ObservableList<Appointment> allAppointments = AppointmentDAO.getAllAppointments();
+            ObservableList<Appointment> allAppointments = AppointmentDAO.allAppointments();
             for(Appointment ignored : allAppointments){
                 mainApptTable.setItems(allAppointments);
             }
