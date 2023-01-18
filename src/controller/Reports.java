@@ -1,18 +1,56 @@
 package controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 public class Reports {
-    public TableView apptReport;
-    public TableView apptByMonth;
-    public TableView apptByState;
+
+    // Schedules by Contact Table
+    @FXML
+    private TableView apptReportTable;
+    @FXML
+    private TableColumn apptIdCol;
+    @FXML
+    private TableColumn apptTitleCol;
+    @FXML
+    private TableColumn apptDescCol;
+    @FXML
+    private TableColumn apptTypeCol;
+    @FXML
+    private TableColumn apptStartCol;
+    @FXML
+    private TableColumn apptEndCol;
+    @FXML
+    private TableColumn custIdCol;
+
+    // Appointment Types by Month Table
+    @FXML
+    private TableView apptByMonth;
+    @FXML
+    private TableColumn apptMonthCol;
+    @FXML
+    private TableColumn typeByMonthCol;
+    @FXML
+    private TableColumn totalTypeApptCol;
+
+    // Customer Appointments by State Province Table
+    @FXML
+    private TableView apptByState;
+
+    @FXML
+    private TableColumn stateCol;
+    @FXML
+    private TableColumn totalStateApptCol;
+
 
     /**
      * This navigates the user back to the Main Menu.
