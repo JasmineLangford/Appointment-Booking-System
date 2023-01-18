@@ -6,45 +6,39 @@
 <?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="380.0" prefWidth="600.0" style="-fx-background-color: #373436;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Login">
-    <Label fx:id="signInLabel" alignment="CENTER" layoutX="349.0" layoutY="25.0" prefHeight="34.0" prefWidth="197.0" text="Sign In" textAlignment="CENTER" textFill="#fcfefc">
+    <Label fx:id="signInLabel" alignment="CENTER" layoutX="349.0" layoutY="36.0" prefHeight="34.0" prefWidth="197.0" text="Sign In" textAlignment="CENTER" textFill="#fcfefc">
         <font>
             <Font name="Gill Sans MT Bold" size="29.0" />
         </font>
     </Label>
-    <Label fx:id="usernameLabel" layoutX="353.0" layoutY="77.0" text="Username" textFill="#fcfefc">
+    <Label fx:id="usernameLabel" layoutX="353.0" layoutY="94.0" text="Username" textFill="#fcfefc">
         <font>
             <Font name="Gill Sans MT" size="14.0" />
         </font>
     </Label>
-    <PasswordField fx:id="username" layoutX="351.0" layoutY="100.0" prefHeight="25.0" prefWidth="197.0" />
-    <Label fx:id="passwordLabel" layoutX="354.0" layoutY="132.0" text="Password" textFill="#fcfefc">
+    <TextField fx:id="usernameLogin" layoutX="351.0" layoutY="117.0" prefHeight="25.0" prefWidth="197.0" />
+    <Label fx:id="passwordLabel" layoutX="354.0" layoutY="149.0" text="Password" textFill="#fcfefc">
         <font>
             <Font name="Gill Sans MT" size="14.0" />
         </font>
     </Label>
-    <PasswordField fx:id="passwordLogin" layoutX="351.0" layoutY="154.0" prefHeight="25.0" prefWidth="197.0" />
-    <Button fx:id="loginButtonLabel" layoutX="391.0" layoutY="211.0" mnemonicParsing="false" onAction="#loginButton" prefHeight="25.0" prefWidth="116.0" style="-fx-background-color: #50add7;" text="Login" textFill="#fcfefc">
+    <PasswordField fx:id="passwordLogin" layoutX="351.0" layoutY="171.0" prefHeight="25.0" prefWidth="197.0" />
+    <Button fx:id="loginButtonLabel" layoutX="391.0" layoutY="228.0" mnemonicParsing="false" onAction="#loginButton" prefHeight="25.0" prefWidth="116.0" style="-fx-background-color: #50add7;" text="Login" textFill="#fcfefc">
         <font>
             <Font name="Gill Sans MT Bold" size="13.0" />
         </font>
     </Button>
-    <Label fx:id="languageLabel" layoutX="359.0" layoutY="302.0" text="Language" textAlignment="RIGHT" textFill="#fcfefc">
+    <Label fx:id="timeZoneLabel" layoutX="358.0" layoutY="321.0" text="Time Zone" textAlignment="RIGHT" textFill="#fcfefc">
         <font>
             <Font name="Gill Sans MT" size="12.0" />
         </font>
     </Label>
-    <ChoiceBox layoutX="423.0" layoutY="296.0" prefHeight="25.0" prefWidth="125.0" />
-    <Label fx:id="timeZoneLabel" layoutX="351.0" layoutY="331.0" text="Time Zone" textAlignment="RIGHT" textFill="#fcfefc">
+    <Label fx:id="zoneID" disable="true" layoutX="445.0" layoutY="321.0" prefHeight="14.0" prefWidth="116.0" text="timezone placeholder" textFill="WHITE">
         <font>
             <Font name="Gill Sans MT" size="12.0" />
         </font>
     </Label>
-    <Label disable="true" layoutX="438.0" layoutY="331.0" text="America/New York" textFill="WHITE">
-        <font>
-            <Font name="Gill Sans MT" size="12.0" />
-        </font>
-    </Label>
-    <Line endX="-92.0" endY="103.00003051757812" layoutX="433.0" layoutY="165.0" startX="123.0" startY="103.00003051757812" stroke="#fcfefc" strokeWidth="2.0" />
+    <Line endX="-92.0" endY="103.00003051757812" layoutX="434.0" layoutY="185.0" startX="123.0" startY="103.00003051757812" stroke="#fcfefc" strokeWidth="2.0" />
     <Pane prefHeight="380.0" prefWidth="300.0" style="-fx-background-color: #fffefc;">
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#fffbfa" height="78.0" layoutX="52.0" layoutY="151.0" stroke="#342039" strokeLineJoin="ROUND" strokeType="OUTSIDE" width="197.0" />
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#fffbfa" height="34.0" layoutX="93.0" layoutY="212.0" stroke="#fffbfa" strokeType="INSIDE" width="116.0" />
