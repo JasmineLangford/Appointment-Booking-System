@@ -10,9 +10,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 /**
- * This class contains the database queries for appointment model class and appointment fxml file
- *
- * Methods called in Main Menu controller
+ * This class contains the database queries for appointments.
  */
 public class AppointmentDAO {
 

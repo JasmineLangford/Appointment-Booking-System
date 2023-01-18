@@ -8,7 +8,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * This class contains the database queries for customers.
+ */
 public class CustomerDAO {
+    /**
+     * Method to show all customers queried from database - customer table
+     */
     public static ObservableList<Customer> allCustomers() throws SQLException {
         ObservableList<Customer> listOfCustomers = FXCollections.observableArrayList();
         String sql = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, countries.Country, first_level_divisions.Country_ID, customers.Division_ID, " +
@@ -33,6 +39,5 @@ public class CustomerDAO {
             listOfCustomers.add(customer);
         }
         return listOfCustomers;
-
     }
 }
