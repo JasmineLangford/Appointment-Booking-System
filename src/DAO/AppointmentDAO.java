@@ -2,7 +2,6 @@ package DAO;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
 import model.Appointment;
 
 import java.sql.PreparedStatement;
@@ -10,8 +9,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
+/**
+ * This class contains the database queries for appointment model class and appointment fxml file
+ *
+ * Methods called in Main Menu controller
+ */
 public class AppointmentDAO {
-    public static ObservableList<Appointment> getAllAppointments() throws SQLException{
+
+    /**
+     * Method to show all appointments queried from database - appointment table
+     */
+    public static ObservableList<Appointment> allAppointments() throws SQLException{
         ObservableList<Appointment> listOfAppointments = FXCollections.observableArrayList();
         String sql = "SELECT * from appointments";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
