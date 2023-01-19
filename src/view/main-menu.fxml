@@ -34,12 +34,12 @@
         <TableView fx:id="mainCustomerTable" layoutX="50.0" layoutY="367.0" prefHeight="176.0" prefWidth="850.0">
             <columns>
                 <TableColumn fx:id="customerIdCol" prefWidth="75.0" text="Customer ID" />
-                <TableColumn fx:id="customerNameCol" prefWidth="183.33333587646484" text="Name" />
-                <TableColumn fx:id="customerAddressCol" prefWidth="189.00003051757812" text="Address" />
+                <TableColumn fx:id="customerNameCol" prefWidth="128.0000228881836" text="Name" />
+                <TableColumn fx:id="customerAddressCol" prefWidth="160.00001525878906" text="Address" />
+                <TableColumn fx:id="customerStateCol" prefWidth="133.0" text="State/Province" />
+                <TableColumn fx:id="customerPostalCol" prefWidth="108.6666259765625" text="Postal Code" />
+                <TableColumn fx:id="customerCountryCol" prefWidth="115.33331298828125" text="Country" />
                 <TableColumn fx:id="customerPhoneCol" prefWidth="129.0" text="Phone Number" />
-                <TableColumn fx:id="customerCountryCol" prefWidth="102.6666259765625" text="Country" />
-                <TableColumn fx:id="customerStateCol" prefWidth="181.33331298828125" text="State/Province" />
-                <TableColumn fx:id="customerPostalCol" prefWidth="119.0" text="Postal Code" />
             </columns>
         </TableView>
         <Label layoutX="50.0" layoutY="325.0" text="Customers" textFill="#373436">
@@ -73,18 +73,18 @@
             </font>
         </Button>
         <Line endX="747.0" layoutX="151.0" layoutY="314.0" startX="-100.0" stroke="#373436" strokeWidth="3.0" />
-        <RadioButton fx:id="viewAllAppts" layoutX="513.0" layoutY="46.0" mnemonicParsing="false" onAction="#changeToAllAppts" selected="true" text="All Appointments" textFill="#373436">
+        <RadioButton fx:id="viewAllAppts" layoutX="484.0" layoutY="46.0" mnemonicParsing="false" onAction="#filterAppts" selected="true" text="All Appointments" textFill="#373436">
             <font>
                 <Font name="Gill Sans MT" size="13.0" />
             </font>
          <toggleGroup>
             <ToggleGroup fx:id="apptViewToggle" />
          </toggleGroup></RadioButton>
-        <RadioButton fx:id="viewByMonth" layoutX="775.0" layoutY="46.0" mnemonicParsing="false" onAction="#changeToMonth" text="View by Month" textFill="#373436" toggleGroup="$apptViewToggle">
+        <RadioButton fx:id="viewByMonth" layoutX="764.0" layoutY="46.0" mnemonicParsing="false" onAction="#filterAppts" text="Current Month View" textFill="#373436" toggleGroup="$apptViewToggle">
             <font>
                 <Font name="Gill Sans MT" size="13.0" />
             </font></RadioButton>
-        <RadioButton fx:id="viewByWeek" layoutX="653.0" layoutY="46.0" mnemonicParsing="false" onAction="#changeToWeek" text="View by Week" textFill="#373436" toggleGroup="$apptViewToggle">
+        <RadioButton fx:id="viewByWeek" layoutX="616.0" layoutY="46.0" mnemonicParsing="false" onAction="#filterAppts" text="Current Week View" textFill="#373436" toggleGroup="$apptViewToggle">
             <font>
                 <Font name="Gill Sans MT" size="13.0" />
             </font></RadioButton>
