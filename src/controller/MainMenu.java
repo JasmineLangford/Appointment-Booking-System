@@ -16,11 +16,15 @@ import javafx.stage.Stage;
 import model.Appointment;
 import model.Customer;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.WeekFields;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * This class contains a tableview for appointments and customers.
@@ -111,31 +115,8 @@ public class MainMenu {
         mainCustomerTable.setItems(allcustomers);
     }
 
-    public void changeToMonth(ActionEvent actionEvent) {
-
-    }
-
-    public void changeToWeek(ActionEvent actionEvent) throws SQLException {
-        try{
-            ObservableList<Appointment> allAppointments = AppointmentDAO.allAppointments();
-            ObservableList<Appointment> apptByWeek = FXCollections.observableArrayList();
-
-            LocalDateTime start = LocalDateTime.now().minusWeeks(1);
-            LocalDateTime end = LocalDateTime.now().plusWeeks(1);
-
-            allAppointments.forEach(appointment -> {
-                if (appointment.getEnd().isAfter(start) && appointment.getEnd().isBefore(end)) {
-                    apptByWeek.add(appointment);
-                }
-                mainApptTable.setItems(apptByWeek);
-            });
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
-    }
-
     // Show all appointments if All Appointments radio button selected
-    public void changeToAllAppts(ActionEvent actionEvent) {
+    /*public void changeToAllAppts() {
         try{
             ObservableList<Appointment> allAppointments = AppointmentDAO.allAppointments();
             for(Appointment ignored : allAppointments){
@@ -143,6 +124,20 @@ public class MainMenu {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }*/
+
+    // Filter appointments by current month or week
+    public void filterAppts(ActionEvent event) throws SQLException {
+        if(viewAllAppts.isSelected()){
+            ObservableList<Appointment> allAppointments = AppointmentDAO.allAppointments();
+            for(Appointment ignored : allAppointments){
+                mainApptTable.setItems(allAppointments);
+
+        //}else if(viewByMonth.isSelected()){
+
+        //} else if (viewByWeek.isSelected()){
+            }
         }
     }
 
@@ -258,4 +253,6 @@ public class MainMenu {
             System.out.println("Program Closed");
         }
     }
+
+
 }
