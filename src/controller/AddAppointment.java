@@ -1,13 +1,19 @@
 package controller;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * This class is the controller for the add-appointment.fxml view.
@@ -15,11 +21,77 @@ import java.util.Objects;
  */
 public class AddAppointment {
 
+    // Form fields
+    @FXML
+    private TextField apptID;
+    @FXML
+    private ComboBox contactCombo;
+    @FXML
+    private TextField typeTextfield;
+    @FXML
+    private TextField titleTextfield;
+    @FXML
+    private TextField descTextfield;
+    @FXML
+    private TextField locationTextfield;
+    @FXML
+    private TextField custIdTextfield;
+    @FXML
+    private TextField userIdTextfield;
+
+
+
     /**
-     * This will save data in the text fields and add the new appointment to the Appointment tableview on the Main Menu.
+     * This will add the data from form fields as a new appointment to database.
+     *
      @param actionEvent Save button is clicked.
      */
-    public void onSave(ActionEvent actionEvent) {
+    public void onSaveAppt(ActionEvent actionEvent) {
+
+        // Exception dialog messages
+        try {
+            if (typeTextfield.getText().isEmpty() || titleTextfield.getText().isEmpty() ||
+                    descTextfield.getText().isEmpty() || locationTextfield.getText().isEmpty()) {
+                Alert invalidDataType = new Alert(Alert.AlertType.ERROR, "Please fill out all fields.");
+                Optional<ButtonType> results = invalidDataType.showAndWait();
+                if (results.isPresent() && results.get() == ButtonType.OK)
+                    return;
+            }
+        } catch (Exception e) {
+            return;
+        }
+
+        try {
+            Integer.parseInt(custIdTextfield.getText());
+        } catch (NumberFormatException e) {
+            Alert invalidDataType = new Alert(Alert.AlertType.ERROR, "Customer ID should be an integer.");
+            Optional<ButtonType> results = invalidDataType.showAndWait();
+            if (results.isPresent() && results.get() == ButtonType.OK)
+                return;
+        }
+
+        try {
+            Integer.parseInt(userIdTextfield.getText());
+        } catch (NumberFormatException e) {
+            Alert invalidDataType = new Alert(Alert.AlertType.ERROR, "User ID should be an integer.");
+            Optional<ButtonType> results = invalidDataType.showAndWait();
+            if (results.isPresent() && results.get() == ButtonType.OK)
+                return;
+        }
+
+         int id = Integer.parseInt(apptID.getText());
+         String addContact = contactCombo.getValue().toString();
+         String addType = typeTextfield.getText();
+         String addTitle = titleTextfield.getText();
+         String addDescription = descTextfield.getText();
+         String addLocation = locationTextfield.getText();
+         int addCustID = Integer.parseInt(custIdTextfield.getText());
+         int addUserID = Integer.parseInt(userIdTextfield.getText());
+
+         try {
+             if ()
+         }
+
     }
 
     /**
