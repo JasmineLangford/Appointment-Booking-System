@@ -73,18 +73,18 @@
             </font>
         </Button>
         <Line endX="747.0" layoutX="151.0" layoutY="314.0" startX="-100.0" stroke="#373436" strokeWidth="3.0" />
-        <RadioButton fx:id="viewAllAppts" layoutX="484.0" layoutY="46.0" mnemonicParsing="false" onAction="#filterAppts" selected="true" text="All Appointments" textFill="#373436">
+        <RadioButton fx:id="viewAllAppts" layoutX="484.0" layoutY="46.0" mnemonicParsing="false" onAction="#changeToAllAppts" selected="true" text="All Appointments" textFill="#373436">
             <font>
                 <Font name="Gill Sans MT" size="13.0" />
             </font>
          <toggleGroup>
             <ToggleGroup fx:id="apptViewToggle" />
          </toggleGroup></RadioButton>
-        <RadioButton fx:id="viewByMonth" layoutX="764.0" layoutY="46.0" mnemonicParsing="false" onAction="#filterAppts" text="Current Month View" textFill="#373436" toggleGroup="$apptViewToggle">
+        <RadioButton fx:id="viewByMonth" layoutX="764.0" layoutY="46.0" mnemonicParsing="false" onAction="#changeToMonth" text="Current Month View" textFill="#373436" toggleGroup="$apptViewToggle">
             <font>
                 <Font name="Gill Sans MT" size="13.0" />
             </font></RadioButton>
-        <RadioButton fx:id="viewByWeek" layoutX="616.0" layoutY="46.0" mnemonicParsing="false" onAction="#filterAppts" text="Current Week View" textFill="#373436" toggleGroup="$apptViewToggle">
+        <RadioButton fx:id="viewByWeek" layoutX="616.0" layoutY="46.0" mnemonicParsing="false" onAction="#changeToWeek" text="Current Week View" textFill="#373436" toggleGroup="$apptViewToggle">
             <font>
                 <Font name="Gill Sans MT" size="13.0" />
             </font></RadioButton>
