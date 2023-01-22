@@ -1,7 +1,6 @@
 package DAO;
 
 import model.User;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,6 +12,8 @@ import java.time.ZonedDateTime;
 
 /**
  * This class queries the database for valid users to be able to log into the application from the login screen.
+ *
+ * Logger is used to track user activity and records login attempts.
  */
 
 public class UserDAO {
@@ -20,7 +21,7 @@ public class UserDAO {
     private static User currentUser;
     private static final String FILENAME = "login_activity.txt";
 
-
+    // tracks end-user login attempts
     public static void logger (String username, boolean success) {
         try {
             FileWriter fw = new FileWriter(FILENAME,true);
@@ -35,6 +36,7 @@ public class UserDAO {
             }
         }
 
+    // checks to see if end-user is valid based on username/password stored in database
     public static Boolean validateUser(String username, String password) {
         try {
             String loginQuery = "SELECT * FROM users WHERE User_Name='" + username + "' AND password='" + password + "'";
