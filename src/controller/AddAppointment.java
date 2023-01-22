@@ -6,12 +6,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -22,6 +20,14 @@ import java.util.Optional;
 public class AddAppointment {
 
     // Form fields
+    @FXML
+    private DatePicker startDatePicker;
+    @FXML
+    private ChoiceBox startTimeCombo;
+    @FXML
+    private ChoiceBox endTimeCombo;
+    @FXML
+    private DatePicker endDatePicker;
     @FXML
     private TextField apptID;
     @FXML
@@ -52,8 +58,9 @@ public class AddAppointment {
         try {
             if (typeTextfield.getText().isEmpty() || titleTextfield.getText().isEmpty() ||
                     descTextfield.getText().isEmpty() || locationTextfield.getText().isEmpty()) {
-                Alert invalidDataType = new Alert(Alert.AlertType.ERROR, "Please fill out all fields.");
-                Optional<ButtonType> results = invalidDataType.showAndWait();
+                Alert emptyField = new Alert(Alert.AlertType.ERROR, "Invalid data type. Please enter value in each "
+                                   + "form field.");
+                Optional<ButtonType> results = emptyField.showAndWait();
                 if (results.isPresent() && results.get() == ButtonType.OK)
                     return;
             }
@@ -79,6 +86,10 @@ public class AddAppointment {
                 return;
         }
 
+         String addStartDate = startDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd MMMM yyyy zzzz"));
+         int addStartTime = startTimeCombo.getSelectionModel().getSelectedIndex();
+         String addEndDate = endDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd MMMM yyyy zzzz"));
+         int addEndTime = endTimeCombo.getSelectionModel().getSelectedIndex();
          int id = Integer.parseInt(apptID.getText());
          String addContact = contactCombo.getValue().toString();
          String addType = typeTextfield.getText();
@@ -87,10 +98,6 @@ public class AddAppointment {
          String addLocation = locationTextfield.getText();
          int addCustID = Integer.parseInt(custIdTextfield.getText());
          int addUserID = Integer.parseInt(userIdTextfield.getText());
-
-         try {
-             if ()
-         }
 
     }
 
