@@ -1,7 +1,6 @@
 package controller;
 
-import DAO.AppointmentDAO;
-import javafx.collections.ObservableList;
+import DAO.UserDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,14 +10,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import model.Appointment;
-
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.time.ZoneId;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 
@@ -52,9 +49,9 @@ public class Login implements Initializable {
 
     // end-user username and password input
     @FXML
-    private TextField usernameInput;
+    private TextField usernameLogin;
     @FXML
-    private PasswordField passwordInput;
+    private PasswordField passwordLogin;
 
     @Override
 
@@ -79,7 +76,13 @@ public class Login implements Initializable {
      *
      * @param actionEvent Login button is clicked.
      */
-    public void loginButton(ActionEvent actionEvent) throws IOException{
+    public void loginButton(ActionEvent actionEvent) throws IOException {
+        String username = usernameLogin.getText();
+        String password = passwordLogin.getText();
+
+        boolean validUser = UserDAO.validateUser(username, password);
+
+        if (validUser) {
             // Change from login screen to main menu
             Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/main-menu.fxml"))));
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -88,7 +91,13 @@ public class Login implements Initializable {
             stage.show();
             stage.centerOnScreen();
             stage.setResizable(false);
+
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle(" ");
+            alert.setHeaderText("Invalid Login");
+            alert.setContentText("Incorrect username and/or password.");
+            alert.showAndWait();
+            }
         }
-
-}
-
+    }
