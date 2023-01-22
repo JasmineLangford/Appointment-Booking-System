@@ -15,7 +15,6 @@ import java.net.URL;
 import java.time.ZoneId;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 
@@ -53,8 +52,15 @@ public class Login implements Initializable {
     @FXML
     private PasswordField passwordLogin;
 
-    @Override
+    // error control message
+    @FXML
+    private String invalidLoginTitle;
+    @FXML
+    private String invalidLoginHeader;
+    @FXML
+    private String invalidLoginContent;
 
+    @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Login initialized!");
 
@@ -66,6 +72,9 @@ public class Login implements Initializable {
         logoTagline.setText(rb.getString("tagline"));
         signInLabel.setText(rb.getString("signInLabel"));
         loginButtonLabel.setText(rb.getString("loginButtonLabel"));
+        invalidLoginTitle = rb.getString("invalidLoginTitle");
+        invalidLoginHeader = rb.getString("invalidLoginHeader");
+        invalidLoginContent = rb.getString("invalidLoginContent");
 
         // timezone
         zoneID.setText(ZoneId.systemDefault().toString());
@@ -83,7 +92,7 @@ public class Login implements Initializable {
         boolean validUser = UserDAO.validateUser(username, password);
 
         if (validUser) {
-            // Change from login screen to main menu
+            // change from login screen to main menu
             Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/main-menu.fxml"))));
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             Scene scene = new Scene(root, 1108, 620);
@@ -93,10 +102,11 @@ public class Login implements Initializable {
             stage.setResizable(false);
 
         } else {
+            // error control message
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle(" ");
-            alert.setHeaderText("Invalid Login");
-            alert.setContentText("Incorrect username and/or password.");
+            alert.setTitle(invalidLoginTitle);
+            alert.setHeaderText(invalidLoginHeader);
+            alert.setContentText(invalidLoginContent);
             alert.showAndWait();
             }
         }
