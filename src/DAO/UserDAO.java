@@ -1,14 +1,10 @@
 package DAO;
 
+import model.Logger;
 import model.User;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.ZonedDateTime;
 
 /**
  * This class queries the database for valid users to be able to log into the application from the login screen.
@@ -19,22 +15,6 @@ import java.time.ZonedDateTime;
 public class UserDAO {
 
     private static User currentUser;
-    private static final String FILENAME = "login_activity.txt";
-
-    // tracks end-user login attempts
-    public static void logger (String username, boolean success) {
-        try {
-            FileWriter fw = new FileWriter(FILENAME,true);
-            BufferedWriter bw = new BufferedWriter(fw);
-            PrintWriter pw = new PrintWriter(bw);
-            {
-            pw.println(ZonedDateTime.now() + "User: " + username + "Login_Attempt: " +(success ? "Successful" :
-                    "Failed"));
-            }
-        }catch (IOException e) {
-            System.out.println("Log Error: " + e.getMessage());
-            }
-        }
 
     // checks to see if end-user is valid based on username/password stored in database
     public static Boolean validateUser(String username, String password) {
@@ -48,10 +28,10 @@ public class UserDAO {
                 currentUser.setUsername(rs.getString("User_Name"));
                 statement.close();
 
-                logger(username, true);
+                Logger.trackLogin(username, true, "Login Attempt");
                 return true;
             } else {
-                logger(username, false);
+                Logger.trackLogin(username, false, "Login Attempt");
                 return false;
             }
         } catch (SQLException e) {
