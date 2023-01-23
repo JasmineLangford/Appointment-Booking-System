@@ -16,7 +16,7 @@ import java.time.ZoneId;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
-
+import java.util.logging.Logger;
 
 /**
  * This class is the controller for Login.fxml
@@ -92,6 +92,7 @@ public class Login implements Initializable {
         boolean validUser = UserDAO.validateUser(username, password);
 
         if (validUser) {
+
             // change from login screen to main menu
             Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/main-menu.fxml"))));
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
