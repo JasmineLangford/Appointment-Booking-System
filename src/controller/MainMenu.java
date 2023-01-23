@@ -38,25 +38,25 @@ public class MainMenu {
     @FXML
     private TableView<Appointment> mainApptTable;
     @FXML
-    private TableColumn<Appointment, String > mainApptID;
+    private TableColumn<Appointment, String > apptIDCol;
     @FXML
-    private TableColumn<Appointment, String> mainApptTitle;
+    private TableColumn<Appointment, String> apptTitleCol;
     @FXML
-    private TableColumn<Appointment, String>  mainApptDesc;
+    private TableColumn<Appointment, String>  apptDescCol;
     @FXML
-    private TableColumn<Appointment, String>  mainApptLocation;
+    private TableColumn<Appointment, String>  apptLocationCol;
     @FXML
-    private TableColumn<Appointment, String> mainApptContact;
+    private TableColumn<Appointment, String> apptContactCol;
     @FXML
-    private TableColumn<Appointment, String>  mainApptType;
+    private TableColumn<Appointment, String>  apptTypeCol;
     @FXML
-    private TableColumn<Appointment, String> mainApptStart;
+    private TableColumn<Appointment, String> apptStartCol;
     @FXML
-    private TableColumn<Appointment, String> mainApptEnd;
+    private TableColumn<Appointment, String> apptEndCol;
     @FXML
-    private TableColumn<Appointment, String> mainApptCust;
+    private TableColumn<Appointment, String> apptCustCol;
     @FXML
-    private TableColumn<Appointment, String>  mainApptUser;
+    private TableColumn<Appointment, String>  apptUserCol;
 
     // Customers Table
     @FXML
@@ -84,20 +84,18 @@ public class MainMenu {
         System.out.println("Main Menu initialized!");
 
         // Appointment table columns
-        mainApptID.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
-        mainApptTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
-        mainApptDesc.setCellValueFactory(new PropertyValueFactory<>("description"));
-        mainApptLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
-        mainApptContact.setCellValueFactory(new PropertyValueFactory<>("contactID"));
-        mainApptType.setCellValueFactory(new PropertyValueFactory<>("type"));
-        mainApptStart.setCellValueFactory(new PropertyValueFactory<>("start"));
-        mainApptEnd.setCellValueFactory(new PropertyValueFactory<>("end"));
-        mainApptCust.setCellValueFactory(new PropertyValueFactory<>("customerID"));
-        mainApptUser.setCellValueFactory(new PropertyValueFactory<>("userID"));
+        apptIDCol.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
+        apptTitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+        apptDescCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+        apptLocationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
+        apptContactCol.setCellValueFactory(new PropertyValueFactory<>("contactID"));
+        apptTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        apptStartCol.setCellValueFactory(new PropertyValueFactory<>("start"));
+        apptEndCol.setCellValueFactory(new PropertyValueFactory<>("end"));
+        apptCustCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        apptUserCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
 
-        // All appointments appear on Appointment table on screen load
-        ObservableList<Appointment> allAppointments = AppointmentDAO.allAppointments();
-        mainApptTable.setItems(allAppointments);
+        loadApptTable();
 
         // Customer table columns
         customerIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
@@ -108,9 +106,20 @@ public class MainMenu {
         customerStateCol.setCellValueFactory(new PropertyValueFactory<>("Division"));
         customerPostalCol.setCellValueFactory(new PropertyValueFactory<>("customerPostal"));
 
-        // All customers appear on Customer table on screen load
-        ObservableList<Customer> allcustomers = CustomerDAO.allCustomers();
-        mainCustomerTable.setItems(allcustomers);
+        loadCustomerTable();
+
+    }
+
+    // refresh tables
+    public void loadApptTable() throws SQLException {
+        ObservableList<Appointment> allAppointments = AppointmentDAO.allAppointments();
+        mainApptTable.setItems(allAppointments);
+
+    }
+
+    public void loadCustomerTable() throws SQLException {
+        ObservableList<Customer> allCustomers = CustomerDAO.allCustomers();
+        mainCustomerTable.setItems(allCustomers);
     }
 
     // Show all appointments if All Appointments radio button selected
@@ -186,6 +195,32 @@ public class MainMenu {
     }
 
     /**
+     * This will delete appointments from appointments table in the database.
+     *
+     * Will update appointment table on main menu after deletion.
+     */
+    public void deleteApptRow() throws SQLException {
+        if (mainApptTable.getSelectionModel().isEmpty()) {
+            Alert deleteAppt = new Alert(Alert.AlertType.WARNING, "Please select an appointment to be deleted."
+                    + "");
+            Optional<ButtonType> result = deleteAppt.showAndWait();
+            if(result.isPresent() && result.get() == ButtonType.OK)
+                return;
+        }
+
+        Alert deleteApptConfirm = new Alert(Alert.AlertType.CONFIRMATION,"Are you sure you want to delete this " +
+                "appointment?", ButtonType.YES, ButtonType.NO);
+        Optional<ButtonType> result = deleteApptConfirm.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.YES) {
+            Appointment selectedAppt = mainApptTable.getSelectionModel().getSelectedItem();
+            AppointmentDAO.deleteAppt(selectedAppt);
+
+            loadApptTable();
+        }
+        mainApptTable.getSelectionModel().clearSelection();
+    }
+
+    /**
      * This will take the end-user to the Add Customer screen where they can add a new customer.
      *
      * @param actionEvent Add button is clicked under the Customers tableview.
@@ -220,39 +255,47 @@ public class MainMenu {
         stage.setResizable(false);
     }
 
+
     /**
-     * This will delete appointments from appointment table in the database.
+     * This will delete a customer from the customers table in the database.
      *
+     * All customer's associated appointments will need to be deleted prior to deleting the customer.
      */
-    public void deleteApt() throws SQLException {
-        if (mainApptTable.getSelectionModel().isEmpty()) {
-            Alert deleteApptSelect = new Alert(Alert.AlertType.WARNING, "Please select an appointment to be deleted."
-                    + "");
-            Optional<ButtonType> result = deleteApptSelect.showAndWait();
-            if(result.isPresent() && result.get() == ButtonType.OK)
+    public void deleteCustomerRow() throws SQLException {
+        if (mainCustomerTable.getSelectionModel().isEmpty()) {
+            Alert deleteCust = new Alert(Alert.AlertType.WARNING, "Please select a customer to be deleted.");
+            Optional<ButtonType> result = deleteCust.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK)
                 return;
         }
 
-        Alert deleteApptConfirm = new Alert(Alert.AlertType.CONFIRMATION,"Are you sure you want to delete this " +
-                "appointment?", ButtonType.YES, ButtonType.NO);
-        Optional<ButtonType> result = deleteApptConfirm.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.YES) {
-            Appointment selectedAppt = mainApptTable.getSelectionModel().getSelectedItem();
-            AppointmentDAO.deleteAppt(selectedAppt);
-            changeToAllAppts();
+        /*Customer deleteAssociatedAppts = mainCustomerTable.getSelectionModel().getSelectedItem();
+
+        if (deleteAssociatedAppts.get size() > 0){
+
+            Alert associatedAppt = new Alert(Alert.AlertType.WARNING, "All associated appointments will be deleted"
+            + "along with this customer. Are you sure you want to delete the customer?", ButtonType.YES, ButtonType.NO);
+            Optional<ButtonType> results = associatedAppt.showAndWait();
+            if (results.isPresent() && results.get() == ButtonType.YES ) {
+
+            CustomerDAO.deleteCustomer(deleteAssociatedAppts);
+
+            loadApptTable();
+            loadCustomerTable();
+            }
         }
-        mainApptTable.getSelectionModel().clearSelection();
-    }
+        /*mainCustomerTable.getSelectionModel().clearSelection();
 
-    /**
-     * This will delete a customer from the customer table in the database.
-     *
-     * All customer appointments will need to be deleted prior to deleting the customer.
-     *
-     * @param actionEvent delete button below Customer tableview is clicked.
-     */
-    public void deleteCustomer(ActionEvent actionEvent) {
+        Alert deleteCustConfirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this " +
+                "customer?", ButtonType.YES, ButtonType.NO);
+        Optional<ButtonType> result = deleteCustConfirm.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.YES) {
+            Customer selectedCustomer = mainCustomerTable.getSelectionModel().getSelectedItem();
+            CustomerDAO.deleteCustomer(selectedCustomer);
 
+            loadCustomerTable();
+        }
+        mainCustomerTable.getSelectionModel().clearSelection();*/
     }
 
     /**
