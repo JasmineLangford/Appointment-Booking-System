@@ -1,9 +1,13 @@
 package model;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 /**
  * This class is the model class for customer.
  */
 public class Customer {
+
     private int customerId;
     private String customerName;
     private String customerAddress;
@@ -153,7 +157,6 @@ public class Customer {
     public void setCustomerPostal(String customerPostal) {
         this.customerPostal = customerPostal;
     }
-
 
 
 }
