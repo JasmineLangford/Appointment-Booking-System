@@ -15,12 +15,12 @@ import java.time.LocalDateTime;
 public class AppointmentDAO {
 
     /**
-     * Method to show all appointments queried from database - appointment table
+     * Method to query all appointments from appointments table in database.
      */
     public static ObservableList<Appointment> allAppointments() throws SQLException{
         ObservableList<Appointment> listOfAppointments = FXCollections.observableArrayList();
-        String sql = "SELECT * from appointments";
-        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        String apptQuery = "SELECT * FROM appointments";
+        PreparedStatement ps = JDBC.connection.prepareStatement(apptQuery);
         ResultSet rs = ps.executeQuery();
 
         while(rs.next()){
@@ -39,5 +39,16 @@ public class AppointmentDAO {
             listOfAppointments.add(appointment);
         }
         return listOfAppointments;
+    }
+
+    /**
+     * Method to query deletion from appointments table in database.
+     */
+    public static void deleteAppt(Appointment appointment) throws SQLException {
+
+        String deleteApptQuery = "DELETE FROM appointments WHERE Appointment_ID = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(deleteApptQuery);
+        ps.setInt(1, appointment.getAppointmentID());
+        ps.executeUpdate();
     }
 }

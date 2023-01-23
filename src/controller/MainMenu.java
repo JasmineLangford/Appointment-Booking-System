@@ -223,9 +223,8 @@ public class MainMenu {
     /**
      * This will delete appointments from appointment table in the database.
      *
-     * @param actionEvent delete button below Appointment tableview clicked.
      */
-    public void deleteApt(ActionEvent actionEvent) {
+    public void deleteApt() throws SQLException {
         if (mainApptTable.getSelectionModel().isEmpty()) {
             Alert deleteApptSelect = new Alert(Alert.AlertType.WARNING, "Please select an appointment to be deleted."
                     + "");
@@ -234,12 +233,13 @@ public class MainMenu {
                 return;
         }
 
-        Appointment selectedAppt = mainApptTable.getSelectionModel().getSelectedItem();
         Alert deleteApptConfirm = new Alert(Alert.AlertType.CONFIRMATION,"Are you sure you want to delete this " +
                 "appointment?", ButtonType.YES, ButtonType.NO);
         Optional<ButtonType> result = deleteApptConfirm.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.YES) {
-            //AppointmentDAO.deleteAppt(selectedAppt);
+            Appointment selectedAppt = mainApptTable.getSelectionModel().getSelectedItem();
+            AppointmentDAO.deleteAppt(selectedAppt);
+            changeToAllAppts();
         }
         mainApptTable.getSelectionModel().clearSelection();
     }
