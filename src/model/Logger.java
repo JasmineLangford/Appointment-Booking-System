@@ -1,30 +1,32 @@
 package model;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
- * This class is used to track user activity by recording all user log-in attempts.
+ * This class tracks user activity.
  */
 public class Logger {
-    private static final String FILENAME = "login_activity.txt";
 
-    public Logger() {}
+    private static final String log = "login_activity.txt";
 
-    public static void trackLogin (String username, boolean success, String login_attempt) {
-        try {
-            FileWriter fw = new FileWriter(FILENAME,true);
-            BufferedWriter bw = new BufferedWriter(fw);
-            PrintWriter pw = new PrintWriter(bw);
-            {
-                pw.println("User: " + username + "Login Attempt" + login_attempt + ZonedDateTime.now() +
-                        (success ? "Successful" : "Failed"));
-            }
-        }catch (IOException e) {
-            System.out.println("Log Error: " + e.getMessage());
+    /**
+     * This method keeps record of all login attempts
+     *
+     * @param username is the username used for the login attempt by the end-user
+     * @param success is used based on the end-user's login attempt
+     */
+    public static void trackerLog (String username, DateTimeFormatter trackerFormat, Boolean success){
+        try{
+            BufferedWriter bw = new BufferedWriter(new FileWriter(log, true));
+            bw.write ("Username: " + username + " " + "Date/Time Stamp: " + trackerFormat.format(ZonedDateTime.now())
+                     + " " + "Attempt: " + (success ? "Successful" : "Failed") + "\n");
+            bw.flush();
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
     }
 }
