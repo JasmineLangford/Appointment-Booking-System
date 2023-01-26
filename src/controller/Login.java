@@ -10,13 +10,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import model.User;
+
 import java.io.IOException;
 import java.net.URL;
 import java.time.ZoneId;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
-import java.util.logging.Logger;
 
 /**
  * This class is the controller for Login.fxml
@@ -29,6 +30,7 @@ import java.util.logging.Logger;
  */
 public class Login implements Initializable {
 
+    // login screen labels
     @FXML
     private Label usernameLabel;
     @FXML
@@ -54,11 +56,12 @@ public class Login implements Initializable {
 
     // error control message
     @FXML
-    private String invalidLoginTitle;
+    private String blankUserInput;
     @FXML
     private String invalidLoginHeader;
     @FXML
     private String invalidLoginContent;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -72,13 +75,14 @@ public class Login implements Initializable {
         logoTagline.setText(rb.getString("tagline"));
         signInLabel.setText(rb.getString("signInLabel"));
         loginButtonLabel.setText(rb.getString("loginButtonLabel"));
-        invalidLoginTitle = rb.getString("invalidLoginTitle");
+        blankUserInput = rb.getString("blankUserInput");
         invalidLoginHeader = rb.getString("invalidLoginHeader");
         invalidLoginContent = rb.getString("invalidLoginContent");
 
         // timezone
         zoneID.setText(ZoneId.systemDefault().toString());
     }
+
 
     /**
      * This navigates the end-user to the Main Menu upon successful login.
@@ -101,14 +105,23 @@ public class Login implements Initializable {
             stage.show();
             stage.centerOnScreen();
             stage.setResizable(false);
+        } else if(usernameLogin.getText().isEmpty() || passwordLogin.getText().isEmpty()) {
+
+            // error control message - end-user did not enter values in username/password fields
+            Alert blankUser = new Alert(Alert.AlertType.ERROR, blankUserInput);
+            blankUser.setTitle(" ");
+            blankUser.setHeaderText(invalidLoginHeader);
+            blankUser.showAndWait();
 
         } else {
-            // error control message
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle(invalidLoginTitle);
-            alert.setHeaderText(invalidLoginHeader);
-            alert.setContentText(invalidLoginContent);
-            alert.showAndWait();
+
+            // error control message - end-user did not enter valid login credentials
+                Alert invalidUser = new Alert(Alert.AlertType.ERROR, invalidLoginContent);
+                invalidUser.setTitle(" ");
+                invalidUser.setHeaderText(invalidLoginHeader);
+                invalidUser.showAndWait();
             }
+
         }
+
     }
