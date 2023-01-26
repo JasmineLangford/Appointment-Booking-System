@@ -10,8 +10,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import model.User;
-
 import java.io.IOException;
 import java.net.URL;
 import java.time.ZoneId;
@@ -64,6 +62,7 @@ public class Login implements Initializable {
 
 
     @Override
+
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Login initialized!");
 
@@ -82,7 +81,6 @@ public class Login implements Initializable {
         // timezone
         zoneID.setText(ZoneId.systemDefault().toString());
     }
-
 
     /**
      * This navigates the end-user to the Main Menu upon successful login.
@@ -105,7 +103,8 @@ public class Login implements Initializable {
             stage.show();
             stage.centerOnScreen();
             stage.setResizable(false);
-        } else if(usernameLogin.getText().isEmpty() || passwordLogin.getText().isEmpty()) {
+
+        } else if (usernameLogin.getText().isEmpty() || passwordLogin.getText().isEmpty()) {
 
             // error control message - end-user did not enter values in username/password fields
             Alert blankUser = new Alert(Alert.AlertType.ERROR, blankUserInput);
