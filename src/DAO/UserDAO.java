@@ -5,6 +5,7 @@ import model.User;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.format.DateTimeFormatter;
 
 /**
  * This class queries the database for valid users to be able to log into the application from the login screen.
@@ -14,7 +15,7 @@ import java.sql.Statement;
 
 public class UserDAO {
 
-    private static User currentUser;
+    private static User userLogin;
 
     // checks to see if end-user is valid based on username/password stored in database
     public static Boolean validateUser(String username, String password) {
@@ -24,14 +25,13 @@ public class UserDAO {
             ResultSet rs = statement.executeQuery(loginQuery);
 
             if(rs.next()) {
-                currentUser = new User();
-                currentUser.setUsername(rs.getString("User_Name"));
-                statement.close();
+                userLogin = new User();
+                userLogin.setUsername(rs.getString("User_Name"));
 
-                Logger.trackLogin(username, true, "Login Attempt");
+                Logger.trackerLog(username,DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"),true);
                 return true;
             } else {
-                Logger.trackLogin(username, false, "Login Attempt");
+                Logger.trackerLog(username, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"),false);
                 return false;
             }
         } catch (SQLException e) {
@@ -40,11 +40,11 @@ public class UserDAO {
         }
     }
 
-    public static User getCurrentUser() {
-        return currentUser;
+    public static User getUserLogin() {
+        return userLogin;
     }
 
-    public static void setCurrentUser(User currentUser) {
-        UserDAO.currentUser = currentUser;
+    public static void setUserLogin(User userLogin) {
+        UserDAO.userLogin = userLogin;
     }
 }
