@@ -7,6 +7,7 @@ import model.Customer;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 /**
  * This class contains the database queries for customers.
@@ -41,6 +42,9 @@ public class CustomerDAO {
         return listOfCustomers;
     }
 
+    /**
+     * Method to delete customer from database.
+     */
     public static void deleteCustomer (Customer customer) throws SQLException {
 
         String deleteCustomerQuery = "DELETE FROM customers WHERE Customer_ID = ?";
@@ -48,4 +52,35 @@ public class CustomerDAO {
         ps.setInt(1, customer.getCustomerId());
         ps.executeUpdate();
     }
+
+    /**
+     * Method to query appointments if the there is a matching customer ID.
+     */
+    public static ObservableList<Appointment> deleteAssociated(int customerId) throws SQLException {
+        ObservableList<Appointment> associatedAppts = FXCollections.observableArrayList();
+        String associatedApptQuery = "SELECT * FROM appointments WHERE EXISTS (SELECT Customer_ID FROM customers " +
+                "WHERE appointments.Customer_ID = customers.Customer_ID AND Customer_ID = ?)";
+        PreparedStatement ps = JDBC.connection.prepareStatement(associatedApptQuery);
+        ps.setInt(1, customerId);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            int appointmentID = rs.getInt("Appointment_ID");
+            String title = rs.getString("Title");
+            String description = rs.getString("Description");
+            String location = rs.getString("Location");
+            int contactID = rs.getInt("Contact_ID");
+            String type = rs.getString("Type");
+            Timestamp start = rs.getTimestamp("Start");
+            Timestamp end = rs.getTimestamp("End");
+            int customerID = rs.getInt("Customer_ID");
+            int userID = rs.getInt("User_ID");
+
+            Appointment deleteAppt = new Appointment(appointmentID, title, description, location, contactID, type,
+                    start, end, customerID, userID);
+            associatedAppts.add(deleteAppt);
+        }
+        return associatedAppts;
+    }
+
 }
