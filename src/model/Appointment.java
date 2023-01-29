@@ -1,6 +1,6 @@
 package model;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 /**
  * This class is the model class for appointments.
@@ -11,18 +11,23 @@ public class Appointment {
     private String title;
     private String description;
     private String location;
-    private int contactID;
     private String type;
-    private LocalDateTime start;
-    private LocalDateTime end;
+    private Timestamp start;
+    private Timestamp end;
+    private Timestamp createdDate;
+    private String createdBy;
+    private Timestamp lastUpdated;
+    private String lastUpdatedBy;
     private int customerID;
     private int userID;
+    private int contactID;
 
 
     /**
      * Constructor
      */
-    public Appointment (int appointmentID, String title, String description, String location, int contactID, String type, LocalDateTime start, LocalDateTime end, int customerID, int userID){
+
+    public Appointment(int appointmentID, String title, String description, String location, int contactID, String type, Timestamp start, Timestamp end, int customerID, int userID) {
         this.appointmentID = appointmentID;
         this.title = title;
         this.description = description;
@@ -33,6 +38,24 @@ public class Appointment {
         this.end = end;
         this.customerID = customerID;
         this.userID = userID;
+    }
+
+    public Appointment (Appointment addScreen){
+
+        this.appointmentID = addScreen.appointmentID;
+        this.title = addScreen.title;
+        this.description = addScreen.description;
+        this.location = addScreen.location;
+        this.type = addScreen.type;
+        this.start = addScreen.start;
+        this.end = addScreen.end;
+        this.createdDate = addScreen.createdDate;
+        this.createdBy = addScreen.createdBy;
+        this.lastUpdated = addScreen.lastUpdated;
+        this.lastUpdatedBy = addScreen.lastUpdatedBy;
+        this.customerID = addScreen.customerID;
+        this.userID = addScreen.userID;
+        this.contactID = addScreen.contactID;
     }
 
     // Null appointment
@@ -126,28 +149,29 @@ public class Appointment {
     /**
      * @return local start date and time
      */
-    public LocalDateTime getStart() {
+    public Timestamp getStart() {
         return start;
     }
 
     /**
      * @param start date and time to set
      */
-    public void setStart(LocalDateTime start) {
+    public void setStart(Timestamp start) {
         this.start = start;
+
     }
 
     /**
      * @return local end date and time
      */
-    public LocalDateTime getEnd() {
+    public Timestamp getEnd() {
         return end;
     }
 
     /**
      * @param end date and time to set
      */
-    public void setEnd(LocalDateTime end) {
+    public void setEnd(Timestamp end) {
         this.end = end;
     }
 
