@@ -28,9 +28,11 @@ public class UserDAO {
                 userLogin = new User();
                 userLogin.setUsername(rs.getString("User_Name"));
 
+                // logs end-user login attempt as successful
                 Logger.trackerLog(username,DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"),true);
                 return true;
             } else {
+                // logs end-user login attempt as failed
                 Logger.trackerLog(username, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"),false);
                 return false;
             }
