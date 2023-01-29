@@ -2,6 +2,7 @@ package controller;
 
 import DAO.AppointmentDAO;
 import DAO.CustomerDAO;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import model.Appointment;
 import model.Customer;
@@ -25,16 +27,18 @@ import java.util.Optional;
  * End-user is able to navigate to other screens by buttons to add, modify and delete appointments and customers.
  *
  * End-user can also navigate to a report view.
+ *
+ * <b> LAMBDA EXPRESSION #1 - changeToMonth and changeToWeek methods to filter dates. </b>
  */
 public class MainMenu {
 
-    // Radio Buttons for Appointment View
+    // radio buttons for appointment View
     public ToggleGroup apptViewToggle;
     public RadioButton viewByMonth;
     public RadioButton viewByWeek;
     public RadioButton viewAllAppts;
 
-    // Appointment Table
+    // appointments tableview
     @FXML
     private TableView<Appointment> mainApptTable;
     @FXML
@@ -58,7 +62,7 @@ public class MainMenu {
     @FXML
     private TableColumn<Appointment, String>  apptUserCol;
 
-    // Customers Table
+    // customers tableview
     @FXML
     private TableView<Customer> mainCustomerTable;
     @FXML
@@ -83,7 +87,8 @@ public class MainMenu {
     public void initialize() throws SQLException{
         System.out.println("Main Menu initialized!");
 
-        // Appointment table columns
+
+        // appointment table columns
         apptIDCol.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
         apptTitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         apptDescCol.setCellValueFactory(new PropertyValueFactory<>("description"));
@@ -97,7 +102,7 @@ public class MainMenu {
 
         loadApptTable();
 
-        // Customer table columns
+        // customer table columns
         customerIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         customerNameCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         customerAddressCol.setCellValueFactory(new PropertyValueFactory<>("customerAddress"));
@@ -110,55 +115,48 @@ public class MainMenu {
 
     }
 
-    // refresh tables
+    // load appointments tableview
     public void loadApptTable() throws SQLException {
         ObservableList<Appointment> allAppointments = AppointmentDAO.allAppointments();
         mainApptTable.setItems(allAppointments);
-
     }
 
+    // load customer tableview
     public void loadCustomerTable() throws SQLException {
         ObservableList<Customer> allCustomers = CustomerDAO.allCustomers();
         mainCustomerTable.setItems(allCustomers);
     }
 
-    // Show all appointments if All Appointments radio button selected
-    public void changeToAllAppts() {
-        try{
+    // show all appointments if All Appointments radio button selected - default selection
+    public void changeToAllAppts() throws SQLException {
             ObservableList<Appointment> allAppointments = AppointmentDAO.allAppointments();
             for(Appointment ignored : allAppointments){
                 mainApptTable.setItems(allAppointments);
+
+                mainApptTable.setPlaceholder(new Label("No appointments available"));
+
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    }
+
+    // filter appointments for current month
+    public void changeToMonth() throws SQLException {
+        ObservableList<Appointment> currentMonth = AppointmentDAO.currentMonth();
+        for(Appointment ignored : currentMonth){
+            mainApptTable.setItems(currentMonth);
+
+        mainApptTable.setPlaceholder(new Label("No appointments for this month"));
         }
     }
 
-    public void changeToMonth() {
-    }
+    // filter appointment for current week
+    public void changeToWeek() throws SQLException {
+            ObservableList<Appointment> currentWeek = AppointmentDAO.currentWeek();
+            for(Appointment ignored : currentWeek){
+                mainApptTable.setItems(currentWeek);
 
-    public void changeToWeek() {
-}
-
-    // Filter appointments by all, current month, or current week by radio button selection
-/*        if (viewByWeek.isSelected()) {
-            LocalDateTime startWeek = LocalDate.now().with(WeekFields.ISO.getFirstDayOfWeek()).atStartOfDay();
-            LocalDateTime endWeek = startWeek.plusWeeks(1);
-            mainApptTable.setItems(AppointmentDAO.allAppointments().stream()
-                    .filter(a -> a.getStart().isAfter(startWeek) && a.getStart().isBefore(endWeek))
-                    .collect(Collectors.toCollection(FXCollections::observableArrayList)));
-        } else if (viewByMonth.isSelected()) {
-            mainApptTable.setItems(AppointmentDAO.allAppointments().stream()
-                    .filter(a -> a.getStart().getMonth() == LocalDate.now().getMonth())
-                    .collect(Collectors.toCollection(FXCollections::observableArrayList)));
-        } else {
-            viewAllAppts.isSelected();
-            ObservableList<Appointment> allAppointments = AppointmentDAO.allAppointments();
-            for (Appointment ignored : allAppointments) {
-                mainApptTable.setItems(allAppointments);
-            }
+        mainApptTable.setPlaceholder(new Label("No appointments for this week"));
         }
-    }*/
+    }
 
     /**
      * This will take the end-user to the Add Appointment screen where they can add a new appointment.
@@ -166,7 +164,6 @@ public class MainMenu {
      * @param actionEvent Add button is clicked under the Appointments tableview.
      */
     public void addAppt(ActionEvent actionEvent) throws IOException {
-        System.out.println("Add Appointment initialized.");
 
         Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/add-appointment.fxml"))));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -197,17 +194,17 @@ public class MainMenu {
     /**
      * This will delete appointments from appointments table in the database.
      *
-     * Will update appointment table on main menu after deletion.
+     * Deleted row will no longer be displayed on appointment tableview
+     *
+     * Info message will let end-user know appointment ID and type that was deleted.
      */
     public void deleteApptRow() throws SQLException {
         if (mainApptTable.getSelectionModel().isEmpty()) {
-            Alert deleteAppt = new Alert(Alert.AlertType.WARNING, "Please select an appointment to be deleted."
-                    + "");
+            Alert deleteAppt = new Alert(Alert.AlertType.WARNING, "Please select an appointment to be deleted.");
             Optional<ButtonType> result = deleteAppt.showAndWait();
             if(result.isPresent() && result.get() == ButtonType.OK)
-                return;
-        }
-
+                mainApptTable.getSelectionModel().clearSelection();
+        } else {
         Alert deleteApptConfirm = new Alert(Alert.AlertType.CONFIRMATION,"Are you sure you want to delete this " +
                 "appointment?", ButtonType.YES, ButtonType.NO);
         Optional<ButtonType> result = deleteApptConfirm.showAndWait();
@@ -215,9 +212,14 @@ public class MainMenu {
             Appointment selectedAppt = mainApptTable.getSelectionModel().getSelectedItem();
             AppointmentDAO.deleteAppt(selectedAppt);
 
+            Alert apptInfo = new Alert(Alert.AlertType.INFORMATION,"You have deleted the following appointment: " + '\n' + '\n' +
+                    "Appointment ID: " + selectedAppt.getAppointmentID() + '\n' + "Type: " + selectedAppt.getType(), ButtonType.OK);
+            apptInfo.showAndWait();
+
             loadApptTable();
-        }
+            }
         mainApptTable.getSelectionModel().clearSelection();
+        }
     }
 
     /**
@@ -269,22 +271,24 @@ public class MainMenu {
                 return;
         }
 
-        /*Customer deleteAssociatedAppts = mainCustomerTable.getSelectionModel().getSelectedItem();
+        Customer deleteAssociatedAppts = mainCustomerTable.getSelectionModel().getSelectedItem();
+        ObservableList<Appointment> associatedAppts = CustomerDAO.deleteAssociated(deleteAssociatedAppts.getCustomerId());
 
-        if (deleteAssociatedAppts.get size() > 0){
-
-            Alert associatedAppt = new Alert(Alert.AlertType.WARNING, "All associated appointments will be deleted"
-            + "along with this customer. Are you sure you want to delete the customer?", ButtonType.YES, ButtonType.NO);
+        if(associatedAppts.size() > 0){
+            Alert associatedAppt = new Alert(Alert.AlertType.WARNING, "All associated appointments will be " +
+                    "deleted along with this customer. Are you sure you want to delete this customer?", ButtonType.YES, ButtonType.NO);
+            associatedAppt.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+            associatedAppt.setTitle(" ");
+            associatedAppt.setHeaderText("Associated Appointment Found!");
             Optional<ButtonType> results = associatedAppt.showAndWait();
             if (results.isPresent() && results.get() == ButtonType.YES ) {
 
             CustomerDAO.deleteCustomer(deleteAssociatedAppts);
-
             loadApptTable();
             loadCustomerTable();
+            mainCustomerTable.getSelectionModel().clearSelection();
             }
-        }
-        /*mainCustomerTable.getSelectionModel().clearSelection();
+        } else {
 
         Alert deleteCustConfirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this " +
                 "customer?", ButtonType.YES, ButtonType.NO);
@@ -294,8 +298,9 @@ public class MainMenu {
             CustomerDAO.deleteCustomer(selectedCustomer);
 
             loadCustomerTable();
+            }
+        mainCustomerTable.getSelectionModel().clearSelection();
         }
-        mainCustomerTable.getSelectionModel().clearSelection();*/
     }
 
     /**
@@ -316,19 +321,15 @@ public class MainMenu {
 
     /**
      * This closes the application.
-     * An alert will ask the user to confirm close.
-     * @param actionEvent Logout button is clicked (located on the right panel).
+     *
+     * An alert will ask the end-user to confirm close.
      */
-    public void toClose(ActionEvent actionEvent) {
+    public void toClose() {
         Alert closeConfirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to close the program?", ButtonType.YES, ButtonType.NO);
         Optional<ButtonType> result = closeConfirm.showAndWait();
         if(result.isPresent() && result.get() == ButtonType.YES) {
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.close();
+            Platform.exit();
             System.out.println("Program Closed");
         }
     }
-
-
-
 }
