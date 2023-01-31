@@ -1,8 +1,5 @@
 package model;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
 /**
  * This class is the model class for customer.
  */
@@ -69,7 +66,6 @@ public class Customer {
     }
 
     /**
-     * @param customerAddress to set
      */
     public void setCustomerAddress(String customerAddress) {
         this.customerAddress = customerAddress;

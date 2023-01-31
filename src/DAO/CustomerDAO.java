@@ -43,6 +43,34 @@ public class CustomerDAO {
     }
 
     /**
+     * Method to add customer into customers table in the database.
+     *
+     * @param customer constructor to be used
+     */
+    public static void addCustomer(Customer customer) throws SQLException {
+
+        String addCustomerQuery = "INSERT INTO customers (Customer_ID,Customer_Name,Address,Postal_Code,Phone,Division_ID) VALUES (NULL,?,?,?,?,?)";
+        PreparedStatement ps = JDBC.connection.prepareStatement(addCustomerQuery);
+        ps.setInt(1, customer.getCustomerId());
+        ps.setString(2, customer.getCustomerName());
+        ps.setString(3, customer.getCustomerAddress());
+        ps.setString(4,customer.getCustomerPostal());
+        ps.setString(5,customer.getCustomerPhone());
+        ps.setInt(10,customer.getDivisionId());
+
+        ps.executeUpdate();
+
+    }
+
+    /**
+     * Method to query selections for combo box.
+     */
+
+    public static void selectCountries (){
+        String countriesQuery = "SELECT Country FROM countries";
+    }
+
+    /**
      * Method to delete customer from database.
      */
     public static void deleteCustomer (Customer customer) throws SQLException {
