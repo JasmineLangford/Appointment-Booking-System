@@ -20,7 +20,7 @@
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Label>
-    <Label layoutX="132.0" layoutY="273.0" text="Country" textAlignment="RIGHT" textFill="#373436">
+    <Label layoutX="132.0" layoutY="349.0" text="Country" textAlignment="RIGHT" textFill="#373436">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
@@ -30,17 +30,17 @@
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Label>
-    <Label layoutX="112.0" layoutY="347.0" text="Postal Code" textAlignment="RIGHT" textFill="#373436">
+    <Label layoutX="112.0" layoutY="312.0" text="Postal Code" textAlignment="RIGHT" textFill="#373436">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Label>
-    <Label layoutX="103.0" layoutY="310.0" text="State/Province" textAlignment="RIGHT" textFill="#373436">
+    <Label layoutX="103.0" layoutY="275.0" text="State/Province" textAlignment="RIGHT" textFill="#373436">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Label>
-    <Button layoutX="282.0" layoutY="406.0" mnemonicParsing="false" onAction="#onSave" prefHeight="23.0" prefWidth="54.0" style="-fx-background-color: #50add7;" text="Save" textFill="#fcfefc">
+    <Button layoutX="282.0" layoutY="406.0" mnemonicParsing="false" onAction="#onSaveCustomer" prefHeight="23.0" prefWidth="54.0" style="-fx-background-color: #50add7;" text="Save" textFill="#fcfefc">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
@@ -57,11 +57,11 @@
             </font>
         </Label>
     </Pane>
-    <TextField layoutX="198.0" layoutY="122.0" prefHeight="25.0" prefWidth="46.0" />
-    <TextField layoutX="198.0" layoutY="157.0" prefHeight="25.0" prefWidth="206.0" />
-    <TextField layoutX="198.0" layoutY="194.0" prefHeight="25.0" prefWidth="206.0" />
-    <TextField layoutX="198.0" layoutY="231.0" prefHeight="25.0" prefWidth="206.0" />
-    <TextField layoutX="198.0" layoutY="342.0" prefHeight="25.0" prefWidth="206.0" />
-    <ChoiceBox layoutX="198.0" layoutY="268.0" prefHeight="25.0" prefWidth="206.0" />
-    <ChoiceBox layoutX="198.0" layoutY="305.0" prefHeight="25.0" prefWidth="206.0" />
+    <TextField fx:id="customerID" disable="true" layoutX="198.0" layoutY="122.0" prefHeight="25.0" prefWidth="65.0" promptText="Auto Gen-Disabled" />
+    <TextField fx:id="custNameTextfield" layoutX="198.0" layoutY="157.0" prefHeight="25.0" prefWidth="206.0" />
+    <TextField fx:id="addressTextfield" layoutX="198.0" layoutY="194.0" prefHeight="25.0" prefWidth="206.0" />
+    <TextField fx:id="phoneNumberTextfield" layoutX="198.0" layoutY="231.0" prefHeight="25.0" prefWidth="206.0" />
+    <TextField fx:id="postalCodeTextfield" layoutX="198.0" layoutY="307.0" prefHeight="25.0" prefWidth="206.0" />
+   <ComboBox fx:id="firstLevelCombo" layoutX="198.0" layoutY="270.0" prefHeight="25.0" prefWidth="206.0" />
+   <ComboBox fx:id="countryCombo" layoutX="198.0" layoutY="344.0" prefHeight="25.0" prefWidth="206.0" />
 </AnchorPane>
