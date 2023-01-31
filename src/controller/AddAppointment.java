@@ -10,8 +10,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import model.Appointment;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -73,9 +71,9 @@ public class AddAppointment implements Initializable {
     public void onSaveAppt(ActionEvent actionEvent) {
 
         // end-user form fields
-        String addStartDate = startDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd MMMM yyyy zzzz"));
+        String addStartDate = startDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         String addStartTime = (String) startTimeCombo.getValue().toString();
-        String addEndDate = endDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd MMMM yyyy zzzz"));
+        String addEndDate = endDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         String addEndTime = (String) endTimeCombo.getValue().toString();
         //int apptId = Integer.parseInt(apptID.getText());
         String addContact = contactCombo.getValue().toString();
@@ -118,6 +116,8 @@ public class AddAppointment implements Initializable {
             if (results.isPresent() && results.get() == ButtonType.OK)
                 return;
         }
+
+
 
          Alert addAppointmentConfirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to add this " +
                  "appointment?");

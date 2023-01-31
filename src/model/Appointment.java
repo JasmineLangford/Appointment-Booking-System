@@ -14,10 +14,6 @@ public class Appointment {
     private String type;
     private Timestamp start;
     private Timestamp end;
-    private Timestamp createdDate;
-    private String createdBy;
-    private Timestamp lastUpdated;
-    private String lastUpdatedBy;
     private int customerID;
     private int userID;
     private int contactID;
@@ -40,26 +36,13 @@ public class Appointment {
         this.userID = userID;
     }
 
-    public Appointment (Appointment addScreen){
-
-        this.appointmentID = addScreen.appointmentID;
-        this.title = addScreen.title;
-        this.description = addScreen.description;
-        this.location = addScreen.location;
-        this.type = addScreen.type;
-        this.start = addScreen.start;
-        this.end = addScreen.end;
-        this.createdDate = addScreen.createdDate;
-        this.createdBy = addScreen.createdBy;
-        this.lastUpdated = addScreen.lastUpdated;
-        this.lastUpdatedBy = addScreen.lastUpdatedBy;
-        this.customerID = addScreen.customerID;
-        this.userID = addScreen.userID;
-        this.contactID = addScreen.contactID;
-    }
-
     // Null appointment
     public Appointment() {
+    }
+
+    public Appointment(int appointment_id, Timestamp start) {
+        this.appointmentID = appointment_id;
+        this.start = start;
     }
 
     /**

@@ -4,7 +4,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Appointment;
 import java.sql.*;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 /**
  * This class contains the database queries for appointments.
@@ -96,25 +98,62 @@ public class AppointmentDAO {
     /**
      * Method to insert new appointment in appointments table in database.
      */
-    /* static void addAppt(Appointment addAppointment) throws SQLException {
+    /*public void addAppt(Appointment appointment) throws SQLException {
         try {
-        String addApptQuery = "INSERT INTO appointments Appointment_ID, Title, Description, Location, Type, Start, End, Create_Date, " +
-                "Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String addApptQuery = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, " +
+                "Customer_ID, User_ID, Contact_ID) VALUES (?,?,?,?,?,?,?,?,?,?)";
         PreparedStatement ps = JDBC.connection.prepareStatement(addApptQuery);
-        ps.setInt(1, addAppointment.getAppointmentID());
-        ps.setString(2, addAppointment.getTitle());
-        ps.setString(3, addAppointment.getDescription());
-        ps.setString(4, addAppointment.getLocation());
-        ps.setString(5, addAppointment.getType());
-        ps.setTimestamp(6, MainMenu.localDT (addAppointment.getStart()));
-        ps.setTimestamp(7, MainMenu.localDT (addAppointment.getEnd()));
-        ps.setString(6,);
+        ps.setInt(1, appointment.getAppointmentID());
+        ps.setString(2, appointment.getTitle());
+        ps.setString(3, appointment.getDescription());
+        ps.setString(4, appointment.getLocation());
+        ps.setString(5, appointment.getType());
+        ps.setTimestamp(6, localDT.appointment.getStart());
+        ps.setTimestamp(7, localDT.appointment.getEnd());
+        ps.setString(8, appointment.get);
+        ps.setString(9,);
+        ps.setString(10,);
 
 
         } catch (){
 
         }
     }*/
+
+    /**
+     * Method to query for 15 minute appointment alert.
+     */
+
+    public static Appointment appointmentAlert() {
+        LocalDateTime now = LocalDateTime.now();
+        ZoneId zoneId = ZoneId.systemDefault();
+        ZonedDateTime zonedDT = now.atZone(zoneId);
+        LocalDateTime localDT = zonedDT.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime();
+        LocalDateTime fifteenMinTime = localDT.plusMinutes(15);
+
+        String userLoggedIn = UserDAO.getUserLogin().getUsername();
+
+        Appointment alertAppointments;
+
+        try {
+        String alertFifteenQuery = "SELECT * FROM appointments,users WHERE appointments.Start BETWEEN" + localDT + fifteenMinTime + "AND users.User_Name=" + userLoggedIn;
+        PreparedStatement ps = JDBC.connection.prepareStatement(alertFifteenQuery);
+        ResultSet rs = ps.executeQuery();
+
+        if(rs.next()) {
+            alertAppointments = new Appointment(
+            rs.getInt("Appointment_ID"),
+            rs.getTimestamp("Start"));
+
+            return alertAppointments;
+
+        }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     /**
      * Method to query deletion from appointments table in database.
