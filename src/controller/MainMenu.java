@@ -18,6 +18,7 @@ import model.Appointment;
 import model.Customer;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -66,19 +67,19 @@ public class MainMenu {
     @FXML
     private TableView<Customer> mainCustomerTable;
     @FXML
-    private TableColumn<Appointment, String> customerIdCol;
+    private TableColumn<Customer, String> customerIdCol;
     @FXML
-    private TableColumn<Appointment, String> customerNameCol;
+    private TableColumn<Customer, String> customerNameCol;
     @FXML
-    private TableColumn<Appointment, String> customerAddressCol;
+    private TableColumn<Customer, String> customerAddressCol;
     @FXML
-    private TableColumn<Appointment, String> customerPhoneCol;
+    private TableColumn<Customer, String> customerPhoneCol;
     @FXML
-    private TableColumn<Appointment, String>  customerCountryCol;
+    private TableColumn<Customer, String>  customerCountryCol;
     @FXML
-    private TableColumn<Appointment, String>  customerStateCol;
+    private TableColumn<Customer, String>  customerStateCol;
     @FXML
-    private TableColumn<Appointment, String> customerPostalCol;
+    private TableColumn<Customer, String> customerPostalCol;
 
 
     /**
@@ -87,6 +88,15 @@ public class MainMenu {
     public void initialize() throws SQLException{
         System.out.println("Main Menu initialized!");
 
+        Appointment appointment = AppointmentDAO.appointmentAlert();
+        if (appointment != null){
+        Alert fifteenAlertTrue = new Alert(Alert.AlertType.INFORMATION,"You have the following appointments: " + '\n' + '\n' +
+                "Appointment ID: " + appointment.getAppointmentID() + '\n' + "Time: " + appointment.getStart(), ButtonType.OK);
+        fifteenAlertTrue.showAndWait();
+        } else {
+            Alert fifteenAlertFalse = new Alert(Alert.AlertType.INFORMATION,"You do not have any upcoming appointments", ButtonType.OK);
+            fifteenAlertFalse.showAndWait();
+        }
 
         // appointment table columns
         apptIDCol.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
@@ -112,7 +122,6 @@ public class MainMenu {
         customerPostalCol.setCellValueFactory(new PropertyValueFactory<>("customerPostal"));
 
         loadCustomerTable();
-
     }
 
     // load appointments tableview
@@ -228,7 +237,6 @@ public class MainMenu {
      * @param actionEvent Add button is clicked under the Customers tableview.
      */
     public void addCustomer(ActionEvent actionEvent) throws IOException {
-        System.out.println("Add Customer initialized.");
 
         Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/add-customer.fxml"))));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
