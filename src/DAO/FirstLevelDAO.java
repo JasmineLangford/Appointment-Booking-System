@@ -3,20 +3,28 @@ package DAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Customer;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Class for first-level division query
+ *
+ * Extends from Customer class
+ */
 public class FirstLevelDAO extends Customer {
 
-    public FirstLevelDAO (int divisionId, String division, int countryId) {
-        super(divisionId, division, countryId);
-    }
-
+    // override format for combo box selection display
     @Override
     public String toString(){
         return (getDivision());
+    }
+
+    /**
+     * Constructor
+     */
+    public FirstLevelDAO (int divisionId, String division, int countryId) {
+        super(divisionId, division, countryId);
     }
 
     /**
@@ -24,7 +32,6 @@ public class FirstLevelDAO extends Customer {
      *
      * @return all first level options
      */
-
     public static ObservableList<FirstLevelDAO> allFirstLevelDivision() throws SQLException {
         ObservableList<FirstLevelDAO> firstLevelDivision = FXCollections.observableArrayList();
         String firstLevelQuery = "SELECT Division_ID, Division, Country_ID FROM first_level_divisions";
