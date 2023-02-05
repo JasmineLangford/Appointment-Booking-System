@@ -1,5 +1,6 @@
 package controller;
 
+import DAO.AppointmentDAO;
 import DAO.UserDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,9 +11,18 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import model.Appointment;
+import model.DateTimeUtil;
+
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -88,12 +98,14 @@ public class Login implements Initializable {
      * @param actionEvent Login button is clicked.
      */
     public void loginButton(ActionEvent actionEvent) throws IOException {
+
         String username = usernameLogin.getText();
         String password = passwordLogin.getText();
 
         boolean validUser = UserDAO.validateUser(username, password);
 
         if (validUser) {
+
 
             // change from login screen to main menu
             Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/main-menu.fxml"))));
@@ -103,6 +115,26 @@ public class Login implements Initializable {
             stage.show();
             stage.centerOnScreen();
             stage.setResizable(false);
+
+            Appointment appointment = AppointmentDAO.appointmentAlert();
+
+            //TEST
+            System.out.println("This is the time converted from UTC: " + DateTimeUtil.toLocalDT(Timestamp.valueOf("2023-02-05 20:22:32")));
+
+            /*LocalDateTime startUDT = DateTimeUtil.formattedLocal(appointment.getStart());
+            ZonedDateTime zStartUDT = startUDT.atZone(ZoneId.of("UTC"));
+            ZonedDateTime zStartLocal = zStartUDT.withZoneSameInstant(ZoneId.systemDefault());
+            LocalDateTime startLocal = zStartLocal.toLocalDateTime();*/
+
+            if (appointment != null){
+                Alert fifteenAlertTrue = new Alert(Alert.AlertType.INFORMATION,"You have an upcoming appointment: " + '\n' + '\n' +
+                        "Appointment ID: " + appointment.getAppointmentID() + '\n' + "Time: " + appointment.getStart(), ButtonType.OK);
+                fifteenAlertTrue.showAndWait();
+            } else {
+                Alert fifteenAlertFalse = new Alert(Alert.AlertType.INFORMATION,"You do not have any upcoming appointments.", ButtonType.OK);
+                fifteenAlertFalse.showAndWait();
+            }
+
 
         } else if (usernameLogin.getText().isEmpty() || passwordLogin.getText().isEmpty()) {
 
