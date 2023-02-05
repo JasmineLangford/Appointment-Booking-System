@@ -1,7 +1,5 @@
 package model;
 
-import DAO.CustomerDAO;
-
 /**
  * This class is the model class for customer.
  */
@@ -32,12 +30,25 @@ public class Customer {
         this.customerPostal = customerPostal;
     }
 
+    /**
+     * Constructor for query of first-level divisions for combo box selection.
+     *
+     * @param divisionId to get
+     * @param division to get
+     * @param countryId to get
+     */
     public Customer(int divisionId, String division, int countryId) {
         this.divisionId = divisionId;
         this.division = division;
         this.countryId = countryId;
     }
 
+    /**
+     * Constructor for query of country selections for combo box.
+     *
+     * @param countryId to get
+     * @param customerCountry to get
+     */
     public Customer(int countryId, String customerCountry) {
         this.countryId = countryId;
         this.customerCountry = customerCountry;
