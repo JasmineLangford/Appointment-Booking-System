@@ -1,5 +1,7 @@
 package model;
 
+import DAO.CustomerDAO;
+
 /**
  * This class is the model class for customer.
  */
@@ -28,6 +30,17 @@ public class Customer {
         this.divisionId = divisionId;
         this.division = division;
         this.customerPostal = customerPostal;
+    }
+
+    public Customer(int divisionId, String division, int countryId) {
+        this.divisionId = divisionId;
+        this.division = division;
+        this.countryId = countryId;
+    }
+
+    public Customer(int countryId, String customerCountry) {
+        this.countryId = countryId;
+        this.customerCountry = customerCountry;
     }
 
     /**
@@ -153,6 +166,4 @@ public class Customer {
     public void setCustomerPostal(String customerPostal) {
         this.customerPostal = customerPostal;
     }
-
-
 }

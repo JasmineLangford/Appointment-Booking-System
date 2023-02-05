@@ -7,12 +7,13 @@ import model.Customer;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 /**
  * This class contains the database queries for customers.
  */
-public class CustomerDAO {
+public abstract class CustomerDAO {
+
     /**
      * Method to show all customers queried from database - customer table
      */
@@ -49,7 +50,7 @@ public class CustomerDAO {
      */
     public static void addCustomer(Customer customer) throws SQLException {
 
-        String addCustomerQuery = "INSERT INTO customers (Customer_ID,Customer_Name,Address,Postal_Code,Phone,Division_ID) VALUES (NULL,?,?,?,?,?)";
+        String addCustomerQuery = "INSERT INTO customers (Customer_ID,Customer_Name,Address,Postal_Code,Phone,Division_ID) VALUES (?,?,?,?,?,?)";
         PreparedStatement ps = JDBC.connection.prepareStatement(addCustomerQuery);
         ps.setInt(1, customer.getCustomerId());
         ps.setString(2, customer.getCustomerName());
@@ -60,14 +61,6 @@ public class CustomerDAO {
 
         ps.executeUpdate();
 
-    }
-
-    /**
-     * Method to query selections for combo box.
-     */
-
-    public static void selectCountries (){
-        String countriesQuery = "SELECT Country FROM countries";
     }
 
     /**
@@ -99,8 +92,8 @@ public class CustomerDAO {
             String location = rs.getString("Location");
             int contactID = rs.getInt("Contact_ID");
             String type = rs.getString("Type");
-            Timestamp start = rs.getTimestamp("Start");
-            Timestamp end = rs.getTimestamp("End");
+            LocalDateTime start = rs.getTimestamp("Start").toLocalDateTime();
+            LocalDateTime end = rs.getTimestamp("End").toLocalDateTime();
             int customerID = rs.getInt("Customer_ID");
             int userID = rs.getInt("User_ID");
 
@@ -111,4 +104,5 @@ public class CustomerDAO {
         return associatedAppts;
     }
 
+    public abstract String string();
 }
