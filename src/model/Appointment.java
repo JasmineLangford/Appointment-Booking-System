@@ -1,6 +1,7 @@
 package model;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 /**
  * This class is the model class for appointments.
@@ -12,8 +13,8 @@ public class Appointment {
     private String description;
     private String location;
     private String type;
-    private Timestamp start;
-    private Timestamp end;
+    private LocalDateTime start;
+    private LocalDateTime end;
     private int customerID;
     private int userID;
     private int contactID;
@@ -23,7 +24,7 @@ public class Appointment {
      * Constructor
      */
 
-    public Appointment(int appointmentID, String title, String description, String location, int contactID, String type, Timestamp start, Timestamp end, int customerID, int userID) {
+    public Appointment(int appointmentID, String title, String description, String location, int contactID, String type, LocalDateTime start, LocalDateTime end, int customerID, int userID) {
         this.appointmentID = appointmentID;
         this.title = title;
         this.description = description;
@@ -38,11 +39,6 @@ public class Appointment {
 
     // Null appointment
     public Appointment() {
-    }
-
-    public Appointment(int appointment_id, Timestamp start) {
-        this.appointmentID = appointment_id;
-        this.start = start;
     }
 
     /**
@@ -130,31 +126,31 @@ public class Appointment {
     }
 
     /**
-     * @return local start date and time
+     * @return start date and time
      */
-    public Timestamp getStart() {
+    public LocalDateTime getStart() {
         return start;
     }
 
     /**
      * @param start date and time to set
      */
-    public void setStart(Timestamp start) {
+    public void setStart(LocalDateTime start) {
         this.start = start;
 
     }
 
     /**
-     * @return local end date and time
+     * @return end date and time
      */
-    public Timestamp getEnd() {
+    public LocalDateTime getEnd() {
         return end;
     }
 
     /**
      * @param end date and time to set
      */
-    public void setEnd(Timestamp end) {
+    public void setEnd(LocalDateTime end) {
         this.end = end;
     }
 
