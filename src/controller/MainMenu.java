@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -17,10 +18,11 @@ import javafx.stage.Stage;
 import model.Appointment;
 import model.Customer;
 import java.io.IOException;
+import java.net.URL;
 import java.sql.SQLException;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 /**
  * This class contains a tableview for appointments and customers queried from the database.
@@ -29,9 +31,8 @@ import java.util.Optional;
  *
  * End-user can also navigate to a report view.
  *
- * <b> LAMBDA EXPRESSION #1 - changeToMonth and changeToWeek methods to filter dates. </b>
  */
-public class MainMenu {
+public class MainMenu implements Initializable {
 
     // radio buttons for appointment View
     public ToggleGroup apptViewToggle;
@@ -82,21 +83,9 @@ public class MainMenu {
     private TableColumn<Customer, String> customerPostalCol;
 
 
-    /**
-     * This initializes the Main Menu and populates the tableviews.
-     */
-    public void initialize() throws SQLException{
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Main Menu initialized!");
-
-        Appointment appointment = AppointmentDAO.appointmentAlert();
-        if (appointment != null){
-        Alert fifteenAlertTrue = new Alert(Alert.AlertType.INFORMATION,"You have the following appointments: " + '\n' + '\n' +
-                "Appointment ID: " + appointment.getAppointmentID() + '\n' + "Time: " + appointment.getStart(), ButtonType.OK);
-        fifteenAlertTrue.showAndWait();
-        } else {
-            Alert fifteenAlertFalse = new Alert(Alert.AlertType.INFORMATION,"You do not have any upcoming appointments", ButtonType.OK);
-            fifteenAlertFalse.showAndWait();
-        }
 
         // appointment table columns
         apptIDCol.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
@@ -110,7 +99,13 @@ public class MainMenu {
         apptCustCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         apptUserCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
 
-        loadApptTable();
+
+        try {
+            loadApptTable();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
 
         // customer table columns
         customerIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
@@ -121,19 +116,25 @@ public class MainMenu {
         customerStateCol.setCellValueFactory(new PropertyValueFactory<>("Division"));
         customerPostalCol.setCellValueFactory(new PropertyValueFactory<>("customerPostal"));
 
-        loadCustomerTable();
+        try {
+            loadCustomerTable();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     // load appointments tableview
     public void loadApptTable() throws SQLException {
         ObservableList<Appointment> allAppointments = AppointmentDAO.allAppointments();
         mainApptTable.setItems(allAppointments);
+        mainApptTable.getSelectionModel().clearSelection();
     }
 
     // load customer tableview
     public void loadCustomerTable() throws SQLException {
         ObservableList<Customer> allCustomers = CustomerDAO.allCustomers();
         mainCustomerTable.setItems(allCustomers);
+        mainCustomerTable.getSelectionModel().clearSelection();
     }
 
     // show all appointments if All Appointments radio button selected - default selection
@@ -141,7 +142,6 @@ public class MainMenu {
             ObservableList<Appointment> allAppointments = AppointmentDAO.allAppointments();
             for(Appointment ignored : allAppointments){
                 mainApptTable.setItems(allAppointments);
-
                 mainApptTable.setPlaceholder(new Label("No appointments available"));
 
             }
@@ -152,8 +152,7 @@ public class MainMenu {
         ObservableList<Appointment> currentMonth = AppointmentDAO.currentMonth();
         for(Appointment ignored : currentMonth){
             mainApptTable.setItems(currentMonth);
-
-        mainApptTable.setPlaceholder(new Label("No appointments for this month"));
+            mainApptTable.setPlaceholder(new Label("No appointments for this month"));
         }
     }
 
@@ -207,7 +206,7 @@ public class MainMenu {
      *
      * Info message will let end-user know appointment ID and type that was deleted.
      */
-    public void deleteApptRow() throws SQLException {
+    public void deleteApptRow() {
         if (mainApptTable.getSelectionModel().isEmpty()) {
             Alert deleteAppt = new Alert(Alert.AlertType.WARNING, "Please select an appointment to be deleted.");
             Optional<ButtonType> result = deleteAppt.showAndWait();
@@ -218,16 +217,19 @@ public class MainMenu {
                 "appointment?", ButtonType.YES, ButtonType.NO);
         Optional<ButtonType> result = deleteApptConfirm.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.YES) {
+            try {
             Appointment selectedAppt = mainApptTable.getSelectionModel().getSelectedItem();
             AppointmentDAO.deleteAppt(selectedAppt);
+            loadApptTable();
 
             Alert apptInfo = new Alert(Alert.AlertType.INFORMATION,"You have deleted the following appointment: " + '\n' + '\n' +
                     "Appointment ID: " + selectedAppt.getAppointmentID() + '\n' + "Type: " + selectedAppt.getType(), ButtonType.OK);
             apptInfo.showAndWait();
-
-            loadApptTable();
+            } catch (SQLException e){
+                e.printStackTrace();
             }
-        mainApptTable.getSelectionModel().clearSelection();
+        }
+            mainApptTable.getSelectionModel().clearSelection();
         }
     }
 
@@ -253,8 +255,21 @@ public class MainMenu {
      * @param actionEvent Modify button is clicked under the Customer tableview.
      */
 
-    public void updateCustomer(ActionEvent actionEvent) throws IOException {
-        System.out.println("Modify Customer initialized.");
+    public void updateCustomer(ActionEvent actionEvent) throws IOException, SQLException {
+
+        if(mainCustomerTable.getSelectionModel().isEmpty()){
+            Alert modCustomerSelect = new Alert(Alert.AlertType.WARNING, "Please select a customer to be modified.");
+            Optional<ButtonType> result = modCustomerSelect.showAndWait();
+            if(result.isPresent() && result.get() == ButtonType.OK)
+                return;
+        }
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/modify-customer.fxml"));
+        loader.load();
+
+        ModifyCustomer MainMenu = loader.getController();
+        MainMenu.sendCustomer(mainCustomerTable.getSelectionModel().getSelectedItem());
 
         Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/modify-customer.fxml"))));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -282,6 +297,7 @@ public class MainMenu {
         Customer deleteAssociatedAppts = mainCustomerTable.getSelectionModel().getSelectedItem();
         ObservableList<Appointment> associatedAppts = CustomerDAO.deleteAssociated(deleteAssociatedAppts.getCustomerId());
 
+        try {
         if(associatedAppts.size() > 0){
             Alert associatedAppt = new Alert(Alert.AlertType.WARNING, "All associated appointments will be " +
                     "deleted along with this customer. Are you sure you want to delete this customer?", ButtonType.YES, ButtonType.NO);
@@ -291,11 +307,15 @@ public class MainMenu {
             Optional<ButtonType> results = associatedAppt.showAndWait();
             if (results.isPresent() && results.get() == ButtonType.YES ) {
 
-            CustomerDAO.deleteCustomer(deleteAssociatedAppts);
-            loadApptTable();
-            loadCustomerTable();
-            mainCustomerTable.getSelectionModel().clearSelection();
+                CustomerDAO.deleteCustomer(deleteAssociatedAppts);
+                loadApptTable();
+                loadCustomerTable();
+                mainCustomerTable.getSelectionModel().clearSelection();
             }
+            if (results.isPresent() && results.get() == ButtonType.NO ) {
+                mainCustomerTable.getSelectionModel().clearSelection();
+            }
+
         } else {
 
         Alert deleteCustConfirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this " +
@@ -306,8 +326,11 @@ public class MainMenu {
             CustomerDAO.deleteCustomer(selectedCustomer);
 
             loadCustomerTable();
+            mainCustomerTable.getSelectionModel().clearSelection();
             }
-        mainCustomerTable.getSelectionModel().clearSelection();
+        }
+    } catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -340,4 +363,5 @@ public class MainMenu {
             System.out.println("Program Closed");
         }
     }
+
 }
