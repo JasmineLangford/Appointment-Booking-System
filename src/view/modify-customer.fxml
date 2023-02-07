@@ -57,11 +57,11 @@
             </font>
         </Label>
     </Pane>
-    <TextField layoutX="198.0" layoutY="122.0" prefHeight="25.0" prefWidth="46.0" />
-    <TextField layoutX="198.0" layoutY="157.0" prefHeight="25.0" prefWidth="206.0" />
-    <TextField layoutX="198.0" layoutY="194.0" prefHeight="25.0" prefWidth="206.0" />
-    <TextField layoutX="198.0" layoutY="231.0" prefHeight="25.0" prefWidth="206.0" />
-    <TextField layoutX="198.0" layoutY="342.0" prefHeight="25.0" prefWidth="206.0" />
-    <ChoiceBox layoutX="198.0" layoutY="268.0" prefHeight="25.0" prefWidth="206.0" />
-    <ChoiceBox layoutX="198.0" layoutY="305.0" prefHeight="25.0" prefWidth="206.0" />
+    <TextField fx:id="customerIdField" disable="true" layoutX="198.0" layoutY="122.0" prefHeight="25.0" prefWidth="46.0" />
+    <TextField fx:id="customerNameText" layoutX="198.0" layoutY="157.0" prefHeight="25.0" prefWidth="206.0" />
+    <TextField fx:id="customerAddressText" layoutX="198.0" layoutY="194.0" prefHeight="25.0" prefWidth="206.0" />
+    <TextField fx:id="customerPhoneText" layoutX="198.0" layoutY="231.0" prefHeight="25.0" prefWidth="206.0" />
+    <TextField fx:id="customerPostalText" layoutX="198.0" layoutY="342.0" prefHeight="25.0" prefWidth="206.0" />
+   <ComboBox fx:id="countryCombo" layoutX="198.0" layoutY="269.0" prefHeight="25.0" prefWidth="206.0" />
+   <ComboBox fx:id="firstLevelCombo" layoutX="198.0" layoutY="306.0" prefHeight="25.0" prefWidth="206.0" />
 </AnchorPane>
