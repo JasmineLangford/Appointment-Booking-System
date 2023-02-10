@@ -13,6 +13,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.Optional;
@@ -25,13 +27,14 @@ import java.util.ResourceBundle;
  */
 public class AddAppointment implements Initializable {
 
+
     // Form fields
     @FXML
     private DatePicker startDatePicker;
     @FXML
-    private ChoiceBox startTimeCombo;
+    private ComboBox<LocalTime> startCombo;
     @FXML
-    private ChoiceBox endTimeCombo;
+    private ComboBox<LocalTime> endCombo;
     @FXML
     private DatePicker endDatePicker;
     @FXML
@@ -61,6 +64,19 @@ public class AddAppointment implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        LocalTime start = LocalTime.of(8,0);
+        LocalTime end = LocalTime.of(22,0);
+
+
+        while(start.isBefore(end.plusSeconds(1))){
+            startCombo.getItems().add(start);
+            endCombo.getItems().add(start);
+            start = start.plusMinutes(30);
+        }
+
+        startCombo.setPromptText("Select a time.");
+        endCombo.setPromptText("Select a time.");
     }
 
     /**
@@ -72,9 +88,9 @@ public class AddAppointment implements Initializable {
 
         // end-user form fields
         String addStartDate = startDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        String addStartTime = (String) startTimeCombo.getValue().toString();
+        String addStartTime = startCombo.getValue().toString();
         String addEndDate = endDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        String addEndTime = (String) endTimeCombo.getValue().toString();
+        String addEndTime = endCombo.getValue().toString();
         //int apptId = Integer.parseInt(apptID.getText());
         String addContact = contactCombo.getValue().toString();
         String addType = typeTextfield.getText();
