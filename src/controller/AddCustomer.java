@@ -69,7 +69,7 @@ public class AddCustomer implements Initializable {
 
         // setting combo box selection of countries
         countryCombo.setItems(countries);
-        countryCombo.setPromptText("Select a country.");
+        countryCombo.setPromptText("Select country.");
     }
 
     /**
@@ -86,18 +86,18 @@ public class AddCustomer implements Initializable {
 
         // changes prompt based on country selected
         if(selection.getCountryId() == 1){
-            firstLevelCombo.setPromptText("Select a state");
+            firstLevelCombo.setPromptText("Select state.");
         } else if (selection.getCountryId() == 2) {
-            firstLevelCombo.setPromptText("Select region");
+            firstLevelCombo.setPromptText("Select region.");
         } else if (selection.getCountryId() == 3) {
-            firstLevelCombo.setPromptText("Select province");
+            firstLevelCombo.setPromptText("Select province.");
         }
     }
 
     /**
      * This will save data entered in form fields and add the new customer to the database.
      */
-    public void onSaveCustomer(ActionEvent actionEvent) throws SQLException {
+    public void onSaveCustomer(ActionEvent actionEvent) {
 
         int addCustomerID = Integer.parseInt(customerID.getText());
         String addCustomerName = custNameTextfield.getText();
@@ -105,7 +105,6 @@ public class AddCustomer implements Initializable {
         String addPhoneNumber = phoneNumberTextfield.getText();
         String addPostalCode =  postalCodeTextfield.getText();
         String addCountry = countryCombo.getValue().toString();
-        //String addFirstLevel = firstLevelCombo.getValue().toString();
         int addFirstLevel = firstLevelCombo.getSelectionModel().getSelectedItem().getDivisionId();
 
 
@@ -125,8 +124,6 @@ public class AddCustomer implements Initializable {
            newCustomer.setCustomerPostal(addPostalCode);
            newCustomer.setCustomerCountry(addCountry);
            newCustomer.setDivisionId(addFirstLevel);
-
-
 
         Alert addCustomer = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to add this new customer?", ButtonType.YES, ButtonType.NO);
         Optional<ButtonType> result = addCustomer.showAndWait();
