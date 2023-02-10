@@ -15,7 +15,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Customer;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -54,10 +53,6 @@ public class AddCustomer implements Initializable {
     public AddCustomer() throws SQLException {
     }
 
-    /**
-     * <b>LAMBDA #1 - Filters first level division combo box selection based on end-user's selection of country
-     * in country combo box. This will provide the end-user with a shortened selection of divisions.<b>
-     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Add customer is initialized!");
@@ -69,22 +64,35 @@ public class AddCustomer implements Initializable {
             e.printStackTrace();
         }
 
+        // setting combo box selection of countries
         countryCombo.setItems(countries);
         countryCombo.setPromptText("Select a country.");
-
-        firstLevelCombo.setItems(firstLevel);
-        firstLevelCombo.setVisibleRowCount(4);
-        firstLevelCombo.setPromptText("Select a division.");
-    }
-
-    public void countrySelected() throws SQLException {
-        Customer selection = countryCombo.getSelectionModel().getSelectedItem();
-
-            firstLevelCombo.setItems(FirstLevelDAO.allFirstLevelDivision().stream().filter(firstLevel -> firstLevel.getCountryId() == selection.getCountryId()).collect(Collectors.toCollection(FXCollections::observableArrayList)));
     }
 
     /**
-     * This will save data in the text fields and add the new customer to the Customer tableview on the Main Menu.
+     * <b>LAMBDA #1 - Filters first level division combo box selection based on end-user's selection of country.
+     * This will provide the end-user with specific divisions to choose from rather than a long list.<b>
+     */
+    public void countrySelected() throws SQLException {
+        Customer selection = countryCombo.getSelectionModel().getSelectedItem();
+        firstLevelCombo.setItems(FirstLevelDAO.allFirstLevelDivision().stream()
+                .filter(firstLevel -> firstLevel.getCountryId() == selection.getCountryId())
+                .collect(Collectors.toCollection(FXCollections::observableArrayList)));
+
+        firstLevelCombo.setVisibleRowCount(3);
+
+        // changes prompt based on country selected
+        if(selection.getCountryId() == 1){
+            firstLevelCombo.setPromptText("Select a state");
+        } else if (selection.getCountryId() == 2) {
+            firstLevelCombo.setPromptText("Select region");
+        } else if (selection.getCountryId() == 3) {
+            firstLevelCombo.setPromptText("Select province");
+        }
+    }
+
+    /**
+     * This will save data entered in form fields and add the new customer to the database.
      */
     public void onSaveCustomer() throws SQLException {
 
