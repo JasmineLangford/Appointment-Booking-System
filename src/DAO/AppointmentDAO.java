@@ -3,10 +3,11 @@ package DAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Appointment;
+import model.DateTimeUtil;
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
 
 /**
  * This class contains the database queries for appointments.
@@ -16,8 +17,9 @@ public class AppointmentDAO {
      * Method to query all appointments from appointments table in database.
      */
     public static ObservableList<Appointment> allAppointments() throws SQLException{
+
         ObservableList<Appointment> listOfAppointments = FXCollections.observableArrayList();
-        String apptQuery = "SELECT * FROM appointments";
+        String apptQuery = "SELECT * FROM appointments ORDER BY Appointment_ID ASC";
         PreparedStatement ps = JDBC.connection.prepareStatement(apptQuery);
         ResultSet rs = ps.executeQuery();
 
@@ -28,8 +30,8 @@ public class AppointmentDAO {
             String location = rs.getString("Location");
             int contactID = rs.getInt("Contact_ID");
             String type = rs.getString("Type");
-            Timestamp start = rs.getTimestamp("Start");
-            Timestamp end = rs.getTimestamp("End");
+            LocalDateTime start = DateTimeUtil.toLocalDT(rs.getTimestamp("Start"));
+            LocalDateTime end = DateTimeUtil.toLocalDT(rs.getTimestamp("End"));
             int customerID = rs.getInt("Customer_ID");
             int userID = rs.getInt("User_ID");
 
@@ -56,8 +58,8 @@ public class AppointmentDAO {
             String location = rs.getString("Location");
             int contactID = rs.getInt("Contact_ID");
             String type = rs.getString("Type");
-            Timestamp start = rs.getTimestamp("Start");
-            Timestamp end = rs.getTimestamp("End");
+            LocalDateTime start = DateTimeUtil.toLocalDT(rs.getTimestamp("Start"));
+            LocalDateTime end = DateTimeUtil.toLocalDT(rs.getTimestamp("End"));
             int customerID = rs.getInt("Customer_ID");
             int userID = rs.getInt("User_ID");
 
@@ -84,8 +86,8 @@ public class AppointmentDAO {
             String location = rs.getString("Location");
             int contactID = rs.getInt("Contact_ID");
             String type = rs.getString("Type");
-            Timestamp start = rs.getTimestamp("Start");
-            Timestamp end = rs.getTimestamp("End");
+            LocalDateTime start = DateTimeUtil.toLocalDT(rs.getTimestamp("Start"));
+            LocalDateTime end = DateTimeUtil.toLocalDT(rs.getTimestamp("End"));
             int customerID = rs.getInt("Customer_ID");
             int userID = rs.getInt("User_ID");
 
@@ -125,32 +127,32 @@ public class AppointmentDAO {
      */
 
     public static Appointment appointmentAlert() {
-        LocalDateTime now = LocalDateTime.now();
-        ZoneId zoneId = ZoneId.systemDefault();
-        ZonedDateTime zonedDT = now.atZone(zoneId);
-        LocalDateTime localDT = zonedDT.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime();
-        LocalDateTime fifteenMinTime = localDT.plusMinutes(15);
 
-        String userLoggedIn = UserDAO.getUserLogin().getUsername();
+        // check for appointments in UTC
+        /*Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
+        ZoneId zoneId = ZoneId.systemDefault();
+        ZonedDateTime zonedDT = timestamp.toLocalDateTime().atZone(zoneId);
+        Timestamp dateTimeUTC = Timestamp.valueOf(zonedDT.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
+        LocalDateTime timeUTC = zonedDT.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime();
+        Timestamp plusFifteenUTC = Timestamp.valueOf(timeUTC.plusMinutes(15));
 
         Appointment alertAppointments;
 
         try {
-        String alertFifteenQuery = "SELECT * FROM appointments,users WHERE appointments.Start BETWEEN" + localDT + fifteenMinTime + "AND users.User_Name=" + userLoggedIn;
-        PreparedStatement ps = JDBC.connection.prepareStatement(alertFifteenQuery);
-        ResultSet rs = ps.executeQuery();
+            String alertFifteenQuery = "SELECT * FROM appointments WHERE Start >='" + dateTimeUTC + "'AND'" + plusFifteenUTC + "'";
+            PreparedStatement ps = JDBC.connection.prepareStatement(alertFifteenQuery);
+            ResultSet rs = ps.executeQuery();
 
-        if(rs.next()) {
-            alertAppointments = new Appointment(
-            rs.getInt("Appointment_ID"),
-            rs.getTimestamp("Start"));
+            if (rs.next()) {
+                alertAppointments = new Appointment(
+                        rs.getInt("Appointment_ID"),
+                        rs.getTimestamp("Start"));
 
-            return alertAppointments;
-
-        }
-        }catch (SQLException e) {
+                return alertAppointments;
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
-        }
+        }*/
         return null;
     }
 
