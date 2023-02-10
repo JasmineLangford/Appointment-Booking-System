@@ -23,7 +23,7 @@ public abstract class CustomerDAO {
                 "first_level_divisions.Country_ID, customers.Division_ID, " +
                      "Division FROM customers INNER JOIN first_level_divisions ON customers.Division_ID=" +
                      "first_level_divisions.Division_ID INNER JOIN countries ON first_level_divisions.Country_ID=" +
-                     "countries.Country_ID;";
+                     "countries.Country_ID ORDER BY Customer_ID ASC;";
         try {
             PreparedStatement ps = JDBC.connection.prepareStatement(customerQuery);
             ResultSet rs = ps.executeQuery();
@@ -51,6 +51,9 @@ public abstract class CustomerDAO {
 
     public static void addCustomer(int addCustomerID, String addCustomerName, String addAddress, String addPhoneNumber,
                                    String addPostalCode, int addFirstLevel){
+
+        String phoneNumber = addPhoneNumber.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "$1- $2-$3");
+
         try {
             String addCustomerQuery = "INSERT INTO customers (Customer_ID,Customer_Name,Address,Postal_Code,Phone," +
                     "Create_Date,Created_By,Last_Update,Last_Updated_By,Division_ID) VALUES (?,?,?,?,?,?,?,?,?,?)";
@@ -59,7 +62,7 @@ public abstract class CustomerDAO {
             ps.setString(2, addCustomerName);
             ps.setString(3, addAddress);
             ps.setString(4, addPostalCode);
-            ps.setString(5, addPhoneNumber);
+            ps.setString(5, phoneNumber);
             ps.setString(6, null);
             ps.setString(7, null);
             ps.setString(8, null);
