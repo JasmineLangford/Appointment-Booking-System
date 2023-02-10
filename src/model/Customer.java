@@ -131,7 +131,8 @@ public class Customer {
     }
 
     /**
-     @param countryId to set */
+     @param countryId to set
+     */
     public void setCountryId(int countryId) {
         this.countryId = countryId;
     }
