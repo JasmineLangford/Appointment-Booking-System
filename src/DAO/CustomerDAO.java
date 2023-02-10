@@ -19,26 +19,31 @@ public abstract class CustomerDAO {
      */
     public static ObservableList<Customer> allCustomers() throws SQLException {
         ObservableList<Customer> listOfCustomers = FXCollections.observableArrayList();
-        String customerQuery = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, countries.Country, first_level_divisions.Country_ID, customers.Division_ID, " +
+        String customerQuery = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, countries.Country, " +
+                "first_level_divisions.Country_ID, customers.Division_ID, " +
                      "Division FROM customers INNER JOIN first_level_divisions ON customers.Division_ID=" +
                      "first_level_divisions.Division_ID INNER JOIN countries ON first_level_divisions.Country_ID=" +
                      "countries.Country_ID;";
-        PreparedStatement ps = JDBC.connection.prepareStatement(customerQuery);
-        ResultSet rs = ps.executeQuery();
+        try {
+            PreparedStatement ps = JDBC.connection.prepareStatement(customerQuery);
+            ResultSet rs = ps.executeQuery();
 
-        while(rs.next()){
-            int customerId = rs.getInt("Customer_ID");
-            String customerName = rs.getString("Customer_Name");
-            String customerAddress = rs.getString("Address");
-            String customerPhone = rs.getString("Phone");
-            String customerCountry = rs.getString("Country");
-            int countryId = rs.getInt("Country_ID");
-            int divisionId = rs.getInt("Division_ID");
-            String division = rs.getString("Division");
-            String customerPostal = rs.getString("Postal_Code");
-            Customer customer = new Customer(customerId,customerName,customerAddress,customerPhone, customerCountry,
-                                countryId, divisionId,division,customerPostal);
-            listOfCustomers.add(customer);
+            while(rs.next()){
+                int customerId = rs.getInt("Customer_ID");
+                String customerName = rs.getString("Customer_Name");
+                String customerAddress = rs.getString("Address");
+                String customerPhone = rs.getString("Phone");
+                String customerCountry = rs.getString("Country");
+                int countryId = rs.getInt("Country_ID");
+                int divisionId = rs.getInt("Division_ID");
+                String division = rs.getString("Division");
+                String customerPostal = rs.getString("Postal_Code");
+                Customer customer = new Customer(customerId,customerName,customerAddress,customerPhone, customerCountry,
+                                    countryId, divisionId,division,customerPostal);
+                listOfCustomers.add(customer);
+        }
+        } catch (SQLException e){
+            e.printStackTrace();
         }
         return listOfCustomers;
     }
@@ -46,21 +51,20 @@ public abstract class CustomerDAO {
     /**
      * Method to add customer into customers table in the database.
      *
-     * @param customer constructor to be used
      */
-    public static void addCustomer(Customer customer) throws SQLException {
+    public static void addCustomer(int customerId, String customerName, String customerAddress, String customerPostal,
+                                   String customerPhone, int divisionId) throws SQLException {
 
-        String addCustomerQuery = "INSERT INTO customers (Customer_ID,Customer_Name,Address,Postal_Code,Phone,Division_ID) VALUES (?,?,?,?,?,?)";
+        String addCustomerQuery = "INSERT INTO customers (Customer_ID,Customer_Name,Address,Postal_Code,Phone," +
+                "Division_ID) VALUES (?,?,?,?,?,?)";
         PreparedStatement ps = JDBC.connection.prepareStatement(addCustomerQuery);
-        ps.setInt(1, customer.getCustomerId());
-        ps.setString(2, customer.getCustomerName());
-        ps.setString(3, customer.getCustomerAddress());
-        ps.setString(4,customer.getCustomerPostal());
-        ps.setString(5,customer.getCustomerPhone());
-        ps.setInt(10,customer.getDivisionId());
-
-        ps.executeUpdate();
-
+        ps.setInt(1, customerId);
+        ps.setString(2, customerName);
+        ps.setString(3, customerAddress);
+        ps.setString(4,customerPostal);
+        ps.setString(5,customerPhone);
+        ps.setInt(10, divisionId);
+        int results = ps.executeUpdate();
     }
 
     /**
@@ -104,5 +108,4 @@ public abstract class CustomerDAO {
         return associatedAppts;
     }
 
-    public abstract String string();
 }
