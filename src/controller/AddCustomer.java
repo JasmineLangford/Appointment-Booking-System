@@ -50,8 +50,11 @@ public class AddCustomer implements Initializable {
     // list of first-level divisions
     ObservableList<FirstLevelDAO> firstLevel = FirstLevelDAO.allFirstLevelDivision();
 
+    Customer newCustomer = new Customer();
+
     public AddCustomer() throws SQLException {
     }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -94,7 +97,7 @@ public class AddCustomer implements Initializable {
     /**
      * This will save data entered in form fields and add the new customer to the database.
      */
-    public void onSaveCustomer() throws SQLException {
+    public void onSaveCustomer(ActionEvent actionEvent) throws SQLException {
 
         int addCustomerID = Integer.parseInt(customerID.getText());
         String addCustomerName = custNameTextfield.getText();
@@ -102,11 +105,12 @@ public class AddCustomer implements Initializable {
         String addPhoneNumber = phoneNumberTextfield.getText();
         String addPostalCode =  postalCodeTextfield.getText();
         String addCountry = countryCombo.getValue().toString();
-        String addFirstLevel = firstLevelCombo.getValue().toString();
+        //String addFirstLevel = firstLevelCombo.getValue().toString();
+        int addFirstLevel = firstLevelCombo.getSelectionModel().getSelectedItem().getDivisionId();
 
 
         if (addCustomerName.isEmpty() || addAddress.isEmpty() ||addPhoneNumber.isEmpty() || addPostalCode.isEmpty() ||
-                addCountry.isEmpty() || addFirstLevel.isEmpty()) {
+                addCountry.isEmpty()) {
             Alert emptyField = new Alert(Alert.AlertType.ERROR, "One or more fields are empty. Please enter a" +
                         " value in each field.");
             emptyField.showAndWait();
@@ -114,11 +118,21 @@ public class AddCustomer implements Initializable {
 
        try{
 
+           newCustomer.setCustomerId(addCustomerID);
+           newCustomer.setCustomerName(addCustomerName);
+           newCustomer.setCustomerAddress(addAddress);
+           newCustomer.setCustomerPhone(addPhoneNumber);
+           newCustomer.setCustomerPostal(addPostalCode);
+           newCustomer.setCustomerCountry(addCountry);
+           newCustomer.setDivisionId(addFirstLevel);
+
+
+
         Alert addCustomer = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to add this new customer?", ButtonType.YES, ButtonType.NO);
         Optional<ButtonType> result = addCustomer.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.YES){
-            CustomerDAO.addCustomer(addCustomerID,addCustomerName,addAddress,addPostalCode,addPhoneNumber, Integer.parseInt(addFirstLevel));
-            toMainMenu(new ActionEvent());
+            CustomerDAO.addCustomer(addCustomerID,addCustomerName,addAddress,addPhoneNumber,addPostalCode,addFirstLevel);
+            toMainMenu(actionEvent);
         }
        }catch (IOException e){
            e.printStackTrace();

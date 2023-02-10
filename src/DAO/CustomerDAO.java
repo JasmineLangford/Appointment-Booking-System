@@ -48,23 +48,27 @@ public abstract class CustomerDAO {
         return listOfCustomers;
     }
 
-    /**
-     * Method to add customer into customers table in the database.
-     *
-     */
-    public static void addCustomer(int customerId, String customerName, String customerAddress, String customerPostal,
-                                   String customerPhone, int divisionId) throws SQLException {
 
-        String addCustomerQuery = "INSERT INTO customers (Customer_ID,Customer_Name,Address,Postal_Code,Phone," +
-                "Division_ID) VALUES (?,?,?,?,?,?)";
-        PreparedStatement ps = JDBC.connection.prepareStatement(addCustomerQuery);
-        ps.setInt(1, customerId);
-        ps.setString(2, customerName);
-        ps.setString(3, customerAddress);
-        ps.setString(4,customerPostal);
-        ps.setString(5,customerPhone);
-        ps.setInt(10, divisionId);
-        int results = ps.executeUpdate();
+    public static void addCustomer(int addCustomerID, String addCustomerName, String addAddress, String addPhoneNumber,
+                                   String addPostalCode, int addFirstLevel){
+        try {
+            String addCustomerQuery = "INSERT INTO customers (Customer_ID,Customer_Name,Address,Postal_Code,Phone," +
+                    "Create_Date,Created_By,Last_Update,Last_Updated_By,Division_ID) VALUES (?,?,?,?,?,?,?,?,?,?)";
+            PreparedStatement ps = JDBC.connection.prepareStatement(addCustomerQuery);
+            ps.setInt(1, addCustomerID);
+            ps.setString(2, addCustomerName);
+            ps.setString(3, addAddress);
+            ps.setString(4, addPostalCode);
+            ps.setString(5, addPhoneNumber);
+            ps.setString(6, null);
+            ps.setString(7, null);
+            ps.setString(8, null);
+            ps.setString(9, null);
+            ps.setInt(10, addFirstLevel);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
