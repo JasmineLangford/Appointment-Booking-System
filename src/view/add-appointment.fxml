@@ -79,7 +79,6 @@
     </Label>
     <Line endX="332.6666564941406" layoutX="172.0" layoutY="204.0" startX="-113.0" stroke="#ccc5c5" />
     <DatePicker fx:id="endDatePicker" layoutX="357.0" layoutY="116.0" prefHeight="25.0" prefWidth="141.0" />
-    <ChoiceBox fx:id="startTimeCombo" layoutX="131.0" layoutY="149.0" prefHeight="25.0" prefWidth="141.0" />
     <Label layoutX="213.0" layoutY="223.0" text="Appointment Details" textFill="#373436">
         <font>
             <Font name="Gill Sans MT Bold" size="14.0" />
@@ -100,5 +99,6 @@
     <TextField fx:id="custIdTextfield" layoutX="234.0" layoutY="472.0" prefHeight="25.0" prefWidth="46.0" />
     <TextField fx:id="userIdTextfield" layoutX="234.0" layoutY="508.0" prefHeight="25.0" prefWidth="46.0" />
    <ComboBox fx:id="contactCombo" layoutX="235.0" layoutY="290.0" prefHeight="25.0" prefWidth="196.0" />
-   <ChoiceBox fx:id="endTimeCombo" layoutX="357.0" layoutY="149.0" prefHeight="25.0" prefWidth="141.0" />
+   <ComboBox fx:id="startCombo" layoutX="129.0" layoutY="149.0" prefHeight="25.0" prefWidth="141.0" />
+   <ComboBox fx:id="endCombo" layoutX="356.0" layoutY="149.0" prefHeight="25.0" prefWidth="141.0" />
 </AnchorPane>
