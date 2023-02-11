@@ -5,8 +5,9 @@ import javafx.collections.ObservableList;
 import model.Appointment;
 import model.DateTimeUtil;
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalTime;
 
 
 /**
@@ -100,27 +101,32 @@ public class AppointmentDAO {
     /**
      * Method to insert new appointment in appointments table in database.
      */
-    /*public void addAppt(Appointment appointment) throws SQLException {
+    public static void addAppointment(LocalDate addStartDate, LocalTime addStartTime, LocalDate addEndDate, LocalTime addEndTime,
+                                      int apptId, String addContact, String addType, String addTitle, String addDescription, String
+                                              addLocation, int addCustID, int addUserID) throws SQLException {
         try {
-        String addApptQuery = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, " +
-                "Customer_ID, User_ID, Contact_ID) VALUES (?,?,?,?,?,?,?,?,?,?)";
+        String addApptQuery = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, " +
+                "End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?,?,?,?,?,?,?,?,?,?)";
         PreparedStatement ps = JDBC.connection.prepareStatement(addApptQuery);
-        ps.setInt(1, appointment.getAppointmentID());
-        ps.setString(2, appointment.getTitle());
-        ps.setString(3, appointment.getDescription());
-        ps.setString(4, appointment.getLocation());
-        ps.setString(5, appointment.getType());
-        ps.setTimestamp(6, localDT.appointment.getStart());
-        ps.setTimestamp(7, localDT.appointment.getEnd());
-        ps.setString(8, appointment.get);
-        ps.setString(9,);
-        ps.setString(10,);
+        ps.setInt(1, apptId);
+        ps.setString(2, addTitle);
+        ps.setString(3, addDescription);
+        ps.setString(4, addLocation);
+        ps.setString(5, addType);
+        ps.setTimestamp(6, DateTimeUtil.toUTCStartDT(addStartDate,addStartTime));
+        ps.setTimestamp(7, DateTimeUtil.toUTCEndDT(addEndDate,addEndTime));
+        ps.setString(8, null);
+        ps.setString(9,null);
+        ps.setString(10,null);
+        ps.setString(11,null);
+        ps.setInt(12,addCustID);
+        ps.setInt(13,addUserID);
+        ps.setString(14,addContact);
 
-
-        } catch (){
-
+        } catch (SQLException e){
+            e.printStackTrace();
         }
-    }*/
+    }
 
     /**
      * Method to query for 15 minute appointment alert.
