@@ -54,6 +54,10 @@ public class Customer {
         this.customerCountry = customerCountry;
     }
 
+    // null
+    public Customer() {
+    }
+
     /**
      * @return the custID
      */
