@@ -63,4 +63,5 @@
     <TextField fx:id="customerPhoneText" layoutX="198.0" layoutY="231.0" prefHeight="25.0" prefWidth="206.0" />
     <TextField fx:id="customerPostalText" layoutX="198.0" layoutY="342.0" prefHeight="25.0" prefWidth="206.0" />
    <ComboBox fx:id="countryModCombo" layoutX="198.0" layoutY="269.0" onAction="#onModCountry" prefHeight="25.0" prefWidth="206.0" />
+   <ComboBox fx:id="firstLevelModCombo" layoutX="198.0" layoutY="305.0" prefHeight="25.0" prefWidth="206.0" />
 </AnchorPane>
