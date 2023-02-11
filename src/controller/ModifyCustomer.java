@@ -11,10 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Customer;
 import java.io.IOException;
@@ -64,12 +61,13 @@ public class ModifyCustomer implements Initializable {
 
         countryModCombo.setItems(countries);
         firstLevelModCombo.setItems(divisions);
+        firstLevelModCombo.setVisibleRowCount(5);
     }
 
     /**
      * This populates the data from the selected customer tableview from Main Menu.
      */
-    public void sendCustomer(Customer customer) throws SQLException {
+    public void sendCustomer(Customer customer) {
         modCustomer = customer;
 
         customerIdField.setText(String.valueOf(modCustomer.getCustomerId()));
@@ -79,6 +77,7 @@ public class ModifyCustomer implements Initializable {
         countryModCombo.setValue(modCustomer.getCustomerCountry());
         firstLevelModCombo.setValue(modCustomer.getDivision());
         customerPostalText.setText(modCustomer.getCustomerPostal());
+
     }
     /**
      * Modified fields will be saved to the Customer tableview on the Main Menu.
@@ -92,7 +91,7 @@ public class ModifyCustomer implements Initializable {
         String modPhone = customerPhoneText.getText();
         String modPostal = customerPostalText.getText();
         String modCountry = countryModCombo.getValue().toString();
-        int modFirstLevel = firstLevelModCombo.getVisibleRowCount();
+        int modFirstLevel = Integer.parseInt(firstLevelModCombo.getValue().toString());
 
         if (modCustomerName.isEmpty() || modAddress.isEmpty() || modPhone.isEmpty() || modCountry.isEmpty() || modPostal.isEmpty()) {
 
@@ -123,6 +122,7 @@ public class ModifyCustomer implements Initializable {
         }
     }
 
+
     /**
      * This navigates the user back to the Main Menu.
      * @param actionEvent Cancel button is clicked.
@@ -143,7 +143,7 @@ public class ModifyCustomer implements Initializable {
     public void onModCountry() throws SQLException {
 
         // unselects the previous division
-        firstLevelModCombo.getSelectionModel().clearAndSelect(1);
+        firstLevelModCombo.getSelectionModel().clearAndSelect(0);
 
         // filters first-level division combo box
         Customer modSelection = (Customer) countryModCombo.getSelectionModel().getSelectedItem();
@@ -151,7 +151,6 @@ public class ModifyCustomer implements Initializable {
                 .filter(firstLevel -> firstLevel.getCountryId() == modSelection.getCountryId())
                 .collect(Collectors.toCollection(FXCollections::observableArrayList)));
 
-        firstLevelModCombo.setVisibleRowCount(3);
+        firstLevelModCombo.setVisibleRowCount(5);
     }
-
 }
