@@ -10,12 +10,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import model.Appointment;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -54,6 +55,8 @@ public class AddAppointment implements Initializable {
     @FXML
     private TextField userIdTextfield;
 
+    Appointment newAppointment = new Appointment();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Add appointment is initialized!");
@@ -87,11 +90,11 @@ public class AddAppointment implements Initializable {
     public void onSaveAppt(ActionEvent actionEvent) {
 
         // end-user form fields
-        String addStartDate = startDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        String addStartTime = startCombo.getValue().toString();
-        String addEndDate = endDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        String addEndTime = endCombo.getValue().toString();
-        //int apptId = Integer.parseInt(apptID.getText());
+        LocalDate addStartDate = startDatePicker.getValue();
+        LocalTime addStartTime = startCombo.getValue();
+        LocalDate addEndDate = endDatePicker.getValue();
+        LocalTime addEndTime = endCombo.getValue();
+        int apptId = Integer.parseInt(apptID.getText());
         String addContact = contactCombo.getValue().toString();
         String addType = typeTextfield.getText();
         String addTitle = titleTextfield.getText();
@@ -102,8 +105,7 @@ public class AddAppointment implements Initializable {
 
         // Input Validation Messages
         try {
-            if (addStartDate.isEmpty() || addEndDate.isEmpty() ||addStartTime.isEmpty() || addEndTime.isEmpty() ||
-                    addContact.isEmpty() || addType.isEmpty() || addTitle.isEmpty() || addDescription.isEmpty() ||
+            if (addContact.isEmpty() || addType.isEmpty() || addTitle.isEmpty() || addDescription.isEmpty() ||
                     addLocation.isEmpty()) {
                 Alert emptyField = new Alert(Alert.AlertType.ERROR, "One or more fields are empty. Please enter a" +
                         " value in each field.");
@@ -133,23 +135,40 @@ public class AddAppointment implements Initializable {
                 return;
         }
 
+        try {
 
+            newAppointment.setStart(LocalDateTime.from(addStartDate));
+            newAppointment.setStart(LocalDateTime.from(addStartTime));
+            newAppointment.setStart(LocalDateTime.from(addEndDate));
+            newAppointment.setStart(LocalDateTime.from(addEndTime));
+            newAppointment.setAppointmentID(apptId);
+            newAppointment.setContactID(Integer.parseInt(addContact));
+            newAppointment.setType(addType);
+            newAppointment.setTitle(addTitle);
+            newAppointment.setDescription(addDescription);
+            newAppointment.setLocation(addLocation);
+            newAppointment.setCustomerID(addCustID);
+            newAppointment.setUserID(addUserID);
 
-         Alert addAppointmentConfirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to add this " +
-                 "appointment?");
-         Optional<ButtonType> result = addAppointmentConfirm.showAndWait();
-         if(result.isPresent() && result.get() == ButtonType.YES) {
+            Alert addAppointmentConfirm = new Alert(Alert.AlertType.CONFIRMATION, "" +
+                    "appointment?");
+            Optional<ButtonType> result = addAppointmentConfirm.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.YES) {
+                AppointmentDAO.addAppointment(addStartDate,addStartTime,addEndDate,addEndTime,apptId,addContact,
+                        addType,addTitle,addDescription,addLocation,addCustID,addUserID);
+                toMainMenu(actionEvent);
 
-
-         }
-
+            }
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * This navigates the user back to the Main Menu.
      * @param actionEvent Cancel button is clicked.
      * */
-    public void onCancel(ActionEvent actionEvent) throws IOException {
+    public void toMainMenu(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/main-menu.fxml"))));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, 1108, 620);
