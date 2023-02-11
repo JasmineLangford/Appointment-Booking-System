@@ -57,7 +57,7 @@
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Button>
-    <Button layoutX="444.0" layoutY="547.0" mnemonicParsing="false" onAction="#onCancel" text="Cancel" textFill="#373436">
+    <Button layoutX="444.0" layoutY="547.0" mnemonicParsing="false" onAction="#toMainMenu" text="Cancel" textFill="#373436">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
