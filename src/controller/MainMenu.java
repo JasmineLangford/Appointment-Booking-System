@@ -99,7 +99,6 @@ public class MainMenu implements Initializable {
         apptCustCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         apptUserCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
 
-
         try {
             loadApptTable();
         } catch (SQLException e) {
@@ -259,9 +258,7 @@ public class MainMenu implements Initializable {
 
         if(mainCustomerTable.getSelectionModel().isEmpty()){
             Alert modCustomerSelect = new Alert(Alert.AlertType.WARNING, "Please select a customer to be modified.");
-            Optional<ButtonType> result = modCustomerSelect.showAndWait();
-            if(result.isPresent() && result.get() == ButtonType.OK)
-                return;
+           modCustomerSelect.showAndWait();
         }
 
         FXMLLoader loader = new FXMLLoader();
@@ -271,10 +268,9 @@ public class MainMenu implements Initializable {
         ModifyCustomer MainMenu = loader.getController();
         MainMenu.sendCustomer(mainCustomerTable.getSelectionModel().getSelectedItem());
 
-        Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/modify-customer.fxml"))));
+        Parent scene = loader.getRoot();
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 500, 475);
-        stage.setScene(scene);
+        stage.setScene(new Scene(scene));
         stage.show();
         stage.centerOnScreen();
         stage.setResizable(false);
