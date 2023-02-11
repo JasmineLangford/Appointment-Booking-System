@@ -1,7 +1,9 @@
 package model;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 
 /**
@@ -21,4 +23,29 @@ public class DateTimeUtil {
         return timestamp.toLocalDateTime().atZone(zoneUTC).withZoneSameInstant(userTimeZone).toLocalDateTime();
     }
 
+    /**
+     * Converts to UTC data and time
+     *
+     * @param dateTime local date and time to convert
+     * @return converted time
+     */
+    public static Timestamp localToUTC(LocalDateTime dateTime) {
+        ZoneId zoneUTC = ZoneId.of("UTC");
+        ZoneId localTimeZone = ZoneId.systemDefault();
+        return Timestamp.valueOf(dateTime.atZone(localTimeZone).withZoneSameInstant(zoneUTC).toLocalDateTime());
+    }
+
+    public static Timestamp toUTCStartDT(LocalDate addStartDate, LocalTime addStartTime) {
+        ZoneId zoneUTC = ZoneId.of("UTC");
+        ZoneId localTimeZone = ZoneId.systemDefault();
+        LocalDateTime localDateLocalTime = LocalDateTime.of(addStartDate,addStartTime);
+        return Timestamp.valueOf(localDateLocalTime.atZone(localTimeZone).withZoneSameInstant(zoneUTC).toLocalDateTime());
+    }
+
+    public static Timestamp toUTCEndDT(LocalDate addEndDate, LocalTime addEndTime) {
+        ZoneId zoneUTC = ZoneId.of("UTC");
+        ZoneId localTimeZone = ZoneId.systemDefault();
+        LocalDateTime localDateLocalTime = LocalDateTime.of(addEndDate,addEndTime);
+        return Timestamp.valueOf(localDateLocalTime.atZone(localTimeZone).withZoneSameInstant(zoneUTC).toLocalDateTime());
+    }
 }
