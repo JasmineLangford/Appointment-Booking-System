@@ -74,6 +74,31 @@ public abstract class CustomerDAO {
         }
     }
 
+    public static void modifyCustomer(int modCustomerID, String modCustomerName, String modAddress, String modPhone,
+                                      String modPostal, int modFirstLevel) {
+
+        String phoneNumber = modPhone.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "$1- $2-$3");
+
+        try{
+            String modCustomerQuery = "UPDATE customers SET Customer_Name = ?,Address = ?,Postal_Code = ?, Phone = ?," +
+                    "Create_Date = ?,Created_By = ?,Last_Update = ?,Last_Updated_By = ?,Division_ID = ?, WHERE Customer_ID = ?";
+            PreparedStatement ps = JDBC.connection.prepareStatement(modCustomerQuery);
+            ps.setInt(1, modCustomerID);
+            ps.setString(2, modCustomerName);
+            ps.setString(3, modAddress);
+            ps.setString(4, modPostal);
+            ps.setString(5, phoneNumber);
+            ps.setString(6, null);
+            ps.setString(7, null);
+            ps.setString(8, null);
+            ps.setString(9, null);
+            ps.setInt(10, modFirstLevel);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Method to delete customer from database.
      */
