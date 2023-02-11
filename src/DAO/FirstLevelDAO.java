@@ -48,4 +48,5 @@ public class FirstLevelDAO extends Customer {
         }
         return firstLevelDivision;
     }
+
 }
