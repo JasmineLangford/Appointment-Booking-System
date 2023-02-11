@@ -47,9 +47,6 @@ public class AddCustomer implements Initializable {
     // list of countries
     ObservableList<CountryDAO> countries = CountryDAO.allCountries();
 
-    // list of first-level divisions
-    ObservableList<FirstLevelDAO> firstLevel = FirstLevelDAO.allFirstLevelDivision();
-
     Customer newCustomer = new Customer();
 
     public AddCustomer() throws SQLException {
@@ -107,7 +104,6 @@ public class AddCustomer implements Initializable {
         String addCountry = countryCombo.getValue().toString();
         int addFirstLevel = firstLevelCombo.getSelectionModel().getSelectedItem().getDivisionId();
 
-
         if (addCustomerName.isEmpty() || addAddress.isEmpty() ||addPhoneNumber.isEmpty() || addPostalCode.isEmpty() ||
                 addCountry.isEmpty()) {
             Alert emptyField = new Alert(Alert.AlertType.ERROR, "One or more fields are empty. Please enter a" +
@@ -125,10 +121,12 @@ public class AddCustomer implements Initializable {
            newCustomer.setCustomerCountry(addCountry);
            newCustomer.setDivisionId(addFirstLevel);
 
-        Alert addCustomer = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to add this new customer?", ButtonType.YES, ButtonType.NO);
+        Alert addCustomer = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to add this new " +
+                "customer?", ButtonType.YES, ButtonType.NO);
         Optional<ButtonType> result = addCustomer.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.YES){
-            CustomerDAO.addCustomer(addCustomerID,addCustomerName,addAddress,addPhoneNumber,addPostalCode,addFirstLevel);
+            CustomerDAO.addCustomer(addCustomerID,addCustomerName,addAddress,addPhoneNumber,addPostalCode,
+                    addFirstLevel);
             toMainMenu(actionEvent);
         }
        }catch (IOException e){
