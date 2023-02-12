@@ -52,12 +52,12 @@
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Label>
-    <Button layoutX="376.0" layoutY="547.0" mnemonicParsing="false" onAction="#onSaveAppt" prefHeight="23.0" prefWidth="54.0" style="-fx-background-color: #50add7;" text="Save" textFill="#fcfefc">
+    <Button layoutX="309.0" layoutY="548.0" mnemonicParsing="false" onAction="#onSaveAppt" prefHeight="23.0" prefWidth="54.0" style="-fx-background-color: #50add7;" text="Save" textFill="#fcfefc">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Button>
-    <Button layoutX="444.0" layoutY="547.0" mnemonicParsing="false" onAction="#toMainMenu" text="Cancel" textFill="#373436">
+    <Button layoutX="377.0" layoutY="548.0" mnemonicParsing="false" onAction="#toMainMenu" text="Cancel" textFill="#373436">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
