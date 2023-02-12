@@ -187,12 +187,21 @@ public class MainMenu implements Initializable {
      * @param actionEvent Modify button is clicked under the Appointments tableview.
      */
     public void updateAppt(ActionEvent actionEvent) throws IOException {
-        System.out.println("Modify Appointment initialized.");
+        if(mainApptTable.getSelectionModel().isEmpty()){
+            Alert modApptSelect = new Alert(Alert.AlertType.WARNING, "Please select an appointment to be modified.");
+            modApptSelect.showAndWait();
+        }
 
-        Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/modify-appointment.fxml"))));
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/modify-appointment.fxml"));
+        loader.load();
+
+        ModifyAppointment MainMenu = loader.getController();
+        MainMenu.sendAppointment(mainApptTable.getSelectionModel().getSelectedItem());
+
+        Parent scene = loader.getRoot();
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 560, 625);
-        stage.setScene(scene);
+        stage.setScene(new Scene(scene));
         stage.show();
         stage.centerOnScreen();
         stage.setResizable(false);
