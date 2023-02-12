@@ -52,12 +52,11 @@ public class AddCustomer implements Initializable {
     public AddCustomer() throws SQLException {
     }
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Add customer is initialized!");
 
-        // generates unique customer id for new appointment
+        // generates unique customer id for new customer
         try {
             customerID.setText(String.valueOf(CustomerDAO.allCustomers().size()+1));
         } catch (SQLException e) {
@@ -93,9 +92,12 @@ public class AddCustomer implements Initializable {
 
     /**
      * This will save data entered in form fields and add the new customer to the database.
+     *
+     * @param actionEvent saved button clicked
      */
     public void onSaveCustomer(ActionEvent actionEvent) {
 
+        // end-user form fields
         int addCustomerID = Integer.parseInt(customerID.getText());
         String addCustomerName = custNameTextfield.getText();
         String addAddress = addressTextfield.getText();
@@ -104,15 +106,15 @@ public class AddCustomer implements Initializable {
         String addCountry = countryCombo.getValue().toString();
         int addFirstLevel = firstLevelCombo.getSelectionModel().getSelectedItem().getDivisionId();
 
+        // input validation messages
         if (addCustomerName.isEmpty() || addAddress.isEmpty() ||addPhoneNumber.isEmpty() || addPostalCode.isEmpty() ||
-                addCountry.isEmpty()) {
+                addCountry.isEmpty() || firstLevelCombo.getSelectionModel().isEmpty()) {
             Alert emptyField = new Alert(Alert.AlertType.ERROR, "One or more fields are empty. Please enter a" +
                         " value in each field.");
             emptyField.showAndWait();
         }
 
        try{
-
            newCustomer.setCustomerId(addCustomerID);
            newCustomer.setCustomerName(addCustomerName);
            newCustomer.setCustomerAddress(addAddress);
@@ -135,7 +137,8 @@ public class AddCustomer implements Initializable {
     }
 
     /**
-     * This navigates the user back to the Main Menu.  */
+     * This navigates the end-user back to the Main Menu.
+     */
     public void toMainMenu(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/main-menu.fxml"))));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -145,5 +148,4 @@ public class AddCustomer implements Initializable {
         stage.centerOnScreen();
         stage.setResizable(false);
     }
-
 }
