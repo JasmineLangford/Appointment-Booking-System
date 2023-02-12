@@ -128,6 +128,33 @@ public class AppointmentDAO {
         }
     }
 
+    public static void modifyAppointment(int modApptId,LocalDate modStartDate,LocalTime modStartTime,LocalDate modEndDate,LocalTime modEndTime,String modContact,
+                                         String modType,String modTitle,String modDescription,String modLocation,int modCustomerID,int modUserID) {
+
+        try{
+            String modApptQuery = "UPDATE appointments SET Customer_Name = ?,Address = ?,Postal_Code = ?, Phone = ?," +
+                    "Create_Date = ?,Created_By = ?,Last_Update = ?,Last_Updated_By = ?,Division_ID = ?, WHERE Appointment_ID = ?";
+            PreparedStatement ps = JDBC.connection.prepareStatement(modApptQuery);
+            ps.setInt(1, modApptId);
+            ps.setString(2, modTitle);
+            ps.setString(3, modDescription);
+            ps.setString(4, modLocation);
+            ps.setString(5, modType);
+            ps.setTimestamp(6, DateTimeUtil.toLocalStartDT(LocalTime.from(modStartDate),modStartTime));
+            ps.setTimestamp(7, DateTimeUtil.toLocalEndDT(LocalTime.from(modEndDate),modEndTime));
+            ps.setString(8, null);
+            ps.setString(9,null);
+            ps.setString(10,null);
+            ps.setString(11,null);
+            ps.setInt(12,modCustomerID);
+            ps.setInt(13,modUserID);
+            ps.setString(14,modContact);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Method to query for 15 minute appointment alert.
      */
