@@ -6,28 +6,28 @@
 <?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="625.0" prefWidth="560.0" style="-fx-background-color: #fffbfa;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ModifyAppointment">
-    <DatePicker layoutX="131.0" layoutY="116.0" prefHeight="25.0" prefWidth="141.0" />
-    <Label layoutX="120.0" layoutY="276.0" text="Appt ID" textAlignment="RIGHT" textFill="#373436">
+    <DatePicker fx:id="startDatePicker" layoutX="131.0" layoutY="116.0" prefHeight="25.0" prefWidth="141.0" />
+    <Label layoutX="168.0" layoutY="267.0" text="Appt ID" textAlignment="RIGHT" textFill="#373436">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Label>
-    <Label layoutX="135.0" layoutY="348.0" text="Title" textAlignment="RIGHT" textFill="#373436">
+    <Label layoutX="182.0" layoutY="344.0" text="Type" textAlignment="RIGHT" textFill="#373436">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Label>
-    <Label layoutX="101.0" layoutY="385.0" text="Description" textAlignment="RIGHT" textFill="#373436">
+    <Label layoutX="185.0" layoutY="381.0" text="Title" textAlignment="RIGHT" textFill="#373436">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Label>
-    <Label layoutX="118.0" layoutY="422.0" text="Location" textAlignment="RIGHT" textFill="#373436">
+    <Label layoutX="147.0" layoutY="420.0" text="Description" textAlignment="RIGHT" textFill="#373436">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Label>
-    <Label layoutX="134.0" layoutY="311.0" text="Type" textAlignment="RIGHT" textFill="#373436">
+    <Label layoutX="167.0" layoutY="305.0" text="Contact" textAlignment="RIGHT" textFill="#373436">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
@@ -37,27 +37,27 @@
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Label>
-    <Label layoutX="91.0" layoutY="496.0" text="Customer ID" textAlignment="RIGHT" textFill="#373436">
+    <Label layoutX="141.0" layoutY="496.0" text="Customer ID" textAlignment="RIGHT" textFill="#373436">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Label>
-    <Label layoutX="119.0" layoutY="532.0" text="User ID" textAlignment="RIGHT" textFill="#373436">
+    <Label layoutX="170.0" layoutY="532.0" text="User ID" textAlignment="RIGHT" textFill="#373436">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Label>
-    <Label layoutX="119.0" layoutY="459.0" text="Contact" textAlignment="RIGHT" textFill="#373436">
+    <Label layoutX="163.0" layoutY="459.0" text="Location" textAlignment="RIGHT" textFill="#373436">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Label>
-    <Button layoutX="379.0" layoutY="564.0" mnemonicParsing="false" onAction="#onSave" prefHeight="23.0" prefWidth="54.0" style="-fx-background-color: #50add7;" text="Save" textFill="#fcfefc">
+    <Button layoutX="300.0" layoutY="564.0" mnemonicParsing="false" onAction="#onSaveModAppointment" prefHeight="23.0" prefWidth="54.0" style="-fx-background-color: #50add7;" text="Save" textFill="#fcfefc">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Button>
-    <Button layoutX="447.0" layoutY="564.0" mnemonicParsing="false" onAction="#onCancel" text="Cancel" textFill="#373436">
+    <Button layoutX="368.0" layoutY="564.0" mnemonicParsing="false" onAction="#toMainMenu" text="Cancel" textFill="#373436">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
@@ -69,40 +69,36 @@
             </font>
         </Label>
     </Pane>
-    <TextField layoutX="177.0" layoutY="271.0" prefHeight="25.0" prefWidth="46.0" />
-    <TextField layoutX="177.0" layoutY="306.0" prefHeight="25.0" prefWidth="263.0" />
-    <TextField layoutX="177.0" layoutY="343.0" prefHeight="25.0" prefWidth="263.0" />
+    <TextField fx:id="apptId" disable="true" layoutX="225.0" layoutY="262.0" prefHeight="25.0" prefWidth="46.0" />
+    <TextField fx:id="locationText" layoutX="226.0" layoutY="454.0" prefHeight="25.0" prefWidth="196.0" />
+    <TextField fx:id="typeText" layoutX="226.0" layoutY="339.0" prefHeight="25.0" prefWidth="196.0" />
     <Label layoutX="296.0" layoutY="120.0" text="End Date" textAlignment="RIGHT" textFill="#373436">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Label>
     <Line endX="332.6666564941406" layoutX="172.0" layoutY="204.0" startX="-113.0" stroke="#ccc5c5" />
-    <DatePicker layoutX="357.0" layoutY="116.0" prefHeight="25.0" prefWidth="141.0" />
-    <ChoiceBox layoutX="131.0" layoutY="149.0" prefHeight="25.0" prefWidth="43.0" />
-    <Label layoutX="213.0" layoutY="230.0" text="Appointment Details" textFill="#373436">
+    <DatePicker fx:id="endDatePicker" layoutX="357.0" layoutY="116.0" prefHeight="25.0" prefWidth="141.0" />
+    <Label layoutX="205.0" layoutY="227.0" text="Appointment Details" textFill="#373436">
         <font>
             <Font name="Gill Sans MT Bold" size="14.0" />
         </font>
     </Label>
-    <ChoiceBox layoutX="179.0" layoutY="149.0" prefHeight="25.0" prefWidth="43.0" />
-    <ChoiceBox layoutX="228.0" layoutY="149.0" prefHeight="25.0" prefWidth="43.0" />
     <Label layoutX="66.0" layoutY="154.0" text="Start Time" textAlignment="RIGHT" textFill="#373436">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Label>
-    <ChoiceBox layoutX="357.0" layoutY="148.0" prefHeight="25.0" prefWidth="43.0" />
-    <ChoiceBox layoutX="405.0" layoutY="148.0" prefHeight="25.0" prefWidth="43.0" />
-    <ChoiceBox layoutX="454.0" layoutY="148.0" prefHeight="25.0" prefWidth="43.0" />
     <Label layoutX="296.0" layoutY="153.0" text="End Time" textAlignment="RIGHT" textFill="#373436">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Label>
-    <TextField layoutX="177.0" layoutY="380.0" prefHeight="25.0" prefWidth="263.0" />
-    <TextField layoutX="177.0" layoutY="417.0" prefHeight="25.0" prefWidth="263.0" />
-    <TextField layoutX="177.0" layoutY="454.0" prefHeight="25.0" prefWidth="263.0" />
-    <TextField layoutX="177.0" layoutY="491.0" prefHeight="25.0" prefWidth="46.0" />
-    <TextField layoutX="177.0" layoutY="527.0" prefHeight="25.0" prefWidth="46.0" />
+    <TextField fx:id="titleText" layoutX="226.0" layoutY="376.0" prefHeight="25.0" prefWidth="196.0" />
+    <TextField fx:id="descText" layoutX="226.0" layoutY="415.0" prefHeight="25.0" prefWidth="196.0" />
+    <TextField fx:id="customerId" layoutX="227.0" layoutY="491.0" prefHeight="25.0" prefWidth="46.0" />
+    <TextField fx:id="userId" layoutX="228.0" layoutY="527.0" prefHeight="25.0" prefWidth="46.0" />
+   <ComboBox fx:id="startCombo" layoutX="133.0" layoutY="150.0" prefHeight="25.0" prefWidth="141.0" />
+   <ComboBox fx:id="endCombo" layoutX="358.0" layoutY="149.0" prefHeight="25.0" prefWidth="141.0" />
+   <ComboBox fx:id="contactCombo" layoutX="225.0" layoutY="300.0" prefHeight="25.0" prefWidth="196.0" />
 </AnchorPane>
