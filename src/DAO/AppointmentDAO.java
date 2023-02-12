@@ -106,7 +106,7 @@ public class AppointmentDAO {
                                               addLocation, int addCustID, int addUserID) throws SQLException {
         try {
         String addApptQuery = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, " +
-                "End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?,?,?,?,?,?,?,?,?,?)";
+                "End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         PreparedStatement ps = JDBC.connection.prepareStatement(addApptQuery);
         ps.setInt(1, apptId);
         ps.setString(2, addTitle);
@@ -122,7 +122,7 @@ public class AppointmentDAO {
         ps.setInt(12,addCustID);
         ps.setInt(13,addUserID);
         ps.setString(14,addContact);
-
+        ps.executeUpdate();
         } catch (SQLException e){
             e.printStackTrace();
         }
