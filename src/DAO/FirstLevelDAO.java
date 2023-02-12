@@ -28,7 +28,7 @@ public class FirstLevelDAO extends Customer {
     }
 
     /**
-     * Method to query all first-level division selections for combo box.
+     * Method to query all first-level division selections for combo box
      *
      * @return all first level options
      */
