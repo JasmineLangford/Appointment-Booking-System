@@ -31,7 +31,7 @@ public class Customer {
     }
 
     /**
-     * Constructor for query of first-level divisions for combo box selection.
+     * Constructor for query of first-level divisions for combo box selection
      *
      * @param divisionId to get
      * @param division to get
