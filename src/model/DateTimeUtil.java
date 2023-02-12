@@ -11,6 +11,9 @@ import java.time.ZoneId;
  */
 public class DateTimeUtil {
 
+    private static final ZoneId zoneUTC = ZoneId.of("UTC");
+    private static final ZoneId userTimeZone = ZoneId.systemDefault();
+
     /**
      * Converts UTC date and time to end-user local date and time
      *
@@ -18,8 +21,6 @@ public class DateTimeUtil {
      * @return timestamp conversion
      */
     public static LocalDateTime toLocalDT(Timestamp timestamp) {
-        ZoneId zoneUTC = ZoneId.of("UTC");
-        ZoneId userTimeZone = ZoneId.systemDefault();
         return timestamp.toLocalDateTime().atZone(zoneUTC).withZoneSameInstant(userTimeZone).toLocalDateTime();
     }
 
@@ -30,22 +31,28 @@ public class DateTimeUtil {
      * @return converted time
      */
     public static Timestamp localToUTC(LocalDateTime dateTime) {
-        ZoneId zoneUTC = ZoneId.of("UTC");
-        ZoneId localTimeZone = ZoneId.systemDefault();
-        return Timestamp.valueOf(dateTime.atZone(localTimeZone).withZoneSameInstant(zoneUTC).toLocalDateTime());
+        return Timestamp.valueOf(dateTime.atZone(userTimeZone).withZoneSameInstant(zoneUTC).toLocalDateTime());
     }
 
     public static Timestamp toUTCStartDT(LocalDate addStartDate, LocalTime addStartTime) {
-        ZoneId zoneUTC = ZoneId.of("UTC");
-        ZoneId localTimeZone = ZoneId.systemDefault();
         LocalDateTime localDateLocalTime = LocalDateTime.of(addStartDate,addStartTime);
-        return Timestamp.valueOf(localDateLocalTime.atZone(localTimeZone).withZoneSameInstant(zoneUTC).toLocalDateTime());
+        return Timestamp.valueOf(localDateLocalTime.atZone(userTimeZone).withZoneSameInstant(zoneUTC).toLocalDateTime());
     }
 
     public static Timestamp toUTCEndDT(LocalDate addEndDate, LocalTime addEndTime) {
-        ZoneId zoneUTC = ZoneId.of("UTC");
-        ZoneId localTimeZone = ZoneId.systemDefault();
         LocalDateTime localDateLocalTime = LocalDateTime.of(addEndDate,addEndTime);
-        return Timestamp.valueOf(localDateLocalTime.atZone(localTimeZone).withZoneSameInstant(zoneUTC).toLocalDateTime());
+        return Timestamp.valueOf(localDateLocalTime.atZone(userTimeZone).withZoneSameInstant(zoneUTC).toLocalDateTime());
     }
+
+    public static Timestamp toLocalStartDT(LocalTime modStartDate, LocalTime modStartTime) {
+        LocalDateTime localDateLocalTime = LocalDateTime.of(LocalDate.from(modStartDate),modStartTime);
+        return Timestamp.valueOf(localDateLocalTime.atZone(userTimeZone).toLocalDateTime());
+    }
+
+    public static Timestamp toLocalEndDT(LocalTime modEndDate, LocalTime modEndTime) {
+        LocalDateTime localDateLocalTime = LocalDateTime.of(LocalDate.from(modEndDate),modEndTime);
+        return Timestamp.valueOf(localDateLocalTime.atZone(userTimeZone).toLocalDateTime());
+    }
+
+
 }
