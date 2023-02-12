@@ -1,6 +1,8 @@
 package controller;
 
 import DAO.AppointmentDAO;
+import DAO.ContactDAO;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,12 +24,11 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
- * This class is the controller for the add-appointment.fxml view.
+ * This class is the controller for adding a new appointment.
  *
- * End-user will be able to input data into text fields and choice boxes in order to add a new appointment.
+ * End-user will be able to input data into text fields and combo boxes.
  */
 public class AddAppointment implements Initializable {
-
 
     // Form fields
     @FXML
@@ -41,7 +42,7 @@ public class AddAppointment implements Initializable {
     @FXML
     private TextField apptID;
     @FXML
-    private ComboBox contactCombo;
+    private ComboBox<ContactDAO> contactCombo;
     @FXML
     private TextField typeTextfield;
     @FXML
@@ -55,7 +56,13 @@ public class AddAppointment implements Initializable {
     @FXML
     private TextField userIdTextfield;
 
+    // list of contacts
+    ObservableList<ContactDAO> contacts = ContactDAO.allContacts();
+
     Appointment newAppointment = new Appointment();
+
+    public AddAppointment() throws SQLException {
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -68,9 +75,9 @@ public class AddAppointment implements Initializable {
             e.printStackTrace();
         }
 
+        // combo box for time selection
         LocalTime start = LocalTime.of(8,0);
         LocalTime end = LocalTime.of(22,0);
-
 
         while(start.isBefore(end.plusSeconds(1))){
             startCombo.getItems().add(start);
@@ -80,12 +87,16 @@ public class AddAppointment implements Initializable {
 
         startCombo.setPromptText("Select a time.");
         endCombo.setPromptText("Select a time.");
+
+        // contact combo box
+        contactCombo.setItems(contacts);
+        contactCombo.setPromptText("Select contact.");
     }
 
     /**
-     * This will add the data from form fields as a new appointment to database.
+     * This will save data entered in form fields and add the new appointment to the database.
      *
-     @param actionEvent Save button is clicked.
+     * @param actionEvent save button clicked
      */
     public void onSaveAppt(ActionEvent actionEvent) {
 
@@ -95,7 +106,7 @@ public class AddAppointment implements Initializable {
         LocalDate addEndDate = endDatePicker.getValue();
         LocalTime addEndTime = endCombo.getValue();
         int apptId = Integer.parseInt(apptID.getText());
-        String addContact = contactCombo.getValue().toString();
+        int addContact = contactCombo.getSelectionModel().getSelectedItem().getContactId();
         String addType = typeTextfield.getText();
         String addTitle = titleTextfield.getText();
         String addDescription = descTextfield.getText();
@@ -103,9 +114,9 @@ public class AddAppointment implements Initializable {
         int addCustID = Integer.parseInt(custIdTextfield.getText());
         int addUserID = Integer.parseInt(userIdTextfield.getText());
 
-        // Input Validation Messages
+        // input validation messages
         try {
-            if (addContact.isEmpty() || addType.isEmpty() || addTitle.isEmpty() || addDescription.isEmpty() ||
+            if ( contactCombo.getSelectionModel().isEmpty() || addType.isEmpty() || addTitle.isEmpty() || addDescription.isEmpty() ||
                     addLocation.isEmpty()) {
                 Alert emptyField = new Alert(Alert.AlertType.ERROR, "One or more fields are empty. Please enter a" +
                         " value in each field.");
@@ -121,28 +132,22 @@ public class AddAppointment implements Initializable {
             Integer.parseInt(String.valueOf(addCustID));
         } catch (NumberFormatException e) {
             Alert invalidDataType = new Alert(Alert.AlertType.ERROR, "Customer ID should be an integer.");
-            Optional<ButtonType> results = invalidDataType.showAndWait();
-            if (results.isPresent() && results.get() == ButtonType.OK)
-                return;
+            invalidDataType.showAndWait();
         }
 
         try {
             Integer.parseInt(String.valueOf(addUserID));
         } catch (NumberFormatException e) {
             Alert invalidDataType = new Alert(Alert.AlertType.ERROR, "User ID should be an integer.");
-            Optional<ButtonType> results = invalidDataType.showAndWait();
-            if (results.isPresent() && results.get() == ButtonType.OK)
-                return;
+            invalidDataType.showAndWait();
         }
 
         try {
 
-            newAppointment.setStart(LocalDateTime.from(addStartDate));
-            newAppointment.setStart(LocalDateTime.from(addStartTime));
-            newAppointment.setStart(LocalDateTime.from(addEndDate));
-            newAppointment.setStart(LocalDateTime.from(addEndTime));
+            newAppointment.setStart(LocalDateTime.of(addStartDate,addStartTime));
+            newAppointment.setEnd(LocalDateTime.of(addEndDate,addEndTime));
             newAppointment.setAppointmentID(apptId);
-            newAppointment.setContactID(Integer.parseInt(addContact));
+            newAppointment.setContactID(addContact);
             newAppointment.setType(addType);
             newAppointment.setTitle(addTitle);
             newAppointment.setDescription(addDescription);
@@ -150,14 +155,13 @@ public class AddAppointment implements Initializable {
             newAppointment.setCustomerID(addCustID);
             newAppointment.setUserID(addUserID);
 
-            Alert addAppointmentConfirm = new Alert(Alert.AlertType.CONFIRMATION, "" +
-                    "appointment?");
+            Alert addAppointmentConfirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to save " +
+                    "this appointment?", ButtonType.YES, ButtonType.NO);
             Optional<ButtonType> result = addAppointmentConfirm.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.YES) {
-                AppointmentDAO.addAppointment(addStartDate,addStartTime,addEndDate,addEndTime,apptId,addContact,
+                AppointmentDAO.addAppointment(addStartDate,addStartTime,addEndDate,addEndTime,apptId, String.valueOf(addContact),
                         addType,addTitle,addDescription,addLocation,addCustID,addUserID);
                 toMainMenu(actionEvent);
-
             }
         } catch (IOException | SQLException e) {
             e.printStackTrace();
@@ -166,7 +170,8 @@ public class AddAppointment implements Initializable {
 
     /**
      * This navigates the user back to the Main Menu.
-     * @param actionEvent Cancel button is clicked.
+     *
+     * @param actionEvent cancel button clicked
      * */
     public void toMainMenu(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/main-menu.fxml"))));
@@ -177,6 +182,4 @@ public class AddAppointment implements Initializable {
         stage.centerOnScreen();
         stage.setResizable(false);
     }
-
-
 }
