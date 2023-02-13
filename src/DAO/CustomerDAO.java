@@ -24,6 +24,7 @@ public abstract class CustomerDAO {
                      "Division FROM customers INNER JOIN first_level_divisions ON customers.Division_ID=" +
                      "first_level_divisions.Division_ID INNER JOIN countries ON first_level_divisions.Country_ID=" +
                      "countries.Country_ID ORDER BY Customer_ID ASC;";
+
         try {
             PreparedStatement ps = JDBC.connection.prepareStatement(customerQuery);
             ResultSet rs = ps.executeQuery();
@@ -52,7 +53,7 @@ public abstract class CustomerDAO {
     public static void addCustomer(int addCustomerID, String addCustomerName, String addAddress, String addPhoneNumber,
                                    String addPostalCode, int addFirstLevel){
 
-        String phoneNumber = addPhoneNumber.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "$1- $2-$3");
+        String phoneNumber = addPhoneNumber.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "$1-$2-$3");
 
         try {
             String addCustomerQuery = "INSERT INTO customers (Customer_ID,Customer_Name,Address,Postal_Code,Phone," +
@@ -77,11 +78,11 @@ public abstract class CustomerDAO {
     public static void modifyCustomer(int modCustomerID, String modCustomerName, String modAddress, String modPhone,
                                       String modPostal, int modFirstLevel) {
 
-        String phoneNumber = modPhone.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "$1- $2-$3");
+        String phoneNumber = modPhone.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "$1-$2-$3");
 
         try{
-            String modCustomerQuery = "UPDATE customers SET Customer_Name = ?,Address = ?,Postal_Code = ?, Phone = ?," +
-                    "Create_Date = ?,Created_By = ?,Last_Update = ?,Last_Updated_By = ?,Division_ID = ?, WHERE Customer_ID = ?";
+            String modCustomerQuery = "UPDATE customers SET Customer_ID Customer_Name = ?,Address = ?,Postal_Code = ?, Phone = ?," +
+                    "Create_Date = ?,Created_By = ?,Last_Update = ?,Last_Updated_By = ?,Division_ID = ? WHERE Customer_ID = ?";
             PreparedStatement ps = JDBC.connection.prepareStatement(modCustomerQuery);
             ps.setInt(1, modCustomerID);
             ps.setString(2, modCustomerName);
