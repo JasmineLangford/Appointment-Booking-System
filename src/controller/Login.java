@@ -106,7 +106,6 @@ public class Login implements Initializable {
 
         if (validUser) {
 
-
             // change from login screen to main menu
             Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/main-menu.fxml"))));
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -116,19 +115,21 @@ public class Login implements Initializable {
             stage.centerOnScreen();
             stage.setResizable(false);
 
-            Appointment appointment = AppointmentDAO.appointmentAlert();
+            Appointment appointmentAlert = AppointmentDAO.appointmentAlert();
 
             //TEST
-            System.out.println("This is the time converted from UTC: " + DateTimeUtil.toLocalDT(Timestamp.valueOf("2023-02-05 20:22:32")));
+            System.out.println("This is the time converted from UTC to local: " + DateTimeUtil.toLocalDT(Timestamp.valueOf("2023-02-12 04:00:32")));
+            //TEST
+            LocalDateTime localDateTime = LocalDateTime.now();
+            Timestamp plusFifteenUTC = DateTimeUtil.localToUTC(localDateTime.plusMinutes(15));
+            System.out.println("This is the time to be checked with the database in UTC time: " + DateTimeUtil.localToUTC(localDateTime));
+            System.out.println("This is the time checked with the database plus 15 minutes: " + plusFifteenUTC);
 
-            /*LocalDateTime startUDT = DateTimeUtil.formattedLocal(appointment.getStart());
-            ZonedDateTime zStartUDT = startUDT.atZone(ZoneId.of("UTC"));
-            ZonedDateTime zStartLocal = zStartUDT.withZoneSameInstant(ZoneId.systemDefault());
-            LocalDateTime startLocal = zStartLocal.toLocalDateTime();*/
 
-            if (appointment != null){
+            assert appointmentAlert != null;
+            if (appointmentAlert.equals(true)){
                 Alert fifteenAlertTrue = new Alert(Alert.AlertType.INFORMATION,"You have an upcoming appointment: " + '\n' + '\n' +
-                        "Appointment ID: " + appointment.getAppointmentID() + '\n' + "Time: " + appointment.getStart(), ButtonType.OK);
+                        "Appointment ID: " + appointmentAlert.getAppointmentID() + '\n' + "Time: " + DateTimeUtil.toLocalDT(Timestamp.valueOf(appointmentAlert.getStart())), ButtonType.OK);
                 fifteenAlertTrue.showAndWait();
             } else {
                 Alert fifteenAlertFalse = new Alert(Alert.AlertType.INFORMATION,"You do not have any upcoming appointments.", ButtonType.OK);
