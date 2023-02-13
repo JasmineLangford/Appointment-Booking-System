@@ -13,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import model.Appointment;
 import model.Customer;
 import java.io.IOException;
 import java.net.URL;
@@ -22,9 +23,9 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 /**
- * This class is the controller for modify-customer.fxml view.
- * User selects a row from the Customer tableview from the Main Menu and info populates to this screen.
- * User can change any modifiable fields.
+ * This class is the controller for modifying a customer.
+ *
+ * End-user will be able to input data in text fields and combo boxes.
  */
 public class ModifyCustomer implements Initializable {
 
@@ -60,8 +61,6 @@ public class ModifyCustomer implements Initializable {
         System.out.println("Modify Customer initialized.");
 
         countryModCombo.setItems(countries);
-        firstLevelModCombo.setItems(divisions);
-        firstLevelModCombo.setVisibleRowCount(5);
     }
 
     /**
@@ -69,11 +68,10 @@ public class ModifyCustomer implements Initializable {
      */
     public void sendCustomer(Customer customer) {
         modCustomer = customer;
-
         customerIdField.setText(String.valueOf(modCustomer.getCustomerId()));
         customerNameText.setText(modCustomer.getCustomerName());
         customerAddressText.setText(modCustomer.getCustomerAddress());
-        customerPhoneText.setText(modCustomer.getCustomerPhone());
+        customerPhoneText.setText(modCustomer.getCustomerPhone().replaceAll("\\D", ""));
         countryModCombo.setValue(modCustomer.getCustomerCountry());
         firstLevelModCombo.setValue(modCustomer.getDivision());
         customerPostalText.setText(modCustomer.getCustomerPostal());
@@ -91,7 +89,7 @@ public class ModifyCustomer implements Initializable {
         String modPhone = customerPhoneText.getText();
         String modPostal = customerPostalText.getText();
         String modCountry = countryModCombo.getValue().toString();
-        int modFirstLevel = Integer.parseInt(firstLevelModCombo.getValue().toString());
+        int modFirstLevel = firstLevelModCombo.getSelectionModel().getSelectedIndex();
 
         if (modCustomerName.isEmpty() || modAddress.isEmpty() || modPhone.isEmpty() || modCountry.isEmpty() || modPostal.isEmpty()) {
 
@@ -122,19 +120,13 @@ public class ModifyCustomer implements Initializable {
         }
     }
 
-
     /**
      * This navigates the user back to the Main Menu.
-     * @param actionEvent Cancel button is clicked.
-     * */
+     *
+     * @param actionEvent cancel button is clicked
+     */
     public void toMainMenu(ActionEvent actionEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(AddAppointment.class.getResource("/view/main-menu.fxml"));
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(fxmlLoader.load(), 1108, 620);
-        stage.setScene(scene);
-        stage.show();
-        stage.centerOnScreen();
-        stage.setResizable(false);
+       MainMenu.toMainMenu(actionEvent);
     }
 
     /**
