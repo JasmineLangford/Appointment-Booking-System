@@ -6,7 +6,7 @@
 <?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="625.0" prefWidth="560.0" style="-fx-background-color: #fffbfa;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ModifyAppointment">
-    <DatePicker fx:id="startDatePicker" layoutX="131.0" layoutY="116.0" prefHeight="25.0" prefWidth="141.0" />
+    <DatePicker fx:id="startDatePicker" editable="false" layoutX="131.0" layoutY="116.0" prefHeight="25.0" prefWidth="141.0" />
     <Label layoutX="168.0" layoutY="267.0" text="Appt ID" textAlignment="RIGHT" textFill="#373436">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
@@ -78,7 +78,7 @@
         </font>
     </Label>
     <Line endX="332.6666564941406" layoutX="172.0" layoutY="204.0" startX="-113.0" stroke="#ccc5c5" />
-    <DatePicker fx:id="endDatePicker" layoutX="357.0" layoutY="116.0" prefHeight="25.0" prefWidth="141.0" />
+    <DatePicker fx:id="endDatePicker" editable="false" layoutX="357.0" layoutY="116.0" prefHeight="25.0" prefWidth="141.0" />
     <Label layoutX="205.0" layoutY="227.0" text="Appointment Details" textFill="#373436">
         <font>
             <Font name="Gill Sans MT Bold" size="14.0" />
@@ -98,7 +98,7 @@
     <TextField fx:id="descText" layoutX="226.0" layoutY="415.0" prefHeight="25.0" prefWidth="196.0" />
     <TextField fx:id="customerId" layoutX="227.0" layoutY="491.0" prefHeight="25.0" prefWidth="46.0" />
     <TextField fx:id="userId" layoutX="228.0" layoutY="527.0" prefHeight="25.0" prefWidth="46.0" />
-   <ComboBox fx:id="startCombo" layoutX="133.0" layoutY="150.0" prefHeight="25.0" prefWidth="141.0" />
+   <ComboBox fx:id="startCombo" layoutX="132.0" layoutY="150.0" prefHeight="25.0" prefWidth="141.0" />
    <ComboBox fx:id="endCombo" layoutX="358.0" layoutY="149.0" prefHeight="25.0" prefWidth="141.0" />
    <ComboBox fx:id="contactCombo" layoutX="225.0" layoutY="300.0" prefHeight="25.0" prefWidth="196.0" />
 </AnchorPane>

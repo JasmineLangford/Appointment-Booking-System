@@ -30,7 +30,7 @@
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Label>
-    <Label layoutX="112.0" layoutY="347.0" text="Postal Code" textAlignment="RIGHT" textFill="#373436">
+    <Label layoutX="112.0" layoutY="365.0" text="Postal Code" textAlignment="RIGHT" textFill="#373436">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
@@ -61,7 +61,12 @@
     <TextField fx:id="customerNameText" layoutX="198.0" layoutY="157.0" prefHeight="25.0" prefWidth="206.0" />
     <TextField fx:id="customerAddressText" layoutX="198.0" layoutY="194.0" prefHeight="25.0" prefWidth="206.0" />
     <TextField fx:id="customerPhoneText" layoutX="198.0" layoutY="231.0" prefHeight="25.0" prefWidth="206.0" />
-    <TextField fx:id="customerPostalText" layoutX="198.0" layoutY="342.0" prefHeight="25.0" prefWidth="206.0" />
+    <TextField fx:id="customerPostalText" layoutX="198.0" layoutY="360.0" prefHeight="25.0" prefWidth="206.0" />
    <ComboBox fx:id="countryModCombo" layoutX="198.0" layoutY="269.0" onAction="#onModCountry" prefHeight="25.0" prefWidth="206.0" />
    <ComboBox fx:id="firstLevelModCombo" layoutX="198.0" layoutY="305.0" prefHeight="25.0" prefWidth="206.0" />
+   <Label layoutX="199.0" layoutY="333.0" text="*Select country to change state/province." textFill="#dd1010">
+      <font>
+         <Font size="11.0" />
+      </font>
+   </Label>
 </AnchorPane>
