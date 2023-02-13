@@ -76,8 +76,8 @@ public class AddAppointment implements Initializable {
         }
 
         // combo box for time selection
-        LocalTime start = LocalTime.of(8,0);
-        LocalTime end = LocalTime.of(22,0);
+        LocalTime start = LocalTime.of(4,0);
+        LocalTime end = LocalTime.of(23,0);
 
         while(start.isBefore(end.plusSeconds(1))){
             startCombo.getItems().add(start);
@@ -100,7 +100,74 @@ public class AddAppointment implements Initializable {
      */
     public void onSaveAppt(ActionEvent actionEvent) {
 
-        // end-user form fields
+        // input validation messages
+        try{
+            if(startDatePicker.getValue() == null || endDatePicker.getValue() == null ||
+                startCombo.getValue() == null || endCombo.getValue() == null) {
+
+                Alert noSelection = new Alert(Alert.AlertType.ERROR, "Please select start date/time and end " +
+                        "date/time.");
+                Optional<ButtonType> results = noSelection.showAndWait();
+                if (results.isPresent() && results.get() == ButtonType.OK)
+                    return;
+                }
+        }catch(NullPointerException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if (contactCombo.getValue() == null || typeTextfield.getText().isEmpty() || titleTextfield.getText().isEmpty() ||
+                    descTextfield.getText().isEmpty() || locationTextfield.getText().isEmpty()) {
+                Alert emptyField = new Alert(Alert.AlertType.ERROR, "One or more fields are empty. Please enter a" +
+                        " value in each field.");
+                Optional<ButtonType> results = emptyField.showAndWait();
+                if (results.isPresent() && results.get() == ButtonType.OK)
+                    return;
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Integer.parseInt(custIdTextfield.getText());
+        } catch (NumberFormatException e) {
+            Alert invalidDataType = new Alert(Alert.AlertType.ERROR, "Customer ID should be an integer.");
+            Optional<ButtonType> results = invalidDataType.showAndWait();
+            if (results.isPresent() && results.get() == ButtonType.OK)
+                return;
+        }
+
+        try {
+            Integer.parseInt(userIdTextfield.getText());
+        } catch (NumberFormatException e) {
+            Alert invalidDataType = new Alert(Alert.AlertType.ERROR, "User ID should be an integer.");
+            Optional<ButtonType> results = invalidDataType.showAndWait();
+            if (results.isPresent() && results.get() == ButtonType.OK)
+                return;
+        }
+
+        try{
+            if (endDatePicker.getValue().isBefore(startDatePicker.getValue())) {
+                Alert invalidDate = new Alert(Alert.AlertType.ERROR, "End date cannot be before start date.");
+                Optional<ButtonType> results = invalidDate.showAndWait();
+                if (results.isPresent() && results.get() == ButtonType.OK)
+                    return;
+            }
+        }catch (Exception e){
+            return;
+        }
+
+        try{
+            if (endCombo.getValue().isBefore(startCombo.getValue())) {
+                Alert invalidDate = new Alert(Alert.AlertType.ERROR, "End time cannot be before start time.");
+                Optional<ButtonType> results = invalidDate.showAndWait();
+                if (results.isPresent() && results.get() == ButtonType.OK)
+                    return;
+            }
+        }catch (Exception e){
+            return;
+        }
+
         LocalDate addStartDate = startDatePicker.getValue();
         LocalTime addStartTime = startCombo.getValue();
         LocalDate addEndDate = endDatePicker.getValue();
@@ -114,33 +181,7 @@ public class AddAppointment implements Initializable {
         int addCustID = Integer.parseInt(custIdTextfield.getText());
         int addUserID = Integer.parseInt(userIdTextfield.getText());
 
-        // input validation messages
-        try {
-            if ( contactCombo.getSelectionModel().isEmpty() || addType.isEmpty() || addTitle.isEmpty() || addDescription.isEmpty() ||
-                    addLocation.isEmpty()) {
-                Alert emptyField = new Alert(Alert.AlertType.ERROR, "One or more fields are empty. Please enter a" +
-                        " value in each field.");
-                Optional<ButtonType> results = emptyField.showAndWait();
-                if (results.isPresent() && results.get() == ButtonType.OK)
-                    return;
-            }
-        } catch (Exception e) {
-            return;
-        }
 
-        try {
-            Integer.parseInt(String.valueOf(addCustID));
-        } catch (NumberFormatException e) {
-            Alert invalidDataType = new Alert(Alert.AlertType.ERROR, "Customer ID should be an integer.");
-            invalidDataType.showAndWait();
-        }
-
-        try {
-            Integer.parseInt(String.valueOf(addUserID));
-        } catch (NumberFormatException e) {
-            Alert invalidDataType = new Alert(Alert.AlertType.ERROR, "User ID should be an integer.");
-            invalidDataType.showAndWait();
-        }
 
         try {
 
