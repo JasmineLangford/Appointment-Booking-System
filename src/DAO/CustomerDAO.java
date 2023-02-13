@@ -50,25 +50,24 @@ public abstract class CustomerDAO {
     }
 
 
-    public static void addCustomer(int addCustomerID, String addCustomerName, String addAddress, String addPhoneNumber,
+    public static void addCustomer(String addCustomerName, String addAddress, String addPhoneNumber,
                                    String addPostalCode, int addFirstLevel){
 
         String phoneNumber = addPhoneNumber.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "$1-$2-$3");
 
         try {
-            String addCustomerQuery = "INSERT INTO customers (Customer_ID,Customer_Name,Address,Postal_Code,Phone," +
-                    "Create_Date,Created_By,Last_Update,Last_Updated_By,Division_ID) VALUES (?,?,?,?,?,?,?,?,?,?)";
+            String addCustomerQuery = "INSERT INTO customers (Customer_Name,Address,Postal_Code,Phone," +
+                    "Create_Date,Created_By,Last_Update,Last_Updated_By,Division_ID) VALUES (?,?,?,?,?,?,?,?,?)";
             PreparedStatement ps = JDBC.connection.prepareStatement(addCustomerQuery);
-            ps.setInt(1, addCustomerID);
-            ps.setString(2, addCustomerName);
-            ps.setString(3, addAddress);
-            ps.setString(4, addPostalCode);
-            ps.setString(5, phoneNumber);
+            ps.setString(1, addCustomerName);
+            ps.setString(2, addAddress);
+            ps.setString(3, addPostalCode);
+            ps.setString(4, phoneNumber);
+            ps.setString(5, null);
             ps.setString(6, null);
             ps.setString(7, null);
             ps.setString(8, null);
-            ps.setString(9, null);
-            ps.setInt(10, addFirstLevel);
+            ps.setInt(9, addFirstLevel);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

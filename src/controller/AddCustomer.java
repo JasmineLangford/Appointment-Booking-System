@@ -59,11 +59,11 @@ public class AddCustomer implements Initializable {
         System.out.println("Add customer is initialized!");
 
         // generates unique customer id for new customer
-        try {
+        /*try {
             customerID.setText(String.valueOf(CustomerDAO.allCustomers().size()+1));
         } catch (SQLException e) {
             e.printStackTrace();
-        }
+        }*/
 
         // setting combo box selection of countries
         countryCombo.setItems(countries);
@@ -100,7 +100,7 @@ public class AddCustomer implements Initializable {
     public void onSaveCustomer(ActionEvent actionEvent) {
 
         // end-user form fields
-        int addCustomerID = Integer.parseInt(customerID.getText());
+        //int addCustomerID = Integer.parseInt(customerID.getText());
         String addCustomerName = custNameTextfield.getText();
         String addAddress = addressTextfield.getText();
         String addPhoneNumber = phoneNumberTextfield.getText();
@@ -117,7 +117,7 @@ public class AddCustomer implements Initializable {
         }
 
        try{
-           newCustomer.setCustomerId(addCustomerID);
+           //newCustomer.setCustomerId(addCustomerID);
            newCustomer.setCustomerName(addCustomerName);
            newCustomer.setCustomerAddress(addAddress);
            newCustomer.setCustomerPhone(addPhoneNumber);
@@ -129,7 +129,7 @@ public class AddCustomer implements Initializable {
                 "customer?", ButtonType.YES, ButtonType.NO);
         Optional<ButtonType> result = addCustomer.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.YES){
-            CustomerDAO.addCustomer(addCustomerID,addCustomerName,addAddress,addPhoneNumber,addPostalCode,
+            CustomerDAO.addCustomer(addCustomerName,addAddress,addPhoneNumber,addPostalCode,
                     addFirstLevel);
             MainMenu.toMainMenu(actionEvent);
         }
