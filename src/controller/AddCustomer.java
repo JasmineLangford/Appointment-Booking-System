@@ -15,6 +15,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Customer;
+
+import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -129,7 +131,7 @@ public class AddCustomer implements Initializable {
         if (result.isPresent() && result.get() == ButtonType.YES){
             CustomerDAO.addCustomer(addCustomerID,addCustomerName,addAddress,addPhoneNumber,addPostalCode,
                     addFirstLevel);
-            toMainMenu(actionEvent);
+            MainMenu.toMainMenu(actionEvent);
         }
        }catch (IOException e){
            e.printStackTrace();
@@ -138,14 +140,11 @@ public class AddCustomer implements Initializable {
 
     /**
      * This navigates the end-user back to the Main Menu.
+     *
+     * @param actionEvent cancel button clicked
      */
     public void toMainMenu(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/main-menu.fxml"))));
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 1108, 620);
-        stage.setScene(scene);
-        stage.show();
-        stage.centerOnScreen();
-        stage.setResizable(false);
+        MainMenu.toMainMenu(actionEvent);
     }
+
 }
