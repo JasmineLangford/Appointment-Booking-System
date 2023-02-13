@@ -8,7 +8,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-
+import java.time.format.DateTimeFormatter;
 
 /**
  * This class contains the database queries for appointments.
@@ -161,31 +161,27 @@ public class AppointmentDAO {
 
     public static Appointment appointmentAlert() {
 
-        // check for appointments in UTC
-        /*Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
-        ZoneId zoneId = ZoneId.systemDefault();
-        ZonedDateTime zonedDT = timestamp.toLocalDateTime().atZone(zoneId);
-        Timestamp dateTimeUTC = Timestamp.valueOf(zonedDT.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
-        LocalDateTime timeUTC = zonedDT.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime();
-        Timestamp plusFifteenUTC = Timestamp.valueOf(timeUTC.plusMinutes(15));
-
+        // check for appointments
         Appointment alertAppointments;
 
+        LocalDateTime localDateTime = LocalDateTime.now();
+        Timestamp plusFifteenUTC = DateTimeUtil.localToUTC(localDateTime.plusMinutes(15));
+
         try {
-            String alertFifteenQuery = "SELECT * FROM appointments WHERE Start >='" + dateTimeUTC + "'AND'" + plusFifteenUTC + "'";
+            String alertFifteenQuery = "SELECT * FROM appointments WHERE Start >='" + DateTimeUtil.localToUTC(localDateTime) + "'AND'" + plusFifteenUTC + "'";
             PreparedStatement ps = JDBC.connection.prepareStatement(alertFifteenQuery);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
                 alertAppointments = new Appointment(
                         rs.getInt("Appointment_ID"),
-                        rs.getTimestamp("Start"));
+                        rs.getTimestamp("Start").toLocalDateTime());
 
                 return alertAppointments;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }*/
+        }
         return null;
     }
 
