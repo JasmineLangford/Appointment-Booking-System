@@ -55,7 +55,7 @@ public class ModifyAppointment implements Initializable {
     @FXML
     private TextField userId;
     @FXML
-    private ComboBox<ContactDAO> contactCombo;
+    private ComboBox contactCombo;
 
     ObservableList<ContactDAO> contacts = ContactDAO.allContacts();
 
@@ -67,6 +67,16 @@ public class ModifyAppointment implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Modify Appointment initialized.");
+
+        // combo box for time selection
+        LocalTime start = LocalTime.of(4,0);
+        LocalTime end = LocalTime.of(23,0);
+
+        while(start.isBefore(end.plusSeconds(1))){
+            startCombo.getItems().add(start);
+            endCombo.getItems().add(start);
+            start = start.plusMinutes(30);
+        }
 
         contactCombo.setItems(contacts);
     }
@@ -82,7 +92,7 @@ public class ModifyAppointment implements Initializable {
         startCombo.setValue(modAppointment.getStart().toLocalTime());
         endDatePicker.setValue(modAppointment.getEnd().toLocalDate());
         endCombo.setValue(modAppointment.getEnd().toLocalTime());
-        //contactCombo.setValue(modAppointment.getContactName());
+        contactCombo.setValue(modAppointment.getContactID());
         locationText.setText(modAppointment.getLocation());
         typeText.setText(modAppointment.getType());
         titleText.setText(modAppointment.getTitle());
@@ -97,36 +107,86 @@ public class ModifyAppointment implements Initializable {
      * @param actionEvent Save button is clicked.
      */
     public void onSaveModAppointment(ActionEvent actionEvent) {
+        // input validation messages
+        try {
+            if (startDatePicker.getValue() == null || endDatePicker.getValue() == null ||
+                    startCombo.getValue() == null || endCombo.getValue() == null) {
+
+                Alert noSelection = new Alert(Alert.AlertType.ERROR, "Please select start date/time and end " +
+                        "date/time.");
+                Optional<ButtonType> results = noSelection.showAndWait();
+                if (results.isPresent() && results.get() == ButtonType.OK)
+                    return;
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if (contactCombo.getValue() == null || typeText.getText().isEmpty() || titleText.getText().isEmpty() ||
+                    descText.getText().isEmpty() || locationText.getText().isEmpty()) {
+                Alert emptyField = new Alert(Alert.AlertType.ERROR, "One or more fields are empty. Please enter a" +
+                        " value in each field.");
+                Optional<ButtonType> results = emptyField.showAndWait();
+                if (results.isPresent() && results.get() == ButtonType.OK)
+                    return;
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Integer.parseInt(customerId.getText());
+        } catch (NumberFormatException e) {
+            Alert invalidDataType = new Alert(Alert.AlertType.ERROR, "Customer ID should be an integer.");
+            Optional<ButtonType> results = invalidDataType.showAndWait();
+            if (results.isPresent() && results.get() == ButtonType.OK)
+                return;
+        }
+
+        try {
+            Integer.parseInt(userId.getText());
+        } catch (NumberFormatException e) {
+            Alert invalidDataType = new Alert(Alert.AlertType.ERROR, "User ID should be an integer.");
+            Optional<ButtonType> results = invalidDataType.showAndWait();
+            if (results.isPresent() && results.get() == ButtonType.OK)
+                return;
+        }
+
+        try {
+            if (endDatePicker.getValue().isBefore(startDatePicker.getValue())) {
+                Alert invalidDate = new Alert(Alert.AlertType.ERROR, "End date cannot be before start date.");
+                Optional<ButtonType> results = invalidDate.showAndWait();
+                if (results.isPresent() && results.get() == ButtonType.OK)
+                    return;
+            }
+        } catch (Exception e) {
+            return;
+        }
+
+        try {
+            if (endCombo.getValue().isBefore(startCombo.getValue())) {
+                Alert invalidDate = new Alert(Alert.AlertType.ERROR, "End time cannot be before start time.");
+                Optional<ButtonType> results = invalidDate.showAndWait();
+                if (results.isPresent() && results.get() == ButtonType.OK)
+                    return;
+            }
+        } catch (Exception e) {
+            return;
+        }
+
         LocalDate modStartDate = startDatePicker.getValue();
         LocalTime modStartTime = startCombo.getValue();
         LocalDate modEndDate = endDatePicker.getValue();
         LocalTime modEndTime = endCombo.getValue();
         int modApptId = Integer.parseInt(apptId.getText());
-        int modContact = contactCombo.getSelectionModel().getSelectedItem().getContactId();
         String modType = typeText.getText();
         String modTitle = titleText.getText();
+        int modContact = contactCombo.getSelectionModel().getSelectedItem().getContactId();
         String modDescription = descText.getText();
         String modLocation = locationText.getText();
         int modCustomerID = Integer.parseInt(customerId.getText());
         int modUserID = Integer.parseInt(userId.getText());
-
-        try {
-            startDatePicker.getValue();
-            endDatePicker.getValue();
-        } catch (Exception e) {
-            Alert emptyPicker = new Alert(Alert.AlertType.ERROR, "Please select a start date.");
-            emptyPicker.showAndWait();
-        }
-
-        if (startCombo.getSelectionModel().isEmpty() || endCombo.getSelectionModel().isEmpty() ||
-                contactCombo.getSelectionModel().isEmpty() || modType.isEmpty() || modTitle.isEmpty() ||
-                modDescription.isEmpty() || modLocation.isEmpty() || customerId.getText().isEmpty() ||
-                userId.getText().isEmpty()) {
-
-            Alert emptyPicker = new Alert(Alert.AlertType.ERROR, "One or more fields are empty. Please enter a" +
-                    " value in each field.");
-            emptyPicker.showAndWait();
-        }
 
         try {
             modAppointment.setAppointmentID(modApptId);
@@ -147,8 +207,8 @@ public class ModifyAppointment implements Initializable {
             Optional<ButtonType> result = modAppointment.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.YES) {
 
-                //AppointmentDAO.modifyAppointment(modApptId,modStartDate,modStartTime,modEndDate,modEndTime,modContact,
-                // modType,modTitle,modDescription,modLocation,modCustomerID,modUserID);
+                AppointmentDAO.modifyAppointment(modApptId,modStartDate,modStartTime,modEndDate,modEndTime,
+                        String.valueOf(modContact),modType,modTitle,modDescription,modLocation,modCustomerID,modUserID);
                 toMainMenu(actionEvent);
             }
         } catch (IOException e) {
