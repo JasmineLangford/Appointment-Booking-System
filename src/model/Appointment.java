@@ -1,6 +1,11 @@
 package model;
 
+import DAO.ContactDAO;
+import javafx.scene.control.SingleSelectionModel;
+
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * This class is the model class for appointments.
@@ -18,11 +23,9 @@ public class Appointment {
     private int userID;
     private int contactID;
 
-
     /**
      * Constructor
      */
-
     public Appointment(int appointmentID, String title, String description, String location, int contactID, String type, LocalDateTime start, LocalDateTime end, int customerID, int userID) {
         this.appointmentID = appointmentID;
         this.title = title;
@@ -38,6 +41,11 @@ public class Appointment {
 
     // Null appointment
     public Appointment() {
+    }
+
+    public Appointment(int appointment_id, LocalDateTime start) {
+        this.appointmentID = appointment_id;
+        this.start = start;
     }
 
     /**
@@ -180,4 +188,5 @@ public class Appointment {
     public void setUserID(int userID) {
         this.userID = userID;
     }
+
 }
