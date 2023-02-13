@@ -40,8 +40,6 @@ public class AddAppointment implements Initializable {
     @FXML
     private DatePicker endDatePicker;
     @FXML
-    private TextField apptID;
-    @FXML
     private ComboBox<ContactDAO> contactCombo;
     @FXML
     private TextField typeTextfield;
@@ -67,13 +65,6 @@ public class AddAppointment implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Add appointment is initialized!");
-
-        // generates unique appointment id for new appointment
-        try {
-            apptID.setText(String.valueOf(AppointmentDAO.allAppointments().size()+1));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
 
         // combo box for time selection
         LocalTime start = LocalTime.of(4,0);
@@ -172,7 +163,7 @@ public class AddAppointment implements Initializable {
         LocalTime addStartTime = startCombo.getValue();
         LocalDate addEndDate = endDatePicker.getValue();
         LocalTime addEndTime = endCombo.getValue();
-        int apptId = Integer.parseInt(apptID.getText());
+        //int apptId = Integer.parseInt(apptID.getText());
         int addContact = contactCombo.getSelectionModel().getSelectedItem().getContactId();
         String addType = typeTextfield.getText();
         String addTitle = titleTextfield.getText();
@@ -181,13 +172,11 @@ public class AddAppointment implements Initializable {
         int addCustID = Integer.parseInt(custIdTextfield.getText());
         int addUserID = Integer.parseInt(userIdTextfield.getText());
 
-
-
         try {
 
             newAppointment.setStart(LocalDateTime.of(addStartDate,addStartTime));
             newAppointment.setEnd(LocalDateTime.of(addEndDate,addEndTime));
-            newAppointment.setAppointmentID(apptId);
+            //newAppointment.setAppointmentID(apptId);
             newAppointment.setContactID(addContact);
             newAppointment.setType(addType);
             newAppointment.setTitle(addTitle);
@@ -200,8 +189,10 @@ public class AddAppointment implements Initializable {
                     "this appointment?", ButtonType.YES, ButtonType.NO);
             Optional<ButtonType> result = addAppointmentConfirm.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.YES) {
-                AppointmentDAO.addAppointment(addStartDate,addStartTime,addEndDate,addEndTime,apptId, String.valueOf(addContact),
-                        addType,addTitle,addDescription,addLocation,addCustID,addUserID);
+                //AppointmentDAO.addAppointment(apptId,addStartDate,addStartTime,addEndDate,addEndTime,String.valueOf(addContact),
+                //      addType,addTitle,addDescription,addLocation,addCustID,addUserID);
+                AppointmentDAO.addAppointment(addStartDate,addStartTime,addEndDate,addEndTime,String.valueOf(addContact),
+                     addType,addTitle,addDescription,addLocation,addCustID,addUserID);
                 toMainMenu(actionEvent);
             }
         } catch (IOException | SQLException e) {

@@ -8,12 +8,12 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 /**
  * This class contains the database queries for appointments.
  */
 public class AppointmentDAO {
+
     /**
      * Method to query all appointments from appointments table in database.
      */
@@ -102,26 +102,25 @@ public class AppointmentDAO {
      * Method to insert new appointment in appointments table in database.
      */
     public static void addAppointment(LocalDate addStartDate, LocalTime addStartTime, LocalDate addEndDate, LocalTime addEndTime,
-                                      int apptId, String addContact, String addType, String addTitle, String addDescription, String
+                                      String addContact, String addType, String addTitle, String addDescription, String
                                               addLocation, int addCustID, int addUserID) throws SQLException {
         try {
-        String addApptQuery = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, " +
-                "End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String addApptQuery = "INSERT INTO appointments (Title, Description, Location, Type, Start, " +
+                "End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
         PreparedStatement ps = JDBC.connection.prepareStatement(addApptQuery);
-        ps.setInt(1, apptId);
-        ps.setString(2, addTitle);
-        ps.setString(3, addDescription);
-        ps.setString(4, addLocation);
-        ps.setString(5, addType);
-        ps.setTimestamp(6, DateTimeUtil.toUTCStartDT(addStartDate,addStartTime));
-        ps.setTimestamp(7, DateTimeUtil.toUTCEndDT(addEndDate,addEndTime));
-        ps.setString(8, null);
+        ps.setString(1, addTitle);
+        ps.setString(2, addDescription);
+        ps.setString(3, addLocation);
+        ps.setString(4, addType);
+        ps.setTimestamp(5, DateTimeUtil.toUTCStartDT(addStartDate,addStartTime));
+        ps.setTimestamp(6, DateTimeUtil.toUTCEndDT(addEndDate,addEndTime));
+        ps.setString(7, null);
+        ps.setString(8,null);
         ps.setString(9,null);
         ps.setString(10,null);
-        ps.setString(11,null);
-        ps.setInt(12,addCustID);
-        ps.setInt(13,addUserID);
-        ps.setString(14,addContact);
+        ps.setInt(11,addCustID);
+        ps.setInt(12,addUserID);
+        ps.setString(13,addContact);
         ps.executeUpdate();
         } catch (SQLException e){
             e.printStackTrace();
@@ -185,7 +184,6 @@ public class AppointmentDAO {
         return null;
     }
 
-
     /**
      * Method to query deletion from appointments table in database.
      */
@@ -196,5 +194,4 @@ public class AppointmentDAO {
         ps.setInt(1, appointment.getAppointmentID());
         ps.executeUpdate();
     }
-
 }
