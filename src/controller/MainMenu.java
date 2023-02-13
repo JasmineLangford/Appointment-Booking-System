@@ -355,6 +355,16 @@ public class MainMenu implements Initializable {
         stage.setResizable(false);
     }
 
+    public static void toMainMenu(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load((Objects.requireNonNull(MainMenu.class.getResource("/view/main-menu.fxml"))));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, 1108, 620);
+        stage.setScene(scene);
+        stage.show();
+        stage.centerOnScreen();
+        stage.setResizable(false);
+    }
+
     /**
      * This closes the application.
      *
