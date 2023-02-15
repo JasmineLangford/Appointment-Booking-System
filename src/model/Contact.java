@@ -1,5 +1,8 @@
 package model;
 
+import DAO.ContactDAO;
+import javafx.scene.control.SingleSelectionModel;
+
 /**
  * This class is the model for contacts.
  */
@@ -15,7 +18,7 @@ public class Contact {
 
     public Contact (int contactId, String contactName){
         this.contactId = contactId;
-        this. contactName = contactName;
+        this.contactName = contactName;
     }
 
     /**
@@ -44,5 +47,11 @@ public class Contact {
      */
     public void setContactName(String contactName) {
         this.contactName = contactName;
+    }
+
+    // override format for combo box selection display
+    @Override
+    public String toString(){
+        return (getContactName());
     }
 }
