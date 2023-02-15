@@ -19,13 +19,12 @@ import java.net.URL;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * This class is the controller for Login.fxml
@@ -72,7 +71,6 @@ public class Login implements Initializable {
 
 
     @Override
-
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Login initialized!");
 
@@ -115,27 +113,20 @@ public class Login implements Initializable {
             stage.centerOnScreen();
             stage.setResizable(false);
 
-            Appointment appointmentAlert = AppointmentDAO.appointmentAlert();
+            if(AppointmentDAO.appointmentAlert){
+                Appointment appointmentAlert = AppointmentDAO.appointmentAlert();
 
-            //TEST
-            System.out.println("This is the time converted from UTC to local: " + DateTimeUtil.toLocalDT(Timestamp.valueOf("2023-02-12 04:00:32")));
-            //TEST
-            LocalDateTime localDateTime = LocalDateTime.now();
-            Timestamp plusFifteenUTC = DateTimeUtil.localToUTC(localDateTime.plusMinutes(15));
-            System.out.println("This is the time to be checked with the database in UTC time: " + DateTimeUtil.localToUTC(localDateTime));
-            System.out.println("This is the time checked with the database plus 15 minutes: " + plusFifteenUTC);
-
-
-            assert appointmentAlert != null;
-            if (appointmentAlert.equals(true)){
                 Alert fifteenAlertTrue = new Alert(Alert.AlertType.INFORMATION,"You have an upcoming appointment: " + '\n' + '\n' +
                         "Appointment ID: " + appointmentAlert.getAppointmentID() + '\n' + "Time: " + DateTimeUtil.toLocalDT(Timestamp.valueOf(appointmentAlert.getStart())), ButtonType.OK);
-                fifteenAlertTrue.showAndWait();
-            } else {
-                Alert fifteenAlertFalse = new Alert(Alert.AlertType.INFORMATION,"You do not have any upcoming appointments.", ButtonType.OK);
-                fifteenAlertFalse.showAndWait();
-            }
+                    Optional<ButtonType> results = fifteenAlertTrue.showAndWait();
+                    if (results.isPresent() && results.get() == ButtonType.OK);
 
+                } else {
+                Alert fifteenAlertFalse = new Alert(Alert.AlertType.INFORMATION, "You do not have any upcoming appointments.", ButtonType.OK);
+                Optional<ButtonType> results = fifteenAlertFalse.showAndWait();
+                if (results.isPresent() && results.get() == ButtonType.OK);
+
+            }
 
         } else if (usernameLogin.getText().isEmpty() || passwordLogin.getText().isEmpty()) {
 
