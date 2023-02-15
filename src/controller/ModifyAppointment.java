@@ -55,7 +55,7 @@ public class ModifyAppointment implements Initializable {
     @FXML
     private TextField userId;
     @FXML
-    private ComboBox contactCombo;
+    private ComboBox<ContactDAO> contactCombo;
 
     ObservableList<ContactDAO> contacts = ContactDAO.allContacts();
 
@@ -92,7 +92,7 @@ public class ModifyAppointment implements Initializable {
         startCombo.setValue(modAppointment.getStart().toLocalTime());
         endDatePicker.setValue(modAppointment.getEnd().toLocalDate());
         endCombo.setValue(modAppointment.getEnd().toLocalTime());
-        contactCombo.setValue(modAppointment.getContactID());
+        //contactCombo.setValue(modAppointment.getContactID());
         locationText.setText(modAppointment.getLocation());
         typeText.setText(modAppointment.getType());
         titleText.setText(modAppointment.getTitle());
@@ -100,12 +100,12 @@ public class ModifyAppointment implements Initializable {
         customerId.setText(String.valueOf(modAppointment.getCustomerID()));
         userId.setText(String.valueOf(modAppointment.getUserID()));
     }
-
-    /**
-     * Modified fields will be updated in the database and reflect on appointment table on main menu.
-     *
-     * @param actionEvent Save button is clicked.
-     */
+    
+        /**
+         * Modified fields will be updated in the database and reflect on appointment table on main menu.
+         *
+         * @param actionEvent Save button is clicked.
+         */
     public void onSaveModAppointment(ActionEvent actionEvent) {
         // input validation messages
         try {
