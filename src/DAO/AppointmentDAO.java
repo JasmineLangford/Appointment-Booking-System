@@ -14,6 +14,8 @@ import java.time.LocalTime;
  */
 public class AppointmentDAO {
 
+    public static boolean appointmentAlert;
+
     /**
      * Method to query all appointments from appointments table in database.
      */
@@ -156,6 +158,7 @@ public class AppointmentDAO {
 
     /**
      * Method to query for 15 minute appointment alert.
+     * @return
      */
 
     public static Appointment appointmentAlert() {
