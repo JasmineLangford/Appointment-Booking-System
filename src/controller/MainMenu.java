@@ -15,7 +15,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
+import main.Main;
 import model.Appointment;
+import model.Contact;
 import model.Customer;
 import java.io.IOException;
 import java.net.URL;
@@ -202,6 +204,7 @@ public class MainMenu implements Initializable {
         Parent scene = loader.getRoot();
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setScene(new Scene(scene));
+
         stage.show();
         stage.centerOnScreen();
         stage.setResizable(false);
