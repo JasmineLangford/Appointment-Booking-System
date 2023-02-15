@@ -1,11 +1,5 @@
 package model;
-
-import DAO.ContactDAO;
-import javafx.scene.control.SingleSelectionModel;
-
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 /**
  * This class is the model class for appointments.
