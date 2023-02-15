@@ -13,12 +13,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Appointment;
+import model.DateTimeUtil;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.sql.Timestamp;
+import java.time.*;
+import java.time.chrono.ChronoLocalDate;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -67,7 +69,7 @@ public class AddAppointment implements Initializable {
         System.out.println("Add appointment is initialized!");
 
         // combo box for time selection
-        LocalTime start = LocalTime.of(4,0);
+        LocalTime start = LocalTime.of(6,0);
         LocalTime end = LocalTime.of(23,0);
 
         while(start.isBefore(end.plusSeconds(1))){
@@ -105,6 +107,7 @@ public class AddAppointment implements Initializable {
         }catch(NullPointerException e) {
             e.printStackTrace();
         }
+
 
         try {
             if (contactCombo.getValue() == null || typeTextfield.getText().isEmpty() || titleTextfield.getText().isEmpty() ||
@@ -163,7 +166,6 @@ public class AddAppointment implements Initializable {
         LocalTime addStartTime = startCombo.getValue();
         LocalDate addEndDate = endDatePicker.getValue();
         LocalTime addEndTime = endCombo.getValue();
-        //int apptId = Integer.parseInt(apptID.getText());
         int addContact = contactCombo.getSelectionModel().getSelectedItem().getContactId();
         String addType = typeTextfield.getText();
         String addTitle = titleTextfield.getText();
@@ -172,11 +174,19 @@ public class AddAppointment implements Initializable {
         int addCustID = Integer.parseInt(custIdTextfield.getText());
         int addUserID = Integer.parseInt(userIdTextfield.getText());
 
-        try {
+        if(addStartDate.getDayOfWeek().equals(DayOfWeek.SATURDAY) ||
+                addStartDate.getDayOfWeek().equals(DayOfWeek.SUNDAY) ||
+                addEndDate.getDayOfWeek().equals(DayOfWeek.SATURDAY) ||
+                addEndDate.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+            Alert invalidDate = new Alert(Alert.AlertType.ERROR, "Start/End dates must be a weekday (Monday-Friday).");
+            Optional<ButtonType> results = invalidDate.showAndWait();
+            if (results.isPresent() && results.get() == ButtonType.OK)
+                return;
+        }
 
+        try {
             newAppointment.setStart(LocalDateTime.of(addStartDate,addStartTime));
             newAppointment.setEnd(LocalDateTime.of(addEndDate,addEndTime));
-            //newAppointment.setAppointmentID(apptId);
             newAppointment.setContactID(addContact);
             newAppointment.setType(addType);
             newAppointment.setTitle(addTitle);
@@ -189,8 +199,6 @@ public class AddAppointment implements Initializable {
                     "this appointment?", ButtonType.YES, ButtonType.NO);
             Optional<ButtonType> result = addAppointmentConfirm.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.YES) {
-                //AppointmentDAO.addAppointment(apptId,addStartDate,addStartTime,addEndDate,addEndTime,String.valueOf(addContact),
-                //      addType,addTitle,addDescription,addLocation,addCustID,addUserID);
                 AppointmentDAO.addAppointment(addStartDate,addStartTime,addEndDate,addEndTime,String.valueOf(addContact),
                      addType,addTitle,addDescription,addLocation,addCustID,addUserID);
                 toMainMenu(actionEvent);
