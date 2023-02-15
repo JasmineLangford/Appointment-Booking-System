@@ -11,13 +11,11 @@ import java.sql.SQLException;
  * Class for contact query
  */
 public class ContactDAO extends Contact {
-
     // override format for combo box selection display
     @Override
     public String toString(){
         return (getContactName());
     }
-
     /**
      * Constructor
      */
