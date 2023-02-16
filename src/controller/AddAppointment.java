@@ -184,6 +184,27 @@ public class AddAppointment implements Initializable {
                 return;
         }
 
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        LocalDateTime dateTimeStart = LocalDateTime.of(addStartDate,addStartTime);
+        LocalDateTime dateTimeEnd = LocalDateTime.of(addEndDate,addEndTime);
+        LocalDateTime dateTimeEST = LocalDateTime.now(ZoneId.of("US/Eastern"));
+        LocalDateTime dateTimeStartEST = LocalDateTime.from(dateTimeStart.atZone(ZoneId.from(dateTimeEST)));
+
+        if(dateTimeStart.isAfter(currentDateTime)){
+            Alert invalidDateTime = new Alert(Alert.AlertType.ERROR, "Date selected has already passed. Please" +
+                    " select a valid future date.");
+            Optional<ButtonType> results = invalidDateTime.showAndWait();
+            if (results.isPresent() && results.get() == ButtonType.OK)
+                return;
+        }
+
+        /*if(){
+
+        }*/
+
+
+
+
         try {
             newAppointment.setStart(LocalDateTime.of(addStartDate,addStartTime));
             newAppointment.setEnd(LocalDateTime.of(addEndDate,addEndTime));
