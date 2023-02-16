@@ -42,6 +42,24 @@ public class Appointment {
         this.start = start;
     }
 
+    public Appointment(int appointmentID, LocalDateTime start, LocalDateTime end) {
+        this.appointmentID = appointmentID;
+        this.start = start;
+        this.end = end;
+
+    }
+
+    public Appointment(int appointmentID, String title, String description, String type, LocalDateTime start,
+                       LocalDateTime end, int customerID) {
+        this.appointmentID = appointmentID;
+        this.title = title;
+        this.description = description;
+        this.type = type;
+        this.start = start;
+        this.end = end;
+        this.customerID = customerID;
+    }
+
     /**
      * @return the Appointment ID
      */
