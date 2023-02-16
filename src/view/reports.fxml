@@ -6,69 +6,69 @@
 <?import javafx.scene.text.*?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="620.0" prefWidth="1108.0" style="-fx-background-color: #373436;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Reports">
-    <Pane layoutX="-3.0" layoutY="-2.0" prefHeight="621.0" prefWidth="945.0" style="-fx-background-color: #fffbfa;">
-        <TableView fx:id="apptReportTable" layoutX="50.0" layoutY="121.0" prefHeight="167.0" prefWidth="850.0">
+    <Pane layoutX="-3.0" layoutY="-2.0" prefHeight="621.0" prefWidth="930.0" style="-fx-background-color: #fffbfa;">
+        <TableView fx:id="byContactView" layoutX="40.0" layoutY="121.0" prefHeight="167.0" prefWidth="850.0">
             <columns>
                 <TableColumn fx:id="apptIdCol" prefWidth="62.0" text="Appt ID" />
                 <TableColumn fx:id="apptTitleCol" prefWidth="109.6666488647461" text="Title" />
                 <TableColumn fx:id="apptDescCol" prefWidth="241.0000457763672" text="Description" />
                 <TableColumn fx:id="apptTypeCol" prefWidth="115.6666259765625" text="Type" />
                 <TableColumn fx:id="apptStartCol" prefWidth="122.0" text="Start Date/Time" />
-                <TableColumn fx:id="apptEndCol" prefWidth="120.33331298828125" text="End Date/time" />
-                <TableColumn fx:id="custIdCol" prefWidth="79.6666259765625" text="Customer ID" />
+                <TableColumn fx:id="apptEndCol" prefWidth="112.6666259765625" text="End Date/time" />
+                <TableColumn fx:id="custIdCol" prefWidth="88.0" text="Customer ID" />
             </columns>
         </TableView>
-        <Label layoutX="50.0" layoutY="33.0" text="Reports" textFill="#373436">
+        <Label layoutX="40.0" layoutY="33.0" text="Reports" textFill="#373436">
             <font>
                 <Font name="Gill Sans MT Bold" size="18.0" />
             </font>
         </Label>
-        <TableView fx:id="apptByMonth" layoutX="51.0" layoutY="387.0" prefHeight="176.0" prefWidth="431.0">
+        <TableView fx:id="byTypeMonthView" layoutX="42.0" layoutY="391.0" prefHeight="176.0" prefWidth="431.0">
             <columns>
                 <TableColumn fx:id="apptMonthCol" prefWidth="123.33332443237305" text="Month" />
                 <TableColumn fx:id="typeByMonthCol" prefWidth="182.66668701171875" text="Appointment Type" />
                 <TableColumn fx:id="totalTypeApptCol" prefWidth="123.0" text="Total Appointments" />
             </columns>
         </TableView>
-        <Line endX="747.0" layoutX="151.0" layoutY="325.0" startX="-100.0" stroke="#373436" strokeWidth="3.0" />
-        <Label layoutX="51.0" layoutY="77.0" text="Schedules by Contact" textFill="#373436">
+        <Line endX="747.0" layoutX="142.0" layoutY="329.0" startX="-100.0" stroke="#373436" strokeWidth="3.0" />
+        <Label layoutX="41.0" layoutY="77.0" text="Appointments by Contact" textFill="#373436">
             <font>
                 <Font name="Gill Sans MT" size="16.0" />
             </font>
         </Label>
-        <Label layoutX="50.0" layoutY="345.0" text="Appointment Types by Month" textFill="#373436">
+        <Label layoutX="41.0" layoutY="349.0" text="Appointment Types by Month" textFill="#373436">
             <font>
                 <Font name="Gill Sans MT" size="16.0" />
             </font>
         </Label>
-        <ChoiceBox layoutX="629.0" layoutY="82.0" prefWidth="150.0" />
-        <Label layoutX="543.0" layoutY="86.0" text="Select Contact" textAlignment="RIGHT" textFill="#373436">
+        <ComboBox fx:id="contactCombo" layoutX="619.0" layoutY="82.0" onAction="#selectedContact" prefWidth="150.0" />
+        <Label layoutX="533.0" layoutY="86.0" text="Select Contact" textAlignment="RIGHT" textFill="#373436">
             <font>
                 <Font name="Gill Sans MT" size="13.0" />
             </font>
         </Label>
-        <TableView fx:id="apptByState" layoutX="583.0" layoutY="387.0" prefHeight="176.0" prefWidth="315.0">
+        <TableView fx:id="byStateProvView" layoutX="574.0" layoutY="391.0" prefHeight="176.0" prefWidth="315.0">
             <columns>
                 <TableColumn fx:id="stateCol" prefWidth="192.6666259765625" text="State/Province" />
                 <TableColumn fx:id="totalStateApptCol" prefWidth="121.33331298828125" text="Total Appointments" />
             </columns>
         </TableView>
-        <Label layoutX="582.0" layoutY="345.0" text="Customer Appointments by State/Province" textFill="#373436">
+        <Label layoutX="573.0" layoutY="349.0" text="Appointments by State/Province" textFill="#373436">
             <font>
                 <Font name="Gill Sans MT" size="16.0" />
             </font>
         </Label>
-        <Line endX="100.0" layoutX="433.0" layoutY="356.0" startX="100.0" startY="207.0" stroke="#373436" strokeWidth="3.0" />
+        <Line endX="100.0" layoutX="424.0" layoutY="360.0" startX="100.0" startY="207.0" stroke="#373436" strokeWidth="3.0" />
     </Pane>
-    <Button layoutX="974.0" layoutY="293.0" mnemonicParsing="false" onAction="#toMainMenu" prefHeight="32.0" prefWidth="105.0" style="-fx-background-color: #50add7;" text="Back to Main" textFill="#fcfefc">
+    <Button layoutX="969.0" layoutY="531.0" mnemonicParsing="false" onAction="#toMainMenu" prefHeight="32.0" prefWidth="105.0" style="-fx-background-color: #50add7;" text="Back to Main" textFill="#fcfefc">
         <font>
             <Font name="Gill Sans MT Bold" size="13.0" />
         </font>
     </Button>
-    <Label layoutX="1001.0" layoutY="61.0" text="W" textAlignment="CENTER" textFill="#fcfefc">
+    <Label layoutX="995.0" layoutY="63.0" text="W" textAlignment="CENTER" textFill="#fcfefc">
         <font>
             <Font name="Lucida Bright" size="55.0" />
         </font>
     </Label>
-    <Line endX="100.0" layoutX="976.0" layoutY="143.0" startX="1.33331298828125" stroke="#fcfefc" strokeWidth="5.0" />
+    <Line endX="100.0" layoutX="970.0" layoutY="145.0" startX="1.33331298828125" stroke="#fcfefc" strokeWidth="5.0" />
 </AnchorPane>
