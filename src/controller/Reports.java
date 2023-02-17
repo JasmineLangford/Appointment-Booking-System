@@ -3,6 +3,10 @@ package controller;
 import DAO.AppointmentDAO;
 import DAO.ContactDAO;
 import DAO.ReportDAO;
+import javafx.beans.Observable;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,20 +17,20 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
 import model.Appointment;
 import model.Contact;
+import model.Customer;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class Reports implements Initializable {
 
-    // Schedules by Contact Table
+    // table of appointments by contact
     @FXML
     private TableView<Appointment> byContactView;
     @FXML
@@ -49,7 +53,7 @@ public class Reports implements Initializable {
     private ComboBox<ContactDAO> contactCombo;
     ObservableList<ContactDAO> contacts = ContactDAO.allContacts();
 
-    // Appointment Types by Month Table
+    // table of current month's appointments by type
     @FXML
     private TableView<Appointment> byTypeMonthView;
     @FXML
@@ -59,13 +63,13 @@ public class Reports implements Initializable {
     @FXML
     private TableColumn<Object, Object> totalTypeApptCol;
 
-    // Customer Appointments by State Province Table
+    // table of customer appointments by state or province
     @FXML
-    private TableView byStateProvView;
+    private TableView<Customer> byStateProvView;
     @FXML
-    private TableColumn stateCol;
+    private TableColumn<Object, Object> divisionCol;
     @FXML
-    private TableColumn totalStateApptCol;
+    private TableColumn<Object, Object> totalCustomersByDivision;
 
     public Reports() throws SQLException {
     }
@@ -75,13 +79,13 @@ public class Reports implements Initializable {
         System.out.println("Reports initialized.");
 
         // report by contact table
-       apptIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
-       apptTitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
-       apptDescCol.setCellValueFactory(new PropertyValueFactory<>("description"));
-       apptTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-       apptStartCol.setCellValueFactory(new PropertyValueFactory<>("start"));
-       apptEndCol.setCellValueFactory(new PropertyValueFactory<>("end"));
-       custIdCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        apptIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
+        apptTitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+        apptDescCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+        apptTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        apptStartCol.setCellValueFactory(new PropertyValueFactory<>("start"));
+        apptEndCol.setCellValueFactory(new PropertyValueFactory<>("end"));
+        custIdCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
 
         try {
             ObservableList<Appointment> reportByContact = ReportDAO.appointmentsByCustomer();
@@ -96,7 +100,39 @@ public class Reports implements Initializable {
         contactCombo.setItems(contacts);
         contactCombo.setPromptText("Select contact.");
 
-         try{
+        // report by customer state or province
+
+        //totalCustomersByDivision.setCellValueFactory(new PropertyValueFactory<>("totalCustomers"));
+
+        divisionCol.setCellValueFactory(new PropertyValueFactory<>("division"));
+        totalCustomersByDivision.setCellValueFactory(new PropertyValueFactory<>("COUNT(first_level_divisions.Division)"));
+
+        try{
+            ObservableList<Customer> reportByDivision = ReportDAO.customersByDivision();
+            byStateProvView.setItems(reportByDivision);
+            byStateProvView.setSelectionModel(null);
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+        /**
+         * Method to filter contact appointments based on end-user selection from contact combo box
+         */
+        public void selectedContact() {
+            Contact contactSelected = contactCombo.getSelectionModel().getSelectedItem();
+            try {
+                byContactView.setItems(AppointmentDAO.allAppointments().stream()
+                        .filter(contactAppts -> contactAppts.getContactID() == contactSelected.getContactId())
+                        .collect(Collectors.toCollection(FXCollections::observableArrayList))
+                );
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+         /*try{
              LocalDate currentDate = LocalDate.now();
              Month currentMonth = currentDate.getMonth();
              ObservableList<Appointment> monthReportByType = AppointmentDAO.currentMonth();
@@ -110,16 +146,7 @@ public class Reports implements Initializable {
 
         apptMonthCol.setCellValueFactory(new PropertyValueFactory<>("start"));
         typeByMonthCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-        //totalTypeApptCol.setCellValueFactory(new PropertyValueFactory<>("start"));
-    }
-    public void selectedContact() throws SQLException {
-        Contact contactSelected = contactCombo.getSelectionModel().getSelectedItem();
-        byContactView.setItems(AppointmentDAO.allAppointments().stream()
-                .filter(contactAppts -> contactAppts.getContactID() == contactSelected.getContactId())
-                .collect(Collectors.toCollection(FXCollections::observableArrayList))
-        );
-    }
-
+        //totalTypeApptCol.setCellValueFactory(new PropertyValueFactory<>("start"));*/
 
     /**
      * This navigates the user back to the Main Menu.
@@ -129,6 +156,5 @@ public class Reports implements Initializable {
     public void toMainMenu(ActionEvent actionEvent) throws IOException {
        MainMenu.toMainMenu(actionEvent);
     }
-
 
 }
