@@ -6,7 +6,7 @@
 <?import javafx.scene.text.*?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="620.0" prefWidth="1108.0" style="-fx-background-color: #373436;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Reports">
-    <Pane layoutX="-3.0" layoutY="-2.0" prefHeight="621.0" prefWidth="899.0" style="-fx-background-color: #fffbfa;">
+    <Pane layoutY="-16.0" prefHeight="621.0" prefWidth="897.0" style="-fx-background-color: #fffbfa;">
         <TableView fx:id="byContactView" layoutX="52.0" layoutY="121.0" prefHeight="167.0" prefWidth="799.0">
             <columns>
                 <TableColumn fx:id="apptIdCol" prefWidth="62.0" text="Appt ID" />
@@ -23,20 +23,13 @@
                 <Font name="Gill Sans MT Bold" size="18.0" />
             </font>
         </Label>
-        <TableView fx:id="byTypeMonthView" layoutX="52.0" layoutY="391.0" prefHeight="176.0" prefWidth="385.0">
-            <columns>
-                <TableColumn fx:id="apptMonthCol" prefWidth="123.33332443237305" text="Month" />
-                <TableColumn fx:id="typeByMonthCol" prefWidth="139.33334350585938" text="Appointment Type" />
-                <TableColumn fx:id="totalTypeApptCol" prefWidth="120.33334350585938" text="Total Appointments" />
-            </columns>
-        </TableView>
         <Line endX="696.0" layoutX="152.0" layoutY="326.0" startX="-100.0" stroke="#373436" strokeWidth="3.0" />
         <Label layoutX="53.0" layoutY="77.0" text="Appointments by Contact" textFill="#373436">
             <font>
                 <Font name="Gill Sans MT" size="16.0" />
             </font>
         </Label>
-        <Label layoutX="51.0" layoutY="349.0" text="Appointment Types by Month" textFill="#373436">
+        <Label layoutX="507.0" layoutY="358.0" text="Customer Appointments by Type &amp; Month" textFill="#373436">
             <font>
                 <Font name="Gill Sans MT" size="16.0" />
             </font>
@@ -47,18 +40,25 @@
                 <Font name="Gill Sans MT" size="13.0" />
             </font>
         </Label>
-        <TableView fx:id="byStateProvView" layoutX="532.0" layoutY="391.0" prefHeight="176.0" prefWidth="315.0">
+        <TableView fx:id="byStateProvView" layoutX="52.0" layoutY="401.0" prefHeight="167.0" prefWidth="338.0">
             <columns>
-                <TableColumn fx:id="divisionCol" prefWidth="172.0" text="State/Province" />
-                <TableColumn fx:id="totalCustomersByDivision" prefWidth="143.33331298828125" text="Total Customers" />
+                <TableColumn fx:id="divisionCol" prefWidth="190.99999618530273" text="State/Province" />
+                <TableColumn fx:id="totalCustomersByDivision" prefWidth="144.6666717529297" text="Total Customers" />
             </columns>
         </TableView>
-        <Label layoutX="534.0" layoutY="349.0" text="Customers by State/Province" textFill="#373436">
+        <Label layoutX="51.0" layoutY="358.0" text="Customers by State/Province" textFill="#373436">
             <font>
                 <Font name="Gill Sans MT" size="16.0" />
             </font>
         </Label>
-        <Line endX="100.0" layoutX="386.0" layoutY="360.0" startX="100.0" startY="207.0" stroke="#373436" strokeWidth="3.0" />
+        <Line endX="100.0" layoutX="351.0" layoutY="360.0" startX="100.0" startY="207.0" stroke="#373436" strokeWidth="3.0" />
+      <TableView layoutX="507.0" layoutY="401.0" prefHeight="167.0" prefWidth="338.0">
+        <columns>
+          <TableColumn fx:id="apptMonthCol" prefWidth="138.99996948242188" text="Month" />
+          <TableColumn fx:id="typeByMonthCol" minWidth="8.33331298828125" prefWidth="118.3333740234375" text="Type" />
+            <TableColumn fx:id="totalTypeCol" prefWidth="80.3333740234375" text="Total Type" />
+        </columns>
+      </TableView>
     </Pane>
     <Button layoutX="938.0" layoutY="531.0" mnemonicParsing="false" onAction="#toMainMenu" prefHeight="32.0" prefWidth="131.0" style="-fx-background-color: #50add7;" text="Back to Main" textFill="#fcfefc">
         <font>

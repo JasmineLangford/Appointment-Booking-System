@@ -10,15 +10,38 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class ReportDAO {
-
-    /*/**
+    /**
      * <b>Report #1 - Total number of customer appointments by type and month</b>
+     */
+    public static ObservableList<Appointment> appointmentsByMonthType() throws SQLException{
 
-    public static ObservableList<Appointment> reportByTypeMonth() throws SQLException {
-        ObservableList<Customer> reportTypeMonth = FXCollections.observableArrayList();
-        String reportQuery = "SELECT Type, Start FROM appointments";*/
+        ObservableList<Appointment> apptByMonthType = FXCollections.observableArrayList();
+        String byMonthQuery = "SELECT Type,count(Type) AS Total_Type FROM appointments GROUP BY Type;";
+        PreparedStatement monthPS = JDBC.connection.prepareStatement(byMonthQuery);
+        ResultSet monthResult = monthPS.executeQuery();
+
+        String byTypeQuery= "SELECT monthname(Start) AS Month FROM appointments ORDER BY month(Start) asc";
+        PreparedStatement typePS = JDBC.connection.prepareStatement(byTypeQuery);
+        ResultSet typeResult = typePS.executeQuery();
+
+        while(monthResult.next()){
+            LocalDateTime start = DateTimeUtil.toLocalDT(monthResult.getTimestamp("Start"));
+            String type = typeResult.getString("Type");
+            int totalType = typeResult.getInt("Total_Type");
+            apptByMonthType.add(new Appointment(start,type,totalType));
+
+        }
+        while(typeResult.next()){
+            LocalDateTime start = DateTimeUtil.toLocalDT(monthResult.getTimestamp("Start"));
+            String type = typeResult.getString("Type");
+            int totalType = typeResult.getInt("Total_Type");
+            apptByMonthType.add(new Appointment(start,type,totalType));
+        }
+        return apptByMonthType;
+    }
 
     /**
      * <b>Report #2 - Schedule for each contact in the organization</b>
@@ -60,11 +83,12 @@ public class ReportDAO {
         ResultSet rs = ps.executeQuery();
 
         while(rs.next()){
-            int division_ID = rs.getInt("Division_ID");
+            int country_ID = rs.getInt("Country_ID");
             String division =  rs.getString("State_Province");
+            int division_ID = rs.getInt("Division_ID");
             int totalCustomers = rs.getInt("Total_Customers");
 
-            Customer customer = new Customer(division_ID,division,totalCustomers);
+            Customer customer = new Customer(country_ID,division,division_ID,totalCustomers);
             customersByDivision.add(customer);
         }
         return customersByDivision;

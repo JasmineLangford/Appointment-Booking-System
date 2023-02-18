@@ -2,11 +2,8 @@ package controller;
 
 import DAO.AppointmentDAO;
 import DAO.ContactDAO;
+import DAO.FirstLevelDAO;
 import DAO.ReportDAO;
-import javafx.beans.Observable;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,7 +14,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.Callback;
 import model.Appointment;
 import model.Contact;
 import model.Customer;
@@ -25,6 +21,8 @@ import model.Customer;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -34,19 +32,19 @@ public class Reports implements Initializable {
     @FXML
     private TableView<Appointment> byContactView;
     @FXML
-    private TableColumn<Object, Object> apptIdCol;
+    private TableColumn<Appointment, Integer> apptIdCol;
     @FXML
-    private TableColumn<Object, Object> apptTitleCol;
+    private TableColumn<Appointment, String> apptTitleCol;
     @FXML
-    private TableColumn<Object, Object> apptDescCol;
+    private TableColumn<Appointment, String> apptDescCol;
     @FXML
-    private TableColumn<Object, Object> apptTypeCol;
+    private TableColumn<Appointment, String> apptTypeCol;
     @FXML
-    private TableColumn<Object, Object> apptStartCol;
+    private TableColumn<Appointment, LocalDateTime> apptStartCol;
     @FXML
-    private TableColumn<Object, Object> apptEndCol;
+    private TableColumn<Appointment, LocalDateTime> apptEndCol;
     @FXML
-    private TableColumn<Object, Object> custIdCol;
+    private TableColumn<Appointment, Integer> custIdCol;
 
     // combo box of contacts to be filtered
     @FXML
@@ -57,19 +55,19 @@ public class Reports implements Initializable {
     @FXML
     private TableView<Appointment> byTypeMonthView;
     @FXML
-    private TableColumn<Object, Object> apptMonthCol;
+    private TableColumn<Appointment, String> apptMonthCol;
     @FXML
-    private TableColumn<Object, Object> typeByMonthCol;
+    private TableColumn<Appointment, String > typeByMonthCol;
     @FXML
-    private TableColumn<Object, Object> totalTypeApptCol;
+    private TableColumn<Appointment, Integer> totalTypeCol;
 
     // table of customer appointments by state or province
     @FXML
     private TableView<Customer> byStateProvView;
     @FXML
-    private TableColumn<Object, Object> divisionCol;
+    private TableColumn<Customer, String> divisionCol;
     @FXML
-    private TableColumn<Object, Object> totalCustomersByDivision;
+    private TableColumn<Customer, Integer> totalCustomersByDivision;
 
     public Reports() throws SQLException {
     }
@@ -78,7 +76,7 @@ public class Reports implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Reports initialized.");
 
-        // report by contact table
+        // tableview set up - report by contact
         apptIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
         apptTitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         apptDescCol.setCellValueFactory(new PropertyValueFactory<>("description"));
@@ -100,12 +98,9 @@ public class Reports implements Initializable {
         contactCombo.setItems(contacts);
         contactCombo.setPromptText("Select contact.");
 
-        // report by customer state or province
-
-        //totalCustomersByDivision.setCellValueFactory(new PropertyValueFactory<>("totalCustomers"));
-
+        // tableview set up - report by customer state or province
         divisionCol.setCellValueFactory(new PropertyValueFactory<>("division"));
-        totalCustomersByDivision.setCellValueFactory(new PropertyValueFactory<>("COUNT(first_level_divisions.Division)"));
+        totalCustomersByDivision.setCellValueFactory(new PropertyValueFactory<>("totalCustomers"));
 
         try{
             ObservableList<Customer> reportByDivision = ReportDAO.customersByDivision();
@@ -115,6 +110,18 @@ public class Reports implements Initializable {
             e.printStackTrace();
         }
 
+        // tableview set up - report by month and type
+        apptMonthCol.setCellValueFactory(new PropertyValueFactory<>("start"));
+        typeByMonthCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        totalTypeCol.setCellValueFactory(new PropertyValueFactory<>("totalType"));
+
+        try{
+            ObservableList<Appointment> reportByType = ReportDAO.appointmentsByMonthType();
+            byTypeMonthView.setItems(reportByType);
+            byTypeMonthView.setSelectionModel(null);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
         /**
          * Method to filter contact appointments based on end-user selection from contact combo box
