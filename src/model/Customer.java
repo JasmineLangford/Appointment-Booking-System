@@ -14,6 +14,7 @@ public class Customer {
     private int divisionId;
     private String division;
     private String customerPostal;
+    private int totalCustomers;
 
     /**
      * Constructor
@@ -37,10 +38,11 @@ public class Customer {
      * @param division to get
      * @param countryId to get
      */
-    public Customer(int divisionId, String division, int countryId) {
+    public Customer(int divisionId, String division, int countryId, int totalCustomers) {
         this.divisionId = divisionId;
         this.division = division;
         this.countryId = countryId;
+        this.totalCustomers = totalCustomers;
     }
 
     /**
@@ -57,6 +59,7 @@ public class Customer {
     // null
     public Customer() {
     }
+
 
     /**
      * @return the custID
@@ -181,5 +184,13 @@ public class Customer {
      */
     public void setCustomerPostal(String customerPostal) {
         this.customerPostal = customerPostal;
+    }
+
+    public int getTotalCustomers() {
+        return totalCustomers;
+    }
+
+    public void setTotalCustomers(int totalCustomers) {
+        this.totalCustomers = totalCustomers;
     }
 }
