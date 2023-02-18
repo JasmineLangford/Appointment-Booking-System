@@ -16,6 +16,7 @@ public class Appointment {
     private int customerID;
     private int userID;
     private int contactID;
+    private int totalType;
 
     /**
      * Constructor
@@ -58,6 +59,12 @@ public class Appointment {
         this.start = start;
         this.end = end;
         this.customerID = customerID;
+    }
+
+    public Appointment(LocalDateTime start, String type, int totalType) {
+        this.start = start;
+        this.type = type;
+        this.totalType = totalType;
     }
 
     /**
@@ -201,4 +208,11 @@ public class Appointment {
         this.userID = userID;
     }
 
+    public int getTotalType() {
+        return totalType;
+    }
+
+    public void setTotalType(int totalType) {
+        this.totalType = totalType;
+    }
 }
