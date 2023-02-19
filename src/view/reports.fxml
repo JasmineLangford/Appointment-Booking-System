@@ -6,7 +6,7 @@
 <?import javafx.scene.text.*?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="620.0" prefWidth="1108.0" style="-fx-background-color: #373436;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Reports">
-    <Pane layoutY="-16.0" prefHeight="621.0" prefWidth="897.0" style="-fx-background-color: #fffbfa;">
+    <Pane layoutY="-1.0" prefHeight="620.0" prefWidth="897.0" style="-fx-background-color: #fffbfa;">
         <TableView fx:id="byContactView" layoutX="52.0" layoutY="121.0" prefHeight="167.0" prefWidth="799.0">
             <columns>
                 <TableColumn fx:id="apptIdCol" prefWidth="62.0" text="Appt ID" />
@@ -52,10 +52,10 @@
             </font>
         </Label>
         <Line endX="100.0" layoutX="351.0" layoutY="360.0" startX="100.0" startY="207.0" stroke="#373436" strokeWidth="3.0" />
-      <TableView layoutX="507.0" layoutY="401.0" prefHeight="167.0" prefWidth="338.0">
+      <TableView fx:id="byTypeMonthView" layoutX="507.0" layoutY="401.0" prefHeight="167.0" prefWidth="338.0">
         <columns>
-          <TableColumn fx:id="apptMonthCol" prefWidth="138.99996948242188" text="Month" />
-          <TableColumn fx:id="typeByMonthCol" minWidth="8.33331298828125" prefWidth="118.3333740234375" text="Type" />
+          <TableColumn fx:id="apptMonthCol" prefWidth="119.33334350585938" text="Month" />
+          <TableColumn fx:id="typeByMonthCol" minWidth="8.33331298828125" prefWidth="138.6666259765625" text="Type" />
             <TableColumn fx:id="totalTypeCol" prefWidth="80.3333740234375" text="Total Type" />
         </columns>
       </TableView>

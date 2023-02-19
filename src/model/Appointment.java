@@ -1,5 +1,7 @@
 package model;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 /**
  * This class is the model class for appointments.
@@ -17,6 +19,7 @@ public class Appointment {
     private int userID;
     private int contactID;
     private int totalType;
+    private String startString;
 
     /**
      * Constructor
@@ -55,8 +58,8 @@ public class Appointment {
         this.customerID = customerID;
     }
 
-    public Appointment(LocalDateTime start, String type, int totalType) {
-        this.start = start;
+    public Appointment(String startString, String type, int totalType) {
+        this.startString = startString;
         this.type = type;
         this.totalType = totalType;
     }
@@ -208,5 +211,13 @@ public class Appointment {
 
     public void setTotalType(int totalType) {
         this.totalType = totalType;
+    }
+
+    public String getStartString() {
+        return startString;
+    }
+
+    public void setStartString(String startString) {
+        this.startString = startString;
     }
 }

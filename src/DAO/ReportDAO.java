@@ -1,44 +1,40 @@
 package DAO;
 
+import controller.MainMenu;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Appointment;
 import model.Customer;
 import model.DateTimeUtil;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class ReportDAO {
+
     /**
      * <b>Report #1 - Total number of customer appointments by type and month</b>
      */
     public static ObservableList<Appointment> appointmentsByMonthType() throws SQLException{
 
         ObservableList<Appointment> apptByMonthType = FXCollections.observableArrayList();
-        String byMonthQuery = "SELECT Type,count(Type) AS Total_Type FROM appointments GROUP BY Type;";
-        PreparedStatement monthPS = JDBC.connection.prepareStatement(byMonthQuery);
-        ResultSet monthResult = monthPS.executeQuery();
 
-        String byTypeQuery= "SELECT monthname(Start) AS Month FROM appointments ORDER BY month(Start) asc";
-        PreparedStatement typePS = JDBC.connection.prepareStatement(byTypeQuery);
-        ResultSet typeResult = typePS.executeQuery();
+        String byMonthTypeQuery= "SELECT monthname(Start) AS Month,Type,count(Type) AS Total_Type FROM appointments " +
+                "GROUP BY Type,Start ORDER BY Start ASC";
+        PreparedStatement ps = JDBC.connection.prepareStatement(byMonthTypeQuery);
+        ResultSet rs = ps.executeQuery();
 
-        while(monthResult.next()){
-            LocalDateTime start = DateTimeUtil.toLocalDT(monthResult.getTimestamp("Start"));
-            String type = typeResult.getString("Type");
-            int totalType = typeResult.getInt("Total_Type");
-            apptByMonthType.add(new Appointment(start,type,totalType));
+        while(rs.next()){
 
-        }
-        while(typeResult.next()){
-            LocalDateTime start = DateTimeUtil.toLocalDT(monthResult.getTimestamp("Start"));
-            String type = typeResult.getString("Type");
-            int totalType = typeResult.getInt("Total_Type");
-            apptByMonthType.add(new Appointment(start,type,totalType));
+            String startString = rs.getString("Month");
+            String type = rs.getString("Type");
+            int totalType = rs.getInt("Total_Type");
+
+            Appointment appointment = new Appointment (startString,type,totalType);
+            apptByMonthType.add(appointment);
+
         }
         return apptByMonthType;
     }

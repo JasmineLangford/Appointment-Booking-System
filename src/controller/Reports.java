@@ -2,7 +2,6 @@ package controller;
 
 import DAO.AppointmentDAO;
 import DAO.ContactDAO;
-import DAO.FirstLevelDAO;
 import DAO.ReportDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,12 +16,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import model.Appointment;
 import model.Contact;
 import model.Customer;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -51,11 +49,11 @@ public class Reports implements Initializable {
     private ComboBox<ContactDAO> contactCombo;
     ObservableList<ContactDAO> contacts = ContactDAO.allContacts();
 
-    // table of current month's appointments by type
+    // table of appointments by month and type
     @FXML
     private TableView<Appointment> byTypeMonthView;
     @FXML
-    private TableColumn<Appointment, String> apptMonthCol;
+    private TableColumn<Appointment, LocalDateTime> apptMonthCol;
     @FXML
     private TableColumn<Appointment, String > typeByMonthCol;
     @FXML
@@ -71,6 +69,7 @@ public class Reports implements Initializable {
 
     public Reports() throws SQLException {
     }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -111,7 +110,7 @@ public class Reports implements Initializable {
         }
 
         // tableview set up - report by month and type
-        apptMonthCol.setCellValueFactory(new PropertyValueFactory<>("start"));
+        apptMonthCol.setCellValueFactory(new PropertyValueFactory<>("startString"));
         typeByMonthCol.setCellValueFactory(new PropertyValueFactory<>("type"));
         totalTypeCol.setCellValueFactory(new PropertyValueFactory<>("totalType"));
 
