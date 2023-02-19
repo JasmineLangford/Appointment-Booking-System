@@ -11,6 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import model.Appointment;
 import model.DateTimeUtil;
@@ -21,6 +22,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.*;
 import java.time.chrono.ChronoLocalDate;
+import java.time.chrono.ChronoLocalDateTime;
+import java.time.chrono.ChronoZonedDateTime;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -33,6 +36,8 @@ import java.util.ResourceBundle;
 public class AddAppointment implements Initializable {
 
     // Form fields
+    @FXML
+    private TextField apptID;
     @FXML
     private DatePicker startDatePicker;
     @FXML
@@ -55,6 +60,7 @@ public class AddAppointment implements Initializable {
     private TextField custIdTextfield;
     @FXML
     private TextField userIdTextfield;
+
 
     // list of contacts
     ObservableList<ContactDAO> contacts = ContactDAO.allContacts();
@@ -91,7 +97,7 @@ public class AddAppointment implements Initializable {
      *
      * @param actionEvent save button clicked
      */
-    public void onSaveAppt(ActionEvent actionEvent) {
+    public void onSaveAppt(ActionEvent actionEvent) throws SQLException {
 
         // input validation messages
         try{
@@ -107,7 +113,6 @@ public class AddAppointment implements Initializable {
         }catch(NullPointerException e) {
             e.printStackTrace();
         }
-
 
         try {
             if (contactCombo.getValue() == null || typeTextfield.getText().isEmpty() || titleTextfield.getText().isEmpty() ||
@@ -174,6 +179,25 @@ public class AddAppointment implements Initializable {
         int addCustID = Integer.parseInt(custIdTextfield.getText());
         int addUserID = Integer.parseInt(userIdTextfield.getText());
 
+
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        LocalDateTime dateTimeStart = LocalDateTime.of(addStartDate,addStartTime);
+        LocalDateTime dateTimeEnd = LocalDateTime.of(addEndDate,addEndTime);
+
+        ZonedDateTime userStart = ZonedDateTime.of(dateTimeStart,ZoneId.systemDefault());
+        ZonedDateTime userEnd = ZonedDateTime.of(dateTimeEnd,ZoneId.systemDefault());
+        ZonedDateTime businessStart = ZonedDateTime.of(addStartDate, LocalTime.of(8,0),ZoneId.of("US/Eastern"));
+        ZonedDateTime businessEnd = ZonedDateTime.of(addEndDate, LocalTime.of(22,0), ZoneId.of("US/Eastern"));
+
+        if(dateTimeStart.isBefore(currentDateTime)){
+            Alert invalidDateTime = new Alert(Alert.AlertType.ERROR, "Date selected has already passed. Please" +
+                    " select a valid future date.");
+            invalidDateTime.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+            Optional<ButtonType> results = invalidDateTime.showAndWait();
+            if (results.isPresent() && results.get() == ButtonType.OK)
+                return;
+        }
+
         if(addStartDate.getDayOfWeek().equals(DayOfWeek.SATURDAY) ||
                 addStartDate.getDayOfWeek().equals(DayOfWeek.SUNDAY) ||
                 addEndDate.getDayOfWeek().equals(DayOfWeek.SATURDAY) ||
@@ -184,26 +208,13 @@ public class AddAppointment implements Initializable {
                 return;
         }
 
-        LocalDateTime currentDateTime = LocalDateTime.now();
-        LocalDateTime dateTimeStart = LocalDateTime.of(addStartDate,addStartTime);
-        LocalDateTime dateTimeEnd = LocalDateTime.of(addEndDate,addEndTime);
-        LocalDateTime dateTimeEST = LocalDateTime.now(ZoneId.of("US/Eastern"));
-        LocalDateTime dateTimeStartEST = LocalDateTime.from(dateTimeStart.atZone(ZoneId.from(dateTimeEST)));
-
-        if(dateTimeStart.isAfter(currentDateTime)){
-            Alert invalidDateTime = new Alert(Alert.AlertType.ERROR, "Date selected has already passed. Please" +
-                    " select a valid future date.");
-            Optional<ButtonType> results = invalidDateTime.showAndWait();
+        if(userStart.isBefore(businessStart) || userStart.isAfter(businessEnd) || userEnd.isBefore(businessStart)
+                || userEnd.isAfter(businessEnd)) {
+            Alert businessHourConflict = new Alert(Alert.AlertType.ERROR, "Time is outside of normal business hours (8am-10pm EST).");
+            Optional<ButtonType> results = businessHourConflict.showAndWait();
             if (results.isPresent() && results.get() == ButtonType.OK)
                 return;
         }
-
-        /*if(){
-
-        }*/
-
-
-
 
         try {
             newAppointment.setStart(LocalDateTime.of(addStartDate,addStartTime));
