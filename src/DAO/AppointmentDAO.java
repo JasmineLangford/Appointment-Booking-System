@@ -158,7 +158,6 @@ public class AppointmentDAO {
 
     /**
      * Method to query for 15 minute appointment alert.
-     * @return
      */
 
     public static Appointment appointmentAlert() {
@@ -177,7 +176,8 @@ public class AppointmentDAO {
             if (rs.next()) {
                 alertAppointments = new Appointment(
                         rs.getInt("Appointment_ID"),
-                        rs.getTimestamp("Start").toLocalDateTime());
+                        rs.getTimestamp("Start").toLocalDateTime(),
+                        rs.getTimestamp("End").toLocalDateTime());
 
                 return alertAppointments;
             }
