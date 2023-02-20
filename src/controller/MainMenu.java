@@ -3,6 +3,8 @@ package controller;
 import DAO.AppointmentDAO;
 import DAO.CustomerDAO;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,6 +24,8 @@ import model.Customer;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -84,6 +88,13 @@ public class MainMenu implements Initializable {
     @FXML
     private TableColumn<Customer, String> customerPostalCol;
 
+    public DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    /**
+     * Method to populate tables on screen load
+     *
+     * <b>LAMBDA #1 - set up columns for start and end date as string property in order to be easily formatted</b>
+     */
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -96,10 +107,12 @@ public class MainMenu implements Initializable {
         apptLocationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
         apptContactCol.setCellValueFactory(new PropertyValueFactory<>("contactID"));
         apptTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-        apptStartCol.setCellValueFactory(new PropertyValueFactory<>("start"));
-        apptEndCol.setCellValueFactory(new PropertyValueFactory<>("end"));
         apptCustCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         apptUserCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
+
+        // lambda
+        apptStartCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStart().format(formatter)));
+        apptEndCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEnd().format(formatter)));
 
         try {
             loadApptTable();
@@ -114,7 +127,7 @@ public class MainMenu implements Initializable {
         customerAddressCol.setCellValueFactory(new PropertyValueFactory<>("customerAddress"));
         customerPhoneCol.setCellValueFactory(new PropertyValueFactory<>("customerPhone"));
         customerCountryCol.setCellValueFactory(new PropertyValueFactory<>("customerCountry"));
-        customerStateCol.setCellValueFactory(new PropertyValueFactory<>("Division"));
+        customerStateCol.setCellValueFactory(new PropertyValueFactory<>("division"));
         customerPostalCol.setCellValueFactory(new PropertyValueFactory<>("customerPostal"));
 
         try {
@@ -347,8 +360,6 @@ public class MainMenu implements Initializable {
      * @param actionEvent Reports button is clicked (located on the right panel).
      */
     public void toReports(ActionEvent actionEvent) throws IOException {
-        System.out.println("Reports initialized.");
-
         Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/reports.fxml"))));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, 1108, 620);
