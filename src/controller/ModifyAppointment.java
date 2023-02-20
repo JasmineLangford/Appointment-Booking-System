@@ -2,7 +2,6 @@ package controller;
 
 import DAO.AppointmentDAO;
 import DAO.ContactDAO;
-import DAO.CustomerDAO;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,7 +12,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Appointment;
-import model.Contact;
 
 import java.io.IOException;
 import java.net.URL;
@@ -55,7 +53,7 @@ public class ModifyAppointment implements Initializable {
     @FXML
     private TextField userId;
     @FXML
-    private ComboBox<ContactDAO> contactCombo;
+    private ComboBox contactCombo;
 
     ObservableList<ContactDAO> contacts = ContactDAO.allContacts();
 
@@ -92,7 +90,7 @@ public class ModifyAppointment implements Initializable {
         startCombo.setValue(modAppointment.getStart().toLocalTime());
         endDatePicker.setValue(modAppointment.getEnd().toLocalDate());
         endCombo.setValue(modAppointment.getEnd().toLocalTime());
-        //contactCombo.setValue(modAppointment.getContactID());
+        contactCombo.setValue(modAppointment.getContactName());
         locationText.setText(modAppointment.getLocation());
         typeText.setText(modAppointment.getType());
         titleText.setText(modAppointment.getTitle());
@@ -182,7 +180,7 @@ public class ModifyAppointment implements Initializable {
         int modApptId = Integer.parseInt(apptId.getText());
         String modType = typeText.getText();
         String modTitle = titleText.getText();
-        int modContact = contactCombo.getSelectionModel().getSelectedItem().getContactId();
+        int modContact = contactCombo.getSelectionModel().getSelectedIndex();
         String modDescription = descText.getText();
         String modLocation = locationText.getText();
         int modCustomerID = Integer.parseInt(customerId.getText());

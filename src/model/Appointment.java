@@ -1,7 +1,8 @@
 package model;
+
+import DAO.ContactDAO;
+
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 /**
  * This class is the model class for appointments.
@@ -18,6 +19,7 @@ public class Appointment {
     private int customerID;
     private int userID;
     private int contactID;
+    private static String contactName;
     private int totalType;
     private String startString;
 
@@ -62,6 +64,11 @@ public class Appointment {
         this.startString = startString;
         this.type = type;
         this.totalType = totalType;
+    }
+
+    public Appointment(int contactID, String contactName){
+        this.contactID = contactID;
+        this.contactName = contactName;
     }
 
     /**
@@ -134,6 +141,14 @@ public class Appointment {
         this.contactID = contactID;
     }
 
+
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
    /**
     * @return the type
     */
@@ -220,4 +235,5 @@ public class Appointment {
     public void setStartString(String startString) {
         this.startString = startString;
     }
+
 }

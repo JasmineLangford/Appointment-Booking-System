@@ -2,7 +2,7 @@ package DAO;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import model.Contact;
+import model.Appointment;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,7 +10,11 @@ import java.sql.SQLException;
 /**
  * Class for contact query
  */
-public class ContactDAO extends Contact {
+public class ContactDAO extends Appointment{
+
+    //private int contactID;
+    //private String contactName;
+
     // override format for combo box selection display
     @Override
     public String toString(){
@@ -20,7 +24,7 @@ public class ContactDAO extends Contact {
      * Constructor
      */
     public ContactDAO (int contactId, String contactName){
-        super(contactId,contactName);
+        super(contactId, contactName);
     }
 
     /**
@@ -43,5 +47,21 @@ public class ContactDAO extends Contact {
         }
         return contactList;
     }
-
 }
+
+    /*public int getContactID() {
+        return contactID;
+    }
+
+    public void setContactID(int contactID) {
+        this.contactID = contactID;
+    }
+
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }*/
+
