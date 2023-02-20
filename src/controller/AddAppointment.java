@@ -2,6 +2,7 @@ package controller;
 
 import DAO.AppointmentDAO;
 import DAO.ContactDAO;
+import com.mysql.cj.BindValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -37,15 +38,13 @@ public class AddAppointment implements Initializable {
 
     // Form fields
     @FXML
-    private TextField apptID;
+    public DatePicker startDatePicker;
     @FXML
-    private DatePicker startDatePicker;
+    public ComboBox<LocalTime> startCombo;
     @FXML
-    private ComboBox<LocalTime> startCombo;
+    public ComboBox<LocalTime> endCombo;
     @FXML
-    private ComboBox<LocalTime> endCombo;
-    @FXML
-    private DatePicker endDatePicker;
+    public DatePicker endDatePicker;
     @FXML
     private ComboBox<ContactDAO> contactCombo;
     @FXML
@@ -179,7 +178,6 @@ public class AddAppointment implements Initializable {
         int addCustID = Integer.parseInt(custIdTextfield.getText());
         int addUserID = Integer.parseInt(userIdTextfield.getText());
 
-
         LocalDateTime currentDateTime = LocalDateTime.now();
         LocalDateTime dateTimeStart = LocalDateTime.of(addStartDate,addStartTime);
         LocalDateTime dateTimeEnd = LocalDateTime.of(addEndDate,addEndTime);
@@ -208,6 +206,7 @@ public class AddAppointment implements Initializable {
                 return;
         }
 
+        // checking for selected appointment dates/times are out of business hours
         if(userStart.isBefore(businessStart) || userStart.isAfter(businessEnd) || userEnd.isBefore(businessStart)
                 || userEnd.isAfter(businessEnd)) {
             Alert businessHourConflict = new Alert(Alert.AlertType.ERROR, "Time is outside of normal business hours (8am-10pm EST).");
@@ -215,6 +214,55 @@ public class AddAppointment implements Initializable {
             if (results.isPresent() && results.get() == ButtonType.OK)
                 return;
         }
+
+        // input validation messages for conflicting appointments
+        ObservableList<Appointment> getAllAppointments = AppointmentDAO.allAppointments();
+        for(Appointment apptConflicts : getAllAppointments) {
+
+            if(addCustID == apptConflicts.getCustomerID() && (dateTimeStart.isEqual(apptConflicts.getStart()) &&
+                    dateTimeEnd.isEqual(apptConflicts.getEnd()) ) ){
+
+            /////TEST/////////////
+            System.out.println(dateTimeStart); //user input
+            System.out.println(apptConflicts.getStart()); // database
+            System.out.println(dateTimeEnd); // user input
+            System.out.println(apptConflicts.getEnd()); //database
+
+
+            Alert apptConflict = new Alert(Alert.AlertType.ERROR, "This customer already has an existing " +
+                    "appointment for this date and time.");
+            Optional<ButtonType> results = apptConflict.showAndWait();
+            if (results.isPresent() && results.get() == ButtonType.OK)
+                return;
+        }
+
+            if(addCustID == apptConflicts.getCustomerID() && ((dateTimeStart.isBefore(apptConflicts.getStart()) ||
+                    dateTimeStart.isEqual(apptConflicts.getStart()))) && ((dateTimeEnd.isAfter(apptConflicts.getEnd()) ||
+                    dateTimeEnd.isEqual(apptConflicts.getEnd())))) {
+                Alert apptConflict = new Alert(Alert.AlertType.ERROR, "This meeting overlaps with the customer's existing appointment.");
+                Optional<ButtonType> results = apptConflict.showAndWait();
+                if (results.isPresent() && results.get() == ButtonType.OK)
+                    return;
+            }
+
+            if(addCustID == apptConflicts.getCustomerID() && ((dateTimeStart.isAfter(apptConflicts.getStart()) &&
+                    dateTimeStart.isBefore(apptConflicts.getEnd())))){
+                Alert apptConflict = new Alert(Alert.AlertType.ERROR, "Start time overlaps with existing " +
+                        "appointment.");
+                Optional<ButtonType> results = apptConflict.showAndWait();
+                if (results.isPresent() && results.get() == ButtonType.OK)
+                    return;
+            }
+
+            if(addCustID == apptConflicts.getCustomerID() && ((dateTimeEnd.isAfter(apptConflicts.getStart()) &&
+                    ((dateTimeEnd.isBefore(apptConflicts.getEnd()) || dateTimeEnd.isEqual(apptConflicts.getEnd())))))){
+                Alert apptConflict = new Alert(Alert.AlertType.ERROR, "End time overlaps with existing " +
+                        "appointment.");
+                Optional<ButtonType> results = apptConflict.showAndWait();
+                if (results.isPresent() && results.get() == ButtonType.OK)
+                    return;
+            }
+    }
 
         try {
             newAppointment.setStart(LocalDateTime.of(addStartDate,addStartTime));
@@ -234,6 +282,9 @@ public class AddAppointment implements Initializable {
                 AppointmentDAO.addAppointment(addStartDate,addStartTime,addEndDate,addEndTime,String.valueOf(addContact),
                      addType,addTitle,addDescription,addLocation,addCustID,addUserID);
                 toMainMenu(actionEvent);
+
+
+
             }
         } catch (IOException | SQLException e) {
             e.printStackTrace();
