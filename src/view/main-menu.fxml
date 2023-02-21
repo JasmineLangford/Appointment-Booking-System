@@ -37,8 +37,8 @@
                 <TableColumn fx:id="customerNameCol" prefWidth="128.0000228881836" text="Name" />
                 <TableColumn fx:id="customerAddressCol" prefWidth="137.66665649414062" text="Address" />
                 <TableColumn fx:id="customerStateCol" prefWidth="139.33334350585938" text="State/Province" />
-                <TableColumn fx:id="customerPostalCol" prefWidth="116.6666259765625" text="Postal Code" />
                 <TableColumn fx:id="customerCountryCol" prefWidth="90.00006103515625" text="Country" />
+                <TableColumn fx:id="customerPostalCol" prefWidth="116.6666259765625" text="Postal Code" />
                 <TableColumn fx:id="customerPhoneCol" prefWidth="138.33331298828125" text="Phone Number" />
             </columns>
         </TableView>
