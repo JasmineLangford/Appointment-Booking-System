@@ -30,8 +30,6 @@ import java.util.*;
  *
  * The end-user's operating system will also determine a timezone, which will be displayed on a label in the lower
  * right-hand corner of the login screen.
- *
- * @author Jasmine Langford
  */
 public class Login implements Initializable {
 
