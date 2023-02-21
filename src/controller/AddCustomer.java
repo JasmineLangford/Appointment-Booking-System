@@ -7,16 +7,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
 import model.Customer;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -24,15 +18,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * This class is the controller for adding a new customer.
- *
- * End-user will be able to input data in text fields and combo boxes.
+ * This class is the controller for add-appointment.fxml.
+ * The end-user can add a new customer by inputting data into text fields and combo boxes.
+ * The customer ID is auto-incremented from the database and disabled on the form.
  */
 public class AddCustomer implements Initializable {
 
     // form fields
-    @FXML
-    private TextField customerID;
     @FXML
     private TextField custNameTextfield;
     @FXML
@@ -46,7 +38,7 @@ public class AddCustomer implements Initializable {
     @FXML
     private ComboBox<FirstLevelDAO> firstLevelCombo;
 
-    // list of countries
+    // list of countries for combo box
     ObservableList<CountryDAO> countries = CountryDAO.allCountries();
 
     Customer newCustomer = new Customer();
@@ -58,66 +50,75 @@ public class AddCustomer implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Add customer is initialized!");
 
-        // generates unique customer id for new customer
-        /*try {
-            customerID.setText(String.valueOf(CustomerDAO.allCustomers().size()+1));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }*/
-
         // setting combo box selection of countries
         countryCombo.setItems(countries);
-        countryCombo.setPromptText("Select country.");
+        countryCombo.getSelectionModel().selectFirst();
+
+        // disabled this combo box until country is selected
+        firstLevelCombo.setDisable(true);
     }
 
     /**
-     * <b>LAMBDA #1 - Filters first level division combo box selection based on end-user's selection of country.
-     * This will provide the end-user with specific divisions to choose from rather than a long list.<b>
+     * <b>LAMBDA REQUIREMENT #2</b> This method uses a lambda expression to filter the state/province selections based
+     * on the country selected. The filter takes the predicate of <i>first level</i> and returns
+     * true if the country ID from the database matches the country ID from the country selected. The state/province(s)
+     * matching the country ID are then collected into an FXCollections instance that will display in the combo box as
+     * an observable array list, along with custom prompts for the end-user to select a state/province.
+     *
+     * @throws SQLException The exception to throw if there are errors with database access or errors.
      */
     public void countrySelected() throws SQLException {
+        // filter based on this selection
         Customer selection = countryCombo.getSelectionModel().getSelectedItem();
+        firstLevelCombo.setDisable(false);
+
+        // Lambda: filter state/province and collect only those matching the country ID to be shown
         firstLevelCombo.setItems(FirstLevelDAO.allFirstLevelDivision().stream()
                 .filter(firstLevel -> firstLevel.getCountryId() == selection.getCountryId())
                 .collect(Collectors.toCollection(FXCollections::observableArrayList)));
 
-        firstLevelCombo.setVisibleRowCount(3);
+        firstLevelCombo.setVisibleRowCount(4);
 
         // changes prompt based on country selected
         if(selection.getCountryId() == 1){
-            firstLevelCombo.setPromptText("Select state.");
+            firstLevelCombo.setPromptText("Select State");
         } else if (selection.getCountryId() == 2) {
-            firstLevelCombo.setPromptText("Select region.");
+            firstLevelCombo.setPromptText("Select Region");
         } else if (selection.getCountryId() == 3) {
-            firstLevelCombo.setPromptText("Select province.");
+            firstLevelCombo.setPromptText("Select Province");
         }
     }
 
     /**
-     * This will save data entered in form fields and add the new customer to the database.
+     * This method will save the new customer in the database.
      *
-     * @param actionEvent saved button clicked
+     * @param actionEvent Save the inputs for new customer on button click.
      */
     public void onSaveCustomer(ActionEvent actionEvent) {
 
         // end-user form fields
-        //int addCustomerID = Integer.parseInt(customerID.getText());
         String addCustomerName = custNameTextfield.getText();
         String addAddress = addressTextfield.getText();
         String addPhoneNumber = phoneNumberTextfield.getText();
         String addPostalCode =  postalCodeTextfield.getText();
         String addCountry = countryCombo.getValue().toString();
-        int addFirstLevel = firstLevelCombo.getSelectionModel().getSelectedItem().getDivisionId();
 
-        // input validation messages
-        if (addCustomerName.isEmpty() || addAddress.isEmpty() ||addPhoneNumber.isEmpty() || addPostalCode.isEmpty() ||
-                addCountry.isEmpty() || firstLevelCombo.getSelectionModel().isEmpty()) {
+
+        // input validation: empty field(s) found
+        if (addCustomerName.isEmpty() || addAddress.isEmpty() ||addPhoneNumber.isEmpty() || addPostalCode.isEmpty()) {
             Alert emptyField = new Alert(Alert.AlertType.ERROR, "One or more fields are empty. Please enter a" +
-                        " value in each field.");
-            emptyField.showAndWait();
+                    " value in each field.");
+            Optional<ButtonType> result = emptyField.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK){
+                return;
+            }
         }
 
-       try{
-           //newCustomer.setCustomerId(addCustomerID);
+        try{
+            // user form field
+            int addFirstLevel = firstLevelCombo.getSelectionModel().getSelectedItem().getDivisionId();
+
+           // setting new customer
            newCustomer.setCustomerName(addCustomerName);
            newCustomer.setCustomerAddress(addAddress);
            newCustomer.setCustomerPhone(addPhoneNumber);
@@ -133,18 +134,19 @@ public class AddCustomer implements Initializable {
                     addFirstLevel);
             MainMenu.toMainMenu(actionEvent);
         }
-       }catch (IOException e){
-           e.printStackTrace();
-       }
+        }catch(NullPointerException e){
+           System.out.println("Null selection");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * This navigates the end-user back to the Main Menu.
      *
-     * @param actionEvent cancel button clicked
+     * @param actionEvent The cancel button is clicked.
      */
     public void toMainMenu(ActionEvent actionEvent) throws IOException {
         MainMenu.toMainMenu(actionEvent);
     }
-
 }
