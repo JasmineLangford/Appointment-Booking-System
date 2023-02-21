@@ -13,27 +13,25 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Appointment;
 import model.DateTimeUtil;
-
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
+import java.time.*;
 import java.util.*;
 
 /**
  * This class is the controller for Login.fxml
  * The end-user will sign in with their username and password.
  *
- * The user's computer language setting will determine this screen's language translation.
- * French or English translation for the scope of this project.
+ * The language setting on the end-user's operating system will determine the language translation presented on the UI.
+ * Input validation message for empty text fields (username and password text fields) and error message for
+ * invalid username and/or password are also translated. For the scope of this project, there are French and
+ * English translations available.
  *
- * End-user's computer setting will determine the timezone listed.
+ * The end-user's operating system will also determine a timezone, which will be displayed on a label in the lower
+ * right-hand corner of the login screen.
+ *
+ * @author Jasmine Langford
  */
 public class Login implements Initializable {
 
@@ -50,8 +48,6 @@ public class Login implements Initializable {
     private Label signInLabel;
     @FXML
     private Button loginButtonLabel;
-
-    // timezone
     @FXML
     private Label zoneID;
 
@@ -61,14 +57,13 @@ public class Login implements Initializable {
     @FXML
     private PasswordField passwordLogin;
 
-    // error control message
+    // error control message for language translations
     @FXML
     private String blankUserInput;
     @FXML
     private String invalidLoginHeader;
     @FXML
     private String invalidLoginContent;
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -86,24 +81,27 @@ public class Login implements Initializable {
         invalidLoginHeader = rb.getString("invalidLoginHeader");
         invalidLoginContent = rb.getString("invalidLoginContent");
 
-        // timezone
+        // set end-user timezone
         zoneID.setText(ZoneId.systemDefault().toString());
     }
 
     /**
-     * This navigates the end-user to the Main Menu upon successful login.
+     * This method navigates the end-user to the Main Menu upon successful login.
+     * Error message is displayed if login is unsuccessful.
      *
      * @param actionEvent Login button is clicked.
+     * @throws IOException if I/O error occurs
      */
     public void loginButton(ActionEvent actionEvent) throws IOException {
 
+        // end-user input
         String username = usernameLogin.getText();
         String password = passwordLogin.getText();
 
+        // check database for valid user
         boolean validUser = UserDAO.validateUser(username, password);
 
         if (validUser) {
-
             // change from login screen to main menu
             Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/main-menu.fxml"))));
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -113,38 +111,35 @@ public class Login implements Initializable {
             stage.centerOnScreen();
             stage.setResizable(false);
 
+            // check for appointments within 15 minutes on login
             if(AppointmentDAO.appointmentAlert){
                 Appointment appointmentAlert = AppointmentDAO.appointmentAlert();
 
-                Alert fifteenAlertTrue = new Alert(Alert.AlertType.INFORMATION,"You have an upcoming appointment: " + '\n' + '\n' +
-                        "Appointment ID: " + appointmentAlert.getAppointmentID() + '\n' + "Time: " + DateTimeUtil.toLocalDT(Timestamp.valueOf(appointmentAlert.getStart())), ButtonType.OK);
-                    Optional<ButtonType> results = fifteenAlertTrue.showAndWait();
-                    if (results.isPresent() && results.get() == ButtonType.OK);
-
-                } else {
+                assert appointmentAlert != null;
+                Alert fifteenAlertTrue = new Alert(Alert.AlertType.INFORMATION,"You have an upcoming " +
+                        "appointment: " + '\n' + '\n' + "Appointment ID: " + appointmentAlert.getAppointmentID()
+                        + '\n' + "Date and Time: " +
+                        DateTimeUtil.toLocalDT(Timestamp.valueOf(appointmentAlert.getStart())) + '\n' + "User ID: " +
+                        appointmentAlert.getUserID(), ButtonType.OK);
+                fifteenAlertTrue.showAndWait();
+            } else {
                 Alert fifteenAlertFalse = new Alert(Alert.AlertType.INFORMATION, "You do not have any upcoming appointments.", ButtonType.OK);
-                Optional<ButtonType> results = fifteenAlertFalse.showAndWait();
-                if (results.isPresent() && results.get() == ButtonType.OK);
-
+                fifteenAlertFalse.showAndWait();
             }
 
+        // error control message for blank username/password fields
         } else if (usernameLogin.getText().isEmpty() || passwordLogin.getText().isEmpty()) {
-
-            // error control message - end-user did not enter values in username/password fields
             Alert blankUser = new Alert(Alert.AlertType.ERROR, blankUserInput);
             blankUser.setTitle(" ");
             blankUser.setHeaderText(invalidLoginHeader);
             blankUser.showAndWait();
 
         } else {
-
-            // error control message - end-user did not enter valid login credentials
+                // error control message - end-user did not enter valid login credentials
                 Alert invalidUser = new Alert(Alert.AlertType.ERROR, invalidLoginContent);
                 invalidUser.setTitle(" ");
                 invalidUser.setHeaderText(invalidLoginHeader);
                 invalidUser.showAndWait();
             }
-
         }
-
     }
