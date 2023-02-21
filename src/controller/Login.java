@@ -4,13 +4,8 @@ import DAO.AppointmentDAO;
 import DAO.UserDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
 import model.Appointment;
 import model.DateTimeUtil;
 import java.io.IOException;
@@ -20,7 +15,7 @@ import java.time.*;
 import java.util.*;
 
 /**
- * This class is the controller for Login.fxml
+ * This class is the controller for login.fxml.
  * The end-user will sign in with their username and password.
  *
  * The language setting on the end-user's operating system will determine the language translation presented on the UI.
@@ -101,13 +96,7 @@ public class Login implements Initializable {
 
         if (validUser) {
             // change from login screen to main menu
-            Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/main-menu.fxml"))));
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root, 1108, 620);
-            stage.setScene(scene);
-            stage.show();
-            stage.centerOnScreen();
-            stage.setResizable(false);
+            MainMenu.toMainMenu(actionEvent);
 
             // check for appointments within 15 minutes on login
             if(AppointmentDAO.appointmentAlert){
