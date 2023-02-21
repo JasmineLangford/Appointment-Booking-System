@@ -63,7 +63,8 @@ public class AddCustomer implements Initializable {
      * on the country selected. The filter takes the predicate of <i>first level</i> and returns
      * true if the country ID from the database matches the country ID from the country selected. The state/province(s)
      * matching the country ID are then collected into an FXCollections instance that will display in the combo box as
-     * an observable array list, along with custom prompts for the end-user to select a state/province.
+     * an observable array list, along with custom prompts for the end-user to select a state/province. The benefit of
+     * this lambda expression is that it takes an existing observable list and filtering it.
      *
      * @throws SQLException The exception to throw if there are errors with database access or errors.
      */
