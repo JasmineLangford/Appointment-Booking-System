@@ -83,7 +83,7 @@ public class Login implements Initializable {
      * Error message is displayed if login is unsuccessful.
      *
      * @param actionEvent Login button is clicked.
-     * @throws IOException if I/O error occurs
+     * @throws IOException The exception to throw if I/O error occurs.
      */
     public void loginButton(ActionEvent actionEvent) throws IOException {
 
