@@ -21,6 +21,8 @@ import java.util.stream.Collectors;
  * This class is the controller for add-appointment.fxml.
  * The end-user can add a new customer by inputting data into text fields and combo boxes.
  * The customer ID is auto-incremented from the database and disabled on the form.
+ * The end-user will be able to save the data for a new customer by clicking the save button at the bottom of the
+ * screen or cancel if the end-user no longer wants to add a customer.
  */
 public class AddCustomer implements Initializable {
 
@@ -40,7 +42,7 @@ public class AddCustomer implements Initializable {
 
     // list of countries for combo box
     ObservableList<CountryDAO> countries = CountryDAO.allCountries();
-
+    ObservableList<FirstLevelDAO> divisions = FirstLevelDAO.allFirstLevelDivision();
     Customer newCustomer = new Customer();
 
     public AddCustomer() throws SQLException {
@@ -54,8 +56,12 @@ public class AddCustomer implements Initializable {
         countryCombo.setItems(countries);
         countryCombo.getSelectionModel().selectFirst();
 
-        // disabled this combo box until country is selected
-        firstLevelCombo.setDisable(true);
+        Customer defaultCountry = countryCombo.getSelectionModel().getSelectedItem();
+        if(defaultCountry.getCountryId() == 1){
+            firstLevelCombo.setPromptText("Select State");}
+
+        // setting combo box selection on load
+        firstLevelCombo.setItems(divisions);
     }
 
     /**
@@ -71,14 +77,6 @@ public class AddCustomer implements Initializable {
     public void countrySelected() throws SQLException {
         // filter based on this selection
         Customer selection = countryCombo.getSelectionModel().getSelectedItem();
-        firstLevelCombo.setDisable(false);
-
-        // Lambda: filter state/province and collect only those matching the country ID to be shown
-        firstLevelCombo.setItems(FirstLevelDAO.allFirstLevelDivision().stream()
-                .filter(firstLevel -> firstLevel.getCountryId() == selection.getCountryId())
-                .collect(Collectors.toCollection(FXCollections::observableArrayList)));
-
-        firstLevelCombo.setVisibleRowCount(4);
 
         // changes prompt based on country selected
         if(selection.getCountryId() == 1){
@@ -88,6 +86,15 @@ public class AddCustomer implements Initializable {
         } else if (selection.getCountryId() == 3) {
             firstLevelCombo.setPromptText("Select Province");
         }
+
+        // Lambda: filter state/province and collect only those matching the country ID to be shown
+        firstLevelCombo.setItems(FirstLevelDAO.allFirstLevelDivision().stream()
+                .filter(firstLevel -> firstLevel.getCountryId() == selection.getCountryId())
+                .collect(Collectors.toCollection(FXCollections::observableArrayList)));
+
+        firstLevelCombo.setVisibleRowCount(4);
+
+
     }
 
     /**
