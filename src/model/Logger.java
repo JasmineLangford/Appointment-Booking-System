@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * This class tracks user activity by recording all user log-in attempts (successful and unsuccessful), date and
- * timestamps to a text file. Each new record is appended to the last record.
+ * timestamps to a text file.
  */
 public class Logger {
 
