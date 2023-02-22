@@ -17,25 +17,23 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
-import main.Main;
 import model.Appointment;
-import model.Contact;
 import model.Customer;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
- * This class contains a tableview for appointments and customers queried from the database.
+ * This class is the controller for main-menu.fxml. This provides tableviews for appointments and customers, which are
+ * queried from the database. The appointment table provides radio buttons to view all appointments, current week, and
+ * current month. The end-user is able to navigate to other screens with the use of buttons. The end-user
+ * is able to add, modify and delete both appointments and customers.
  *
- * End-user is able to navigate to other screens by buttons to add, modify and delete appointments and customers.
- *
- * End-user can also navigate to a report view.
+ * End-user can also navigate to the reports screen.
  *
  */
 public class MainMenu implements Initializable {
@@ -46,7 +44,7 @@ public class MainMenu implements Initializable {
     public RadioButton viewByWeek;
     public RadioButton viewAllAppts;
 
-    // appointments tableview
+    // appointment tableview
     @FXML
     private TableView<Appointment> mainApptTable;
     @FXML
@@ -69,8 +67,9 @@ public class MainMenu implements Initializable {
     private TableColumn<Appointment, String> apptCustCol;
     @FXML
     private TableColumn<Appointment, String>  apptUserCol;
+    public DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    // customers tableview
+    // customer tableview
     @FXML
     private TableView<Customer> mainCustomerTable;
     @FXML
@@ -88,12 +87,11 @@ public class MainMenu implements Initializable {
     @FXML
     private TableColumn<Customer, String> customerPostalCol;
 
-    public DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
     /**
-     * Method to populate tables on screen load
+     * This method populates the customer and appointment tables on screen load.
      *
-     * <b>LAMBDA #1 - set up columns for start and end date as string property in order to be easily formatted</b>
+     * <b>LAMBDA REQUIREMENT #1</b> - This single parameter lambda expression sets up columns for start and end dates as
+     * a string property in order to be easily formatted.
      */
 
     @Override
@@ -111,8 +109,10 @@ public class MainMenu implements Initializable {
         apptUserCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
 
         // lambda
-        apptStartCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStart().format(formatter)));
-        apptEndCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEnd().format(formatter)));
+        apptStartCol.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getStart().format(formatter)));
+        apptEndCol.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getEnd().format(formatter)));
 
         try {
             loadApptTable();
@@ -137,7 +137,7 @@ public class MainMenu implements Initializable {
         }
     }
 
-    // load appointments tableview
+    // load appointment tableview
     public void loadApptTable() throws SQLException {
         ObservableList<Appointment> allAppointments = AppointmentDAO.allAppointments();
         mainApptTable.setItems(allAppointments);
@@ -161,7 +161,7 @@ public class MainMenu implements Initializable {
             }
     }
 
-    // filter appointments for current month
+    // show appointments for current month if radio button selected
     public void changeToMonth() throws SQLException {
         ObservableList<Appointment> currentMonth = AppointmentDAO.currentMonth();
         for(Appointment ignored : currentMonth){
@@ -170,7 +170,7 @@ public class MainMenu implements Initializable {
         }
     }
 
-    // filter appointment for current week
+    // show appointments for current week if radio button selected
     public void changeToWeek() throws SQLException {
             ObservableList<Appointment> currentWeek = AppointmentDAO.currentWeek();
             for(Appointment ignored : currentWeek){
@@ -181,9 +181,10 @@ public class MainMenu implements Initializable {
     }
 
     /**
-     * This will take the end-user to the Add Appointment screen where they can add a new appointment.
+     * This method will take the end-user to the Add Appointment screen where a new appointment can be added.
      *
-     * @param actionEvent Add button is clicked under the Appointments tableview.
+     * @param actionEvent Add button is clicked under the appointments tableview.
+     * @throws IOException The exception to throw if I/O error occurs.
      */
     public void addAppt(ActionEvent actionEvent) throws IOException {
 
@@ -197,11 +198,14 @@ public class MainMenu implements Initializable {
     }
 
     /**
-     * This will take the end-user to Modify Appointment screen where they can modify existing appointments.
+     * This method will take the end-user to Modify Appointment screen where they can modify existing appointments. The
+     * data from the selected row will auto-populate to the modify form.
      *
-     * @param actionEvent Modify button is clicked under the Appointments tableview.
+     * @param actionEvent Modify button is clicked under the appointments tableview.
+     * @throws IOException The exception to throw if I/O error occurs.
      */
     public void updateAppt(ActionEvent actionEvent) throws IOException {
+        // error message if end-user does not make a selection
         if(mainApptTable.getSelectionModel().isEmpty()){
             Alert modApptSelect = new Alert(Alert.AlertType.WARNING, "Please select an appointment to be modified.");
             modApptSelect.showAndWait();
@@ -211,6 +215,7 @@ public class MainMenu implements Initializable {
         loader.setLocation(getClass().getResource("/view/modify-appointment.fxml"));
         loader.load();
 
+        // send selected data to modify appointment screen
         ModifyAppointment MainMenu = loader.getController();
         MainMenu.sendAppointment(mainApptTable.getSelectionModel().getSelectedItem());
 
@@ -224,11 +229,9 @@ public class MainMenu implements Initializable {
     }
 
     /**
-     * This will delete appointments from appointments table in the database.
-     *
-     * Deleted row will no longer be displayed on appointment tableview
-     *
-     * Info message will let end-user know appointment ID and type that was deleted.
+     * This method will delete appointments from appointments table in the database. The deleted row will no longer be
+     * displayed on appointment tableview. A message will also appear for deleted appointments stating the cancelled
+     * appointment ID and type.
      */
     public void deleteApptRow() {
         if (mainApptTable.getSelectionModel().isEmpty()) {
@@ -237,19 +240,20 @@ public class MainMenu implements Initializable {
             if(result.isPresent() && result.get() == ButtonType.OK)
                 mainApptTable.getSelectionModel().clearSelection();
         } else {
-        Alert deleteApptConfirm = new Alert(Alert.AlertType.CONFIRMATION,"Are you sure you want to delete this " +
+            Alert deleteApptConfirm = new Alert(Alert.AlertType.CONFIRMATION,"Are you sure you want to delete this " +
                 "appointment?", ButtonType.YES, ButtonType.NO);
-        Optional<ButtonType> result = deleteApptConfirm.showAndWait();
+            Optional<ButtonType> result = deleteApptConfirm.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.YES) {
             try {
             Appointment selectedAppt = mainApptTable.getSelectionModel().getSelectedItem();
             AppointmentDAO.deleteAppt(selectedAppt);
             loadApptTable();
 
-            Alert apptInfo = new Alert(Alert.AlertType.INFORMATION,"You have deleted the following appointment: " + '\n' + '\n' +
-                    "Appointment ID: " + selectedAppt.getAppointmentID() + '\n' + "Type: " + selectedAppt.getType(), ButtonType.OK);
+            Alert apptInfo = new Alert(Alert.AlertType.INFORMATION,"You have deleted the following appointment: " +
+                    '\n' + '\n' + "Appointment ID: " + selectedAppt.getAppointmentID() + '\n' + "Type: " +
+                    selectedAppt.getType(), ButtonType.OK);
             apptInfo.showAndWait();
-            } catch (SQLException e){
+            }catch (SQLException e){
                 e.printStackTrace();
             }
         }
@@ -258,9 +262,10 @@ public class MainMenu implements Initializable {
     }
 
     /**
-     * This will take the end-user to the Add Customer screen where they can add a new customer.
+     * This method will take the end-user to the Add Customer screen where a new customer can be added.
      *
-     * @param actionEvent Add button is clicked under the Customers tableview.
+     * @param actionEvent Add button is clicked under the customers tableview.
+     * @throws IOException The exception to throw if I/O error occurs.
      */
     public void addCustomer(ActionEvent actionEvent) throws IOException {
 
@@ -274,12 +279,14 @@ public class MainMenu implements Initializable {
     }
 
     /**
-     * This will take the end-user to Modify Customer screen where they can modify existing customers.
+     * This method will take the end-user to Modify Customer screen where they can modify existing customers. The
+     * data from the selected row will auto-populate to the modify form.
      *
-     * @param actionEvent Modify button is clicked under the Customer tableview.
+     * @param actionEvent Modify button is clicked under the customer tableview.
+     * @throws IOException The exception to throw if I/O error occurs.
      */
 
-    public void updateCustomer(ActionEvent actionEvent) throws IOException, SQLException {
+    public void updateCustomer(ActionEvent actionEvent) throws IOException {
 
         if(mainCustomerTable.getSelectionModel().isEmpty()){
             Alert modCustomerSelect = new Alert(Alert.AlertType.WARNING, "Please select a customer to be modified.");
@@ -301,11 +308,10 @@ public class MainMenu implements Initializable {
         stage.setResizable(false);
     }
 
-
     /**
-     * This will delete a customer from the customers table in the database.
-     *
-     * All customer's associated appointments will need to be deleted prior to deleting the customer.
+     * This method will delete a customer from the customers table in the database. If a customer has an associated
+     * appointment, the appointment will also be deleted along with the customer if the end-user proceeds with the
+     * deletion. A message will state the customer name that was deleted.
      */
     public void deleteCustomerRow() throws SQLException {
         if (mainCustomerTable.getSelectionModel().isEmpty()) {
@@ -319,45 +325,48 @@ public class MainMenu implements Initializable {
         ObservableList<Appointment> associatedAppts = CustomerDAO.deleteAssociated(deleteAssociatedAppts.getCustomerId());
 
         try {
-        if(associatedAppts.size() > 0){
-            Alert associatedAppt = new Alert(Alert.AlertType.WARNING, "All associated appointments will be " +
+            if(associatedAppts.size() > 0){
+                Alert associatedAppt = new Alert(Alert.AlertType.WARNING, "All associated appointments will be " +
                     "deleted along with this customer. Are you sure you want to delete this customer?", ButtonType.YES, ButtonType.NO);
-            associatedAppt.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-            associatedAppt.setTitle(" ");
-            associatedAppt.setHeaderText("Associated Appointment Found!");
-            Optional<ButtonType> results = associatedAppt.showAndWait();
-            if (results.isPresent() && results.get() == ButtonType.YES ) {
+                associatedAppt.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+                associatedAppt.setTitle(" ");
+                associatedAppt.setHeaderText("Associated Appointment Found!");
+                Optional<ButtonType> results = associatedAppt.showAndWait();
+                    if (results.isPresent() && results.get() == ButtonType.YES ) {
+                        CustomerDAO.deleteCustomer(deleteAssociatedAppts);
+                        loadApptTable();
+                        loadCustomerTable();
+                        mainCustomerTable.getSelectionModel().clearSelection();
+                    }
+                        if (results.isPresent() && results.get() == ButtonType.NO ) {
+                        mainCustomerTable.getSelectionModel().clearSelection();
+                        }
 
-                CustomerDAO.deleteCustomer(deleteAssociatedAppts);
-                loadApptTable();
-                loadCustomerTable();
-                mainCustomerTable.getSelectionModel().clearSelection();
-            }
-            if (results.isPresent() && results.get() == ButtonType.NO ) {
-                mainCustomerTable.getSelectionModel().clearSelection();
-            }
+            } else {
+                Alert deleteCustConfirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete "
+                        + "this customer?", ButtonType.YES, ButtonType.NO);
+                Optional<ButtonType> result = deleteCustConfirm.showAndWait();
+                    if (result.isPresent() && result.get() == ButtonType.YES) {
+                    Customer selectedCustomer = mainCustomerTable.getSelectionModel().getSelectedItem();
+                    CustomerDAO.deleteCustomer(selectedCustomer);
+                    loadCustomerTable();
+                    mainCustomerTable.getSelectionModel().clearSelection();
 
-        } else {
-
-        Alert deleteCustConfirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this " +
-                "customer?", ButtonType.YES, ButtonType.NO);
-        Optional<ButtonType> result = deleteCustConfirm.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.YES) {
-            Customer selectedCustomer = mainCustomerTable.getSelectionModel().getSelectedItem();
-            CustomerDAO.deleteCustomer(selectedCustomer);
-
-            loadCustomerTable();
-            mainCustomerTable.getSelectionModel().clearSelection();
-            }
-        }
-    } catch (Exception e){
+                    Alert apptInfo = new Alert(Alert.AlertType.INFORMATION,"You have deleted the following " +
+                            "customer: " + selectedCustomer.getCustomerName(), ButtonType.OK);
+                    apptInfo.showAndWait();
+                    }
+                }
+            } catch (Exception e){
             e.printStackTrace();
         }
     }
 
     /**
-     * This takes the user to view reports on the Reports screen.
+     * This method takes the end-user to view reports on the Reports screen.
+     *
      * @param actionEvent Reports button is clicked (located on the right panel).
+     * @throws IOException The exception to throw if I/O error occurs.
      */
     public void toReports(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/reports.fxml"))));
@@ -369,6 +378,12 @@ public class MainMenu implements Initializable {
         stage.setResizable(false);
     }
 
+    /**
+     * This method takes the end-user to the main menu.
+     *
+     * @param actionEvent When button is clicked.
+     * @throws IOException The exception to throw if I/O error occurs.
+     */
     public static void toMainMenu(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load((Objects.requireNonNull(MainMenu.class.getResource("/view/main-menu.fxml"))));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -392,5 +407,4 @@ public class MainMenu implements Initializable {
             System.out.println("Program Closed");
         }
     }
-
 }
