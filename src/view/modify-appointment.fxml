@@ -100,5 +100,5 @@
     <TextField fx:id="userId" layoutX="228.0" layoutY="527.0" prefHeight="25.0" prefWidth="46.0" />
    <ComboBox fx:id="startCombo" layoutX="132.0" layoutY="150.0" prefHeight="25.0" prefWidth="141.0" />
    <ComboBox fx:id="endCombo" layoutX="358.0" layoutY="149.0" prefHeight="25.0" prefWidth="141.0" />
-   <ComboBox fx:id="contactCombo" layoutX="225.0" layoutY="300.0" prefHeight="25.0" prefWidth="196.0" />
+   <ComboBox fx:id="contactModCombo" layoutX="225.0" layoutY="300.0" prefHeight="25.0" prefWidth="196.0" />
 </AnchorPane>
