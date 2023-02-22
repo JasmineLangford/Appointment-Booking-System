@@ -3,7 +3,6 @@ package controller;
 import DAO.AppointmentDAO;
 import DAO.CustomerDAO;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -379,7 +378,7 @@ public class MainMenu implements Initializable {
     }
 
     /**
-     * This method takes the end-user to the main menu.
+     * This method takes the end-user to the main menu from another screen.
      *
      * @param actionEvent When button is clicked.
      * @throws IOException The exception to throw if I/O error occurs.
@@ -395,9 +394,7 @@ public class MainMenu implements Initializable {
     }
 
     /**
-     * This closes the application.
-     *
-     * An alert will ask the end-user to confirm close.
+     * This method closes the application and an alert will ask the end-user to confirm close.
      */
     public void toClose() {
         Alert closeConfirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to close the program?", ButtonType.YES, ButtonType.NO);
