@@ -60,7 +60,7 @@
         </columns>
       </TableView>
     </Pane>
-    <Button layoutX="938.0" layoutY="531.0" mnemonicParsing="false" onAction="#toMainMenu" prefHeight="32.0" prefWidth="131.0" style="-fx-background-color: #50add7;" text="Back to Main" textFill="#fcfefc">
+    <Button layoutX="938.0" layoutY="474.0" mnemonicParsing="false" onAction="#toMainMenu" prefHeight="32.0" prefWidth="131.0" style="-fx-background-color: #50add7;" text="Back to Main" textFill="#fcfefc">
         <font>
             <Font name="Gill Sans MT Bold" size="13.0" />
         </font>
@@ -71,4 +71,9 @@
         </font>
     </Label>
     <Line endX="100.0" layoutX="954.0" layoutY="146.0" startX="1.33331298828125" stroke="#fcfefc" strokeWidth="5.0" />
+   <Button layoutX="940.0" layoutY="531.0" mnemonicParsing="false" onAction="#toCloseApplication" prefHeight="32.0" prefWidth="131.0" style="-fx-background-color: #50add7;" text="Logout" textFill="#fcfefc">
+      <font>
+         <Font name="Gill Sans MT Bold" size="13.0" />
+      </font>
+   </Button>
 </AnchorPane>
