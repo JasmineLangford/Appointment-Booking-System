@@ -33,7 +33,6 @@ import java.util.ResourceBundle;
  * is able to add, modify and delete both appointments and customers.
  *
  * End-user can also navigate to the reports screen.
- *
  */
 public class MainMenu implements Initializable {
 
