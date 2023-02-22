@@ -12,11 +12,11 @@
                 <TableColumn fx:id="apptIDCol" prefWidth="50.66667556762695" text="Appt ID" />
                 <TableColumn fx:id="apptTitleCol" prefWidth="59.33332061767578" text="Title" />
                 <TableColumn fx:id="apptDescCol" prefWidth="103.66670227050781" text="Description" />
-                <TableColumn fx:id="apptLocationCol" prefWidth="85.66668701171875" text="Location" />
-                <TableColumn fx:id="apptContactCol" prefWidth="51.999969482421875" text="Contact" />
-                <TableColumn fx:id="apptTypeCol" prefWidth="100.66668701171875" text="Type" />
-                <TableColumn fx:id="apptStartCol" prefWidth="123.6666259765625" text="Start Date/Time" />
-                <TableColumn fx:id="apptEndCol" prefWidth="123.66668701171875" text="End Date/time" />
+                <TableColumn fx:id="apptLocationCol" prefWidth="70.00001525878906" text="Location" />
+                <TableColumn fx:id="apptContactCol" prefWidth="68.0" text="Contact ID" />
+                <TableColumn fx:id="apptTypeCol" prefWidth="100.99996948242188" text="Type" />
+                <TableColumn fx:id="apptStartCol" prefWidth="125.33328247070312" text="Start Date/Time" />
+                <TableColumn fx:id="apptEndCol" prefWidth="126.0" text="End Date/time" />
                 <TableColumn fx:id="apptCustCol" prefWidth="74.66668701171875" text="Customer ID" />
                 <TableColumn fx:id="apptUserCol" prefWidth="47.0" text="User ID" />
             </columns>
