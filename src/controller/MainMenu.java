@@ -118,7 +118,6 @@ public class MainMenu implements Initializable {
             e.printStackTrace();
         }
 
-
         // customer table columns
         customerIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         customerNameCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
