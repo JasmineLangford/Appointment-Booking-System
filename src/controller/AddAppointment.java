@@ -4,25 +4,18 @@ import DAO.AppointmentDAO;
 import DAO.ContactDAO;
 import DAO.CustomerDAO;
 import DAO.UserDAO;
-import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.Region;
-import javafx.stage.Stage;
 import model.Appointment;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.*;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -35,8 +28,6 @@ import java.util.ResourceBundle;
 public class AddAppointment implements Initializable {
 
     // Form fields
-    @FXML
-    private TextField apptID;
     @FXML
     private DatePicker startDatePicker;
     @FXML
@@ -280,54 +271,55 @@ public class AddAppointment implements Initializable {
 
         // input validation messages for conflicting appointments
         ObservableList<Appointment> getAllAppointments = AppointmentDAO.allAppointments();
-        for(Appointment apptConflicts : getAllAppointments) {
+        try{
+            for(Appointment apptConflicts : getAllAppointments) {
 
-            if(addCustID == apptConflicts.getCustomerID() && (dateTimeStart.isEqual(apptConflicts.getStart()) &&
+                if(addCustID == apptConflicts.getCustomerID() && (dateTimeStart.isEqual(apptConflicts.getStart()) &&
                     dateTimeEnd.isEqual(apptConflicts.getEnd()) ) ){
 
-            /////TEST/////////////
-            System.out.println(dateTimeStart); //user input
-            System.out.println(apptConflicts.getStart()); // database
-            System.out.println(dateTimeEnd); // user input
-            System.out.println(apptConflicts.getEnd()); //database
-
-            Alert apptConflict = new Alert(Alert.AlertType.ERROR, "This customer already has an existing " +
+                    Alert apptConflict = new Alert(Alert.AlertType.ERROR, "This customer already has an existing " +
                     "appointment for this date and time.");
-            apptConflict.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-            Optional<ButtonType> results = apptConflict.showAndWait();
-            if (results.isPresent() && results.get() == ButtonType.OK){
-                apptConflict.close();
-            }
+                    apptConflict.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+                    Optional<ButtonType> results = apptConflict.showAndWait();
+                        if (results.isPresent() && results.get() == ButtonType.OK)
+                        return;
+                }
 
-        }
-
-            if(addCustID == apptConflicts.getCustomerID() && ((dateTimeStart.isBefore(apptConflicts.getStart()) ||
+                if(addCustID == apptConflicts.getCustomerID() && ((dateTimeStart.isBefore(apptConflicts.getStart()) ||
                     dateTimeStart.isEqual(apptConflicts.getStart()))) && ((dateTimeEnd.isAfter(apptConflicts.getEnd()) ||
                     dateTimeEnd.isEqual(apptConflicts.getEnd())))) {
-                Alert apptConflict = new Alert(Alert.AlertType.ERROR, "This meeting overlaps with the customer's existing appointment.");
-                Optional<ButtonType> results = apptConflict.showAndWait();
-                if (results.isPresent() && results.get() == ButtonType.OK)
-                    return;
-            }
 
-            if(addCustID == apptConflicts.getCustomerID() && ((dateTimeStart.isAfter(apptConflicts.getStart()) &&
+                    Alert apptConflict = new Alert(Alert.AlertType.ERROR, "This meeting overlaps with the " +
+                            "customer's existing appointment.");
+                    apptConflict.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+                    Optional<ButtonType> results = apptConflict.showAndWait();
+                        if (results.isPresent() && results.get() == ButtonType.OK)
+                        return;
+                }
+
+                if(addCustID == apptConflicts.getCustomerID() && ((dateTimeStart.isAfter(apptConflicts.getStart()) &&
                     dateTimeStart.isBefore(apptConflicts.getEnd())))){
-                Alert apptConflict = new Alert(Alert.AlertType.ERROR, "Start time overlaps with existing " +
-                        "appointment.");
-                Optional<ButtonType> results = apptConflict.showAndWait();
-                if (results.isPresent() && results.get() == ButtonType.OK)
-                    return;
-            }
 
-            if(addCustID == apptConflicts.getCustomerID() && ((dateTimeEnd.isAfter(apptConflicts.getStart()) &&
-                    ((dateTimeEnd.isBefore(apptConflicts.getEnd()) || dateTimeEnd.isEqual(apptConflicts.getEnd())))))){
-                Alert apptConflict = new Alert(Alert.AlertType.ERROR, "End time overlaps with existing " +
+                    Alert apptConflict = new Alert(Alert.AlertType.ERROR, "Start time overlaps with existing " +
                         "appointment.");
-                Optional<ButtonType> results = apptConflict.showAndWait();
-                if (results.isPresent() && results.get() == ButtonType.OK)
-                    return;
+                    Optional<ButtonType> results = apptConflict.showAndWait();
+                        if (results.isPresent() && results.get() == ButtonType.OK)
+                        return;
+                }
+
+                if(addCustID == apptConflicts.getCustomerID() && ((dateTimeEnd.isAfter(apptConflicts.getStart()) &&
+                    ((dateTimeEnd.isBefore(apptConflicts.getEnd()) || dateTimeEnd.isEqual(apptConflicts.getEnd())))))){
+
+                    Alert apptConflict = new Alert(Alert.AlertType.ERROR, "End time overlaps with existing " +
+                        "appointment.");
+                    Optional<ButtonType> results = apptConflict.showAndWait();
+                        if (results.isPresent() && results.get() == ButtonType.OK)
+                        return;
+                }
             }
-    }
+        }catch (Exception AppointmentConflicts){
+            System.out.println("Caught AppointmentConflicts");
+            }
 
         try {
             newAppointment.setStart(LocalDateTime.of(addStartDate,addStartTime));
@@ -343,29 +335,24 @@ public class AddAppointment implements Initializable {
             Alert addAppointmentConfirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to save " +
                     "this appointment?", ButtonType.YES, ButtonType.NO);
             Optional<ButtonType> result = addAppointmentConfirm.showAndWait();
-            if (result.isPresent() && result.get() == ButtonType.YES) {
-                AppointmentDAO.addAppointment(addStartDate,addStartTime,addEndDate,addEndTime,String.valueOf(addContact),
+                if (result.isPresent() && result.get() == ButtonType.YES) {
+                    AppointmentDAO.addAppointment(addStartDate,addStartTime,addEndDate,addEndTime,String.valueOf(addContact),
                      addType,addTitle,addDescription,addLocation,addCustID, addUserID);
-                toMainMenu(actionEvent);
 
-            }
-        } catch (IOException | SQLException e) {
+                    toMainMenu(actionEvent);
+                }
+        }catch (IOException | SQLException e) {
             e.printStackTrace();
         }
     }
 
     /**
-     * This navigates the user back to the Main Menu.
+     * This method navigates the user back to the Main Menu.
      *
-     * @param actionEvent cancel button clicked
-     * */
+     * @param actionEvent Cancel button is clicked.
+     * @throws IOException The exception to throw if I/O error occurs.
+     */
     public void toMainMenu(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/main-menu.fxml"))));
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 1108, 620);
-        stage.setScene(scene);
-        stage.show();
-        stage.centerOnScreen();
-        stage.setResizable(false);
+        MainMenu.toMainMenu(actionEvent);
     }
 }
