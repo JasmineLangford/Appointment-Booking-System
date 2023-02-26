@@ -5,22 +5,22 @@
 <?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="475.0" prefWidth="500.0" style="-fx-background-color: #fffbfa;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ModifyCustomer">
-    <Label layoutX="112.0" layoutY="127.0" text="Customer ID" textAlignment="RIGHT" textFill="#373436">
+    <Label layoutX="112.0" layoutY="122.0" text="Customer ID" textAlignment="RIGHT" textFill="#373436">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Label>
-    <Label layoutX="135.0" layoutY="199.0" text="Address" textAlignment="RIGHT" textFill="#373436">
+    <Label layoutX="135.0" layoutY="202.0" text="Address" textAlignment="RIGHT" textFill="#373436">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Label>
-    <Label layoutX="97.0" layoutY="236.0" text="Phone Number" textAlignment="RIGHT" textFill="#373436">
+    <Label layoutX="97.0" layoutY="243.0" text="Phone Number" textAlignment="RIGHT" textFill="#373436">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Label>
-    <Label layoutX="132.0" layoutY="273.0" text="Country" textAlignment="RIGHT" textFill="#373436">
+    <Label layoutX="132.0" layoutY="283.0" text="Country" textAlignment="RIGHT" textFill="#373436">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
@@ -35,7 +35,7 @@
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Label>
-    <Label layoutX="103.0" layoutY="310.0" text="State/Province" textAlignment="RIGHT" textFill="#373436">
+    <Label layoutX="103.0" layoutY="324.0" text="State/Province" textAlignment="RIGHT" textFill="#373436">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
@@ -57,16 +57,11 @@
             </font>
         </Label>
     </Pane>
-    <TextField fx:id="customerIdField" disable="true" layoutX="198.0" layoutY="122.0" prefHeight="25.0" prefWidth="46.0" />
+    <TextField fx:id="customerIdField" disable="true" layoutX="198.0" layoutY="117.0" prefHeight="25.0" prefWidth="46.0" />
     <TextField fx:id="customerNameText" layoutX="198.0" layoutY="157.0" prefHeight="25.0" prefWidth="206.0" />
-    <TextField fx:id="customerAddressText" layoutX="198.0" layoutY="194.0" prefHeight="25.0" prefWidth="206.0" />
-    <TextField fx:id="customerPhoneText" layoutX="198.0" layoutY="231.0" prefHeight="25.0" prefWidth="206.0" />
+    <TextField fx:id="customerAddressText" layoutX="198.0" layoutY="197.0" prefHeight="25.0" prefWidth="206.0" />
+    <TextField fx:id="customerPhoneText" layoutX="198.0" layoutY="238.0" prefHeight="25.0" prefWidth="206.0" />
     <TextField fx:id="customerPostalText" layoutX="198.0" layoutY="360.0" prefHeight="25.0" prefWidth="206.0" />
-   <ComboBox fx:id="countryModCombo" layoutX="198.0" layoutY="269.0" onAction="#onModCountry" prefHeight="25.0" prefWidth="206.0" />
-   <ComboBox fx:id="firstLevelModCombo" layoutX="198.0" layoutY="305.0" prefHeight="25.0" prefWidth="206.0" />
-   <Label layoutX="199.0" layoutY="333.0" text="*Select country to change state/province." textFill="#dd1010">
-      <font>
-         <Font size="11.0" />
-      </font>
-   </Label>
+   <ComboBox fx:id="countryModCombo" layoutX="198.0" layoutY="279.0" onAction="#onModCountry" prefHeight="25.0" prefWidth="206.0" />
+   <ComboBox fx:id="firstLevelModCombo" layoutX="198.0" layoutY="319.0" prefHeight="25.0" prefWidth="206.0" />
 </AnchorPane>
