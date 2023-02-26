@@ -2,30 +2,27 @@ package controller;
 
 import DAO.AppointmentDAO;
 import DAO.ContactDAO;
+import DAO.CustomerDAO;
+import DAO.UserDAO;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
 import model.Appointment;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
- * This class is the controller for modifying an appointment.
- *
- * End-user can modify all fields except appointment ID.
+ * This class is the controller for modify-appointment.fxml. The end-user is able to modify text fields, combo boxes,
+ * and date pickers. The appointment ID was auto-incremented from the database when the appointment was added and is
+ * disabled. The end-user will be able to save the changes to this appointment by clicking the save button at the bottom
+ * of the screen or cancel changes if the end-user no longer wants to modify the appointment.
  */
 public class ModifyAppointment implements Initializable {
 
@@ -41,6 +38,8 @@ public class ModifyAppointment implements Initializable {
     @FXML
     private ComboBox<LocalTime> endCombo;
     @FXML
+    public ComboBox<ContactDAO> contactModCombo;
+    @FXML
     private TextField locationText;
     @FXML
     private TextField typeText;
@@ -49,13 +48,15 @@ public class ModifyAppointment implements Initializable {
     @FXML
     private TextField descText;
     @FXML
-    private TextField customerId;
+    private ComboBox<CustomerDAO> customerCombo;
     @FXML
-    private TextField userId;
-    @FXML
-    private ComboBox contactCombo;
+    private ComboBox<UserDAO> userCombo;
 
+
+    // observable lists for combo boxes
     ObservableList<ContactDAO> contacts = ContactDAO.allContacts();
+    ObservableList <UserDAO> users = UserDAO.allUsers();
+    ObservableList <CustomerDAO> customers = CustomerDAO.allCustomerSelections();
 
     Appointment modAppointment = new Appointment();
 
@@ -76,27 +77,43 @@ public class ModifyAppointment implements Initializable {
             start = start.plusMinutes(30);
         }
 
-        contactCombo.setItems(contacts);
+        // contact combo box
+        contactModCombo.setItems(contacts);
+
+        // user combo box
+        userCombo.setItems(users);
+
+        // customer combo box
+        customerCombo.setItems(customers);
     }
 
     /**
      * This populates the date from the selected appointment tableview from Main Menu.
      */
     public void sendAppointment(Appointment appointment) {
+
+        try{
         modAppointment = appointment;
 
+        for (ContactDAO a:contactModCombo.getItems()) {
+            if(a.getContactID() == appointment.getContactID()){
+                contactModCombo.getSelectionModel().select(a);
+                break;
+            }
+        }
         apptId.setText(String.valueOf(modAppointment.getAppointmentID()));
         startDatePicker.setValue(modAppointment.getStart().toLocalDate());
         startCombo.setValue(modAppointment.getStart().toLocalTime());
         endDatePicker.setValue(modAppointment.getEnd().toLocalDate());
         endCombo.setValue(modAppointment.getEnd().toLocalTime());
-        contactCombo.setValue(modAppointment.getContactName());
         locationText.setText(modAppointment.getLocation());
         typeText.setText(modAppointment.getType());
         titleText.setText(modAppointment.getTitle());
         descText.setText(modAppointment.getDescription());
-        customerId.setText(String.valueOf(modAppointment.getCustomerID()));
-        userId.setText(String.valueOf(modAppointment.getUserID()));
+        //customerCombo.setValue(modAppointment.getCustomerID());
+        //userCombo.setValue(modAppointment.getUserID());
+    }catch (Exception e){
+        System.out.println(e.getMessage());}
     }
     
         /**
@@ -121,7 +138,7 @@ public class ModifyAppointment implements Initializable {
         }
 
         try {
-            if (contactCombo.getValue() == null || typeText.getText().isEmpty() || titleText.getText().isEmpty() ||
+            if (contactModCombo.getSelectionModel().isEmpty() || typeText.getText().isEmpty() || titleText.getText().isEmpty() ||
                     descText.getText().isEmpty() || locationText.getText().isEmpty()) {
                 Alert emptyField = new Alert(Alert.AlertType.ERROR, "One or more fields are empty. Please enter a" +
                         " value in each field.");
@@ -131,24 +148,6 @@ public class ModifyAppointment implements Initializable {
             }
         } catch (NullPointerException e) {
             e.printStackTrace();
-        }
-
-        try {
-            Integer.parseInt(customerId.getText());
-        } catch (NumberFormatException e) {
-            Alert invalidDataType = new Alert(Alert.AlertType.ERROR, "Customer ID should be an integer.");
-            Optional<ButtonType> results = invalidDataType.showAndWait();
-            if (results.isPresent() && results.get() == ButtonType.OK)
-                return;
-        }
-
-        try {
-            Integer.parseInt(userId.getText());
-        } catch (NumberFormatException e) {
-            Alert invalidDataType = new Alert(Alert.AlertType.ERROR, "User ID should be an integer.");
-            Optional<ButtonType> results = invalidDataType.showAndWait();
-            if (results.isPresent() && results.get() == ButtonType.OK)
-                return;
         }
 
         try {
@@ -173,43 +172,42 @@ public class ModifyAppointment implements Initializable {
             return;
         }
 
-        LocalDate modStartDate = startDatePicker.getValue();
-        LocalTime modStartTime = startCombo.getValue();
-        LocalDate modEndDate = endDatePicker.getValue();
-        LocalTime modEndTime = endCombo.getValue();
-        int modApptId = Integer.parseInt(apptId.getText());
+        LocalDateTime modStartDateTime = LocalDateTime.of(startDatePicker.getValue(),startCombo.getValue());
+        LocalDateTime modEndDateTime = LocalDateTime.of(endDatePicker.getValue(),endCombo.getValue());
+        int modContact = contactModCombo.getSelectionModel().getSelectedItem().getContactID();
         String modType = typeText.getText();
         String modTitle = titleText.getText();
-        int modContact = contactCombo.getSelectionModel().getSelectedIndex();
         String modDescription = descText.getText();
         String modLocation = locationText.getText();
-        int modCustomerID = Integer.parseInt(customerId.getText());
-        int modUserID = Integer.parseInt(userId.getText());
+        int modCustID = Integer.parseInt(String.valueOf(customerCombo.getValue()));
+        int modUserID = Integer.parseInt(String.valueOf(userCombo.getValue()));
 
         try {
-            modAppointment.setAppointmentID(modApptId);
-            modAppointment.setStart(LocalDateTime.from(modStartDate));
-            modAppointment.setStart(LocalDateTime.from(modStartTime));
-            modAppointment.setEnd(LocalDateTime.from(modEndDate));
-            modAppointment.setEnd(LocalDateTime.from(modEndTime));
-            modAppointment.setContactID(modContact);
-            modAppointment.setType(modType);
             modAppointment.setTitle(modTitle);
             modAppointment.setDescription(modDescription);
             modAppointment.setLocation(modLocation);
-            modAppointment.setCustomerID(modCustomerID);
+            modAppointment.setType(modType);
+            modAppointment.setStart(modStartDateTime);
+            modAppointment.setEnd(modEndDateTime);
+            modAppointment.setCustomerID(modCustID);
             modAppointment.setUserID(modUserID);
+            modAppointment.setContactID(modContact);
 
             Alert modAppointment = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to modify this " +
                     "appointment?", ButtonType.YES, ButtonType.NO);
             Optional<ButtonType> result = modAppointment.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.YES) {
 
-                AppointmentDAO.modifyAppointment(modApptId,modStartDate,modStartTime,modEndDate,modEndTime,
-                        String.valueOf(modContact),modType,modTitle,modDescription,modLocation,modCustomerID,modUserID);
-                toMainMenu(actionEvent);
+                AppointmentDAO.modifyAppointment(modTitle, modDescription, modLocation, modType,
+                        modStartDateTime,modEndDateTime,modCustID, modUserID, String.valueOf(modContact));
+
+                MainMenu.toMainMenu(actionEvent);
+            } else {
+                Alert noChange = new Alert(Alert.AlertType.INFORMATION, "There were no changes made to this " +
+                        "appointment.", ButtonType.OK);
+                noChange.showAndWait();
             }
-        } catch (IOException e) {
+            } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
     }
@@ -220,12 +218,10 @@ public class ModifyAppointment implements Initializable {
      * @param actionEvent Cancel button is clicked.
      */
     public void toMainMenu(ActionEvent actionEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(AddAppointment.class.getResource("/view/main-menu.fxml"));
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(fxmlLoader.load(), 1108, 620);
-        stage.setScene(scene);
-        stage.show();
-        stage.centerOnScreen();
-        stage.setResizable(false);
+        Alert noChange = new Alert(Alert.AlertType.INFORMATION, "There were no changes made to this " +
+                "appointment.", ButtonType.OK);
+        noChange.showAndWait();
+
+        MainMenu.toMainMenu(actionEvent);
     }
 }
