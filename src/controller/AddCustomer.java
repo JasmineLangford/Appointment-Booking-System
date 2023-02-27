@@ -71,7 +71,7 @@ public class AddCustomer implements Initializable {
      * an observable array list, along with custom prompts for the end-user to select a state/province. The benefit of
      * this lambda expression is that it takes an existing observable list and filtering it.
      *
-     * @throws SQLException The exception to throw if there are errors with database access or errors.
+     * @throws SQLException The exception to throw if there are errors querying the divisions for the combo box.
      */
     public void countrySelected() throws SQLException {
         // filter based on this selection
