@@ -9,7 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Region;
 import model.Customer;
 import java.io.IOException;
 import java.net.URL;
@@ -63,7 +63,11 @@ public class ModifyCustomer implements Initializable {
     }
 
     /**
-     * This populates the data from the selected customer tableview from Main Menu.
+     * This method populates the selected customer row of data from Main Menu.
+     *
+     * @param customer The customer represented from the customer model.
+     * @throws SQLException The exception to throw if there are errors querying the countries or divisions for the
+     * combo boxes.
      */
     public void sendCustomer(Customer customer) throws SQLException {
         modCustomer = customer;
@@ -95,7 +99,9 @@ public class ModifyCustomer implements Initializable {
     }
 
     /**
-     * This filters the divisions based on the end-user updating the country.
+     * This method filters the divisions based on the end-user updating the country.
+     *
+     * @throws SQLException The exception to throw if there are errors querying the divisions for the combo box.
      */
     public void onModCountry() throws SQLException {
 
@@ -111,8 +117,9 @@ public class ModifyCustomer implements Initializable {
     }
 
     /**
-     * Modified fields will be saved to the Customer tableview on the Main Menu.
-     @param actionEvent Save button is clicked.
+     * This method will save any modified customer data.
+     *
+     * @param actionEvent The save button is clicked.
      */
     public void onSaveModCustomer(ActionEvent actionEvent) {
 
@@ -122,41 +129,47 @@ public class ModifyCustomer implements Initializable {
         String modPhone = customerPhoneText.getText();
         String modPostal = customerPostalText.getText();
         String modCountry = countryModCombo.getValue().toString();
-        int modFirstLevel = firstLevelModCombo.getSelectionModel().getSelectedIndex();
 
-        if (modCustomerName.isEmpty() || modAddress.isEmpty() || modPhone.isEmpty() || modCountry.isEmpty() || modPostal.isEmpty()) {
+        // input validation message: empty text field(s)
+        if (modCustomerName.isEmpty() || modAddress.isEmpty() || modPhone.isEmpty() || modCountry.isEmpty() ||
+                modPostal.isEmpty()) {
 
-            Alert emptyField = new Alert(Alert.AlertType.ERROR, "One or more fields are empty. Please enter a " +
-                    "value in each field.");
-                    emptyField.showAndWait();
+            Alert emptyField = new Alert(Alert.AlertType.ERROR, "One or more text fields are empty. Please enter a "
+                    + "value in each field.");
+                    emptyField.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+            Optional<ButtonType> result = emptyField.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK)
+                return;
             }
 
         try{
+            int modDivision = firstLevelModCombo.getSelectionModel().getSelectedItem().getDivisionId();
+
             modCustomer.setCustomerId(modCustomerID);
             modCustomer.setCustomerName(modCustomerName);
             modCustomer.setCustomerAddress(modAddress);
-            modCustomer.setCustomerPhone(modPhone);
             modCustomer.setCustomerPostal(modPostal);
+            modCustomer.setCustomerPhone(modPhone);
             modCustomer.setCustomerCountry(modCountry);
-            modCustomer.setDivisionId(modFirstLevel);
+            modCustomer.setDivisionId(modDivision);
 
             Alert modCustomer = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to modify this " +
                     "customer?", ButtonType.YES, ButtonType.NO);
             Optional<ButtonType> result = modCustomer.showAndWait();
-            if (result.isPresent() && result.get() == ButtonType.YES){
-
-                CustomerDAO.modifyCustomer(modCustomerID,modCustomerName,modAddress,modPhone,modPostal,modFirstLevel);
+                if (result.isPresent() && result.get() == ButtonType.YES){
+                CustomerDAO.modifyCustomer(modCustomerID,modCustomerName,modAddress,modPostal,modPhone,modDivision);
                 toMainMenu(actionEvent);
-            }
+                }
         }catch (IOException e){
             e.printStackTrace();
-        }
+            }
     }
 
     /**
-     * This navigates the user back to the Main Menu.
+     * This method navigates the user back to the Main Menu.
      *
-     * @param actionEvent cancel button is clicked
+     * @param actionEvent The cancel button is clicked.
+     * @throws IOException The exception to throw if end-user cannot return to the Main Menu.
      */
     public void toMainMenu(ActionEvent actionEvent) throws IOException {
        MainMenu.toMainMenu(actionEvent);
