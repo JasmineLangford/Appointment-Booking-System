@@ -40,9 +40,10 @@ public class AddCustomer implements Initializable {
     @FXML
     private ComboBox<FirstLevelDAO> firstLevelCombo;
 
-    // list of countries for combo box
+    // lists for combo boxes
     ObservableList<CountryDAO> countries = CountryDAO.allCountries();
     ObservableList<FirstLevelDAO> divisions = FirstLevelDAO.allFirstLevelDivision();
+
     Customer newCustomer = new Customer();
 
     public AddCustomer() throws SQLException {
@@ -54,14 +55,12 @@ public class AddCustomer implements Initializable {
 
         // setting combo box selection of countries
         countryCombo.setItems(countries);
-        countryCombo.getSelectionModel().selectFirst();
+        countryCombo.setPromptText("Select Country");
 
-        Customer defaultCountry = countryCombo.getSelectionModel().getSelectedItem();
-        if(defaultCountry.getCountryId() == 1){
-            firstLevelCombo.setPromptText("Select State");}
-
-        // setting combo box selection on load
+        // setting combo box selection of states/provinces
         firstLevelCombo.setItems(divisions);
+        firstLevelCombo.setPromptText("Select State/Province");
+        firstLevelCombo.setVisibleRowCount(5);
     }
 
     /**
@@ -78,29 +77,19 @@ public class AddCustomer implements Initializable {
         // filter based on this selection
         Customer selection = countryCombo.getSelectionModel().getSelectedItem();
 
-        // changes prompt based on country selected
-        if(selection.getCountryId() == 1){
-            firstLevelCombo.setPromptText("Select State");
-        } else if (selection.getCountryId() == 2) {
-            firstLevelCombo.setPromptText("Select Region");
-        } else if (selection.getCountryId() == 3) {
-            firstLevelCombo.setPromptText("Select Province");
-        }
-
         // Lambda: filter state/province and collect only those matching the country ID to be shown
         firstLevelCombo.setItems(FirstLevelDAO.allFirstLevelDivision().stream()
                 .filter(firstLevel -> firstLevel.getCountryId() == selection.getCountryId())
                 .collect(Collectors.toCollection(FXCollections::observableArrayList)));
 
-        firstLevelCombo.setVisibleRowCount(4);
-
-
+        firstLevelCombo.getSelectionModel().selectFirst();
+        firstLevelCombo.setVisibleRowCount(5);
     }
 
     /**
      * This method will save the new customer in the database.
      *
-     * @param actionEvent Save the inputs for new customer on button click.
+     * @param actionEvent The save button is clicked.
      */
     public void onSaveCustomer(ActionEvent actionEvent) {
 
@@ -110,7 +99,6 @@ public class AddCustomer implements Initializable {
         String addPhoneNumber = phoneNumberTextfield.getText();
         String addPostalCode =  postalCodeTextfield.getText();
         String addCountry = countryCombo.getValue().toString();
-
 
         // input validation: empty field(s) found
         if (addCustomerName.isEmpty() || addAddress.isEmpty() ||addPhoneNumber.isEmpty() || addPostalCode.isEmpty()) {
@@ -123,7 +111,6 @@ public class AddCustomer implements Initializable {
         }
 
         try{
-            // user form field
             int addFirstLevel = firstLevelCombo.getSelectionModel().getSelectedItem().getDivisionId();
 
            // setting new customer
@@ -137,22 +124,20 @@ public class AddCustomer implements Initializable {
         Alert addCustomer = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to add this new " +
                 "customer?", ButtonType.YES, ButtonType.NO);
         Optional<ButtonType> result = addCustomer.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.YES){
-            CustomerDAO.addCustomer(addCustomerName,addAddress,addPhoneNumber,addPostalCode,
-                    addFirstLevel);
-            MainMenu.toMainMenu(actionEvent);
-        }
-        }catch(NullPointerException e){
-           System.out.println("Null selection");
+            if (result.isPresent() && result.get() == ButtonType.YES){
+                CustomerDAO.addCustomer(addCustomerName,addAddress,addPhoneNumber,addPostalCode,addFirstLevel);
+                MainMenu.toMainMenu(actionEvent);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     /**
-     * This navigates the end-user back to the Main Menu.
+     * This method navigates the end-user back to the Main Menu.
      *
      * @param actionEvent The cancel button is clicked.
+     * @throws IOException The exception to throw if I/O error occurs.
      */
     public void toMainMenu(ActionEvent actionEvent) throws IOException {
         MainMenu.toMainMenu(actionEvent);
