@@ -7,13 +7,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
-import model.Appointment;
+import javafx.scene.input.MouseEvent;
 import model.Customer;
 import java.io.IOException;
 import java.net.URL;
@@ -23,9 +19,10 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 /**
- * This class is the controller for modifying a customer.
- *
- * End-user will be able to input data in text fields and combo boxes.
+ * This class is the controller for modify-customer.fxml. The end-user is able to modify text fields and combo boxes.
+ * The customer ID was auto-incremented from the database when the customer was added and is disabled. The end-user will
+ * be able to save the changes to this customer by clicking the save button at the bottom of the screen or cancel
+ * changes if the end-user no longer wants to modify the customer details.
  */
 public class ModifyCustomer implements Initializable {
 
@@ -41,14 +38,12 @@ public class ModifyCustomer implements Initializable {
     @FXML
     private  TextField customerPostalText;
     @FXML
-    private ComboBox countryModCombo;
+    private ComboBox<CountryDAO> countryModCombo;
     @FXML
-    private ComboBox firstLevelModCombo;
+    private ComboBox<FirstLevelDAO> firstLevelModCombo;
 
-    // list of countries
+    // observable lists for combo boxes
     ObservableList<CountryDAO> countries = CountryDAO.allCountries();
-
-    // list of divisions
     ObservableList<FirstLevelDAO> divisions = FirstLevelDAO.allFirstLevelDivision();
 
     Customer modCustomer = new Customer();
@@ -60,23 +55,61 @@ public class ModifyCustomer implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Modify Customer initialized.");
 
+        // country combo box
         countryModCombo.setItems(countries);
+
+        // state/province combo box
+        firstLevelModCombo.setItems(divisions);
     }
 
     /**
      * This populates the data from the selected customer tableview from Main Menu.
      */
-    public void sendCustomer(Customer customer) {
+    public void sendCustomer(Customer customer) throws SQLException {
         modCustomer = customer;
+
+        for (CountryDAO c : countryModCombo.getItems()) {
+            if(c.getCountryId() == modCustomer.getCountryId()){
+                countryModCombo.getSelectionModel().select(c);
+
+                Customer modSelection = countryModCombo.getSelectionModel().getSelectedItem();
+                firstLevelModCombo.setItems(FirstLevelDAO.allFirstLevelDivision().stream()
+                        .filter(firstLevel -> firstLevel.getCountryId() == modSelection.getCountryId())
+                        .collect(Collectors.toCollection(FXCollections::observableArrayList)));
+
+                firstLevelModCombo.setVisibleRowCount(5);
+                break;
+            }
+        }
+        for (FirstLevelDAO f : firstLevelModCombo.getItems()) {
+            if(f.getDivisionId() == modCustomer.getDivisionId()) {
+                firstLevelModCombo.getSelectionModel().select(f);
+                break;
+            }
+        }
         customerIdField.setText(String.valueOf(modCustomer.getCustomerId()));
         customerNameText.setText(modCustomer.getCustomerName());
         customerAddressText.setText(modCustomer.getCustomerAddress());
         customerPhoneText.setText(modCustomer.getCustomerPhone().replaceAll("\\D", ""));
-        countryModCombo.setValue(modCustomer.getCustomerCountry());
-        firstLevelModCombo.setValue(modCustomer.getDivision());
         customerPostalText.setText(modCustomer.getCustomerPostal());
-
     }
+
+    /**
+     * This filters the divisions based on the end-user updating the country.
+     */
+    public void onModCountry() throws SQLException {
+
+        // filters first-level division combo box
+        Customer modSelection = countryModCombo.getSelectionModel().getSelectedItem();
+
+        firstLevelModCombo.setItems(FirstLevelDAO.allFirstLevelDivision().stream()
+                .filter(firstLevel -> firstLevel.getCountryId() == modSelection.getCountryId())
+                .collect(Collectors.toCollection(FXCollections::observableArrayList)));
+
+        firstLevelModCombo.getSelectionModel().selectFirst();
+        firstLevelModCombo.setVisibleRowCount(5);
+    }
+
     /**
      * Modified fields will be saved to the Customer tableview on the Main Menu.
      @param actionEvent Save button is clicked.
@@ -127,22 +160,5 @@ public class ModifyCustomer implements Initializable {
      */
     public void toMainMenu(ActionEvent actionEvent) throws IOException {
        MainMenu.toMainMenu(actionEvent);
-    }
-
-    /**
-     * This filters the divisions based on the end-user updating the country.
-     */
-    public void onModCountry() throws SQLException {
-
-        // unselects the previous division
-        firstLevelModCombo.getSelectionModel().clearAndSelect(0);
-
-        // filters first-level division combo box
-        Customer modSelection = (Customer) countryModCombo.getSelectionModel().getSelectedItem();
-        firstLevelModCombo.setItems(FirstLevelDAO.allFirstLevelDivision().stream()
-                .filter(firstLevel -> firstLevel.getCountryId() == modSelection.getCountryId())
-                .collect(Collectors.toCollection(FXCollections::observableArrayList)));
-
-        firstLevelModCombo.setVisibleRowCount(5);
     }
 }
