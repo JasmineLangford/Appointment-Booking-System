@@ -38,7 +38,7 @@ public class ModifyAppointment implements Initializable {
     @FXML
     private ComboBox<LocalTime> endCombo;
     @FXML
-    public ComboBox<ContactDAO> contactModCombo;
+    private ComboBox<ContactDAO> contactModCombo;
     @FXML
     private TextField locationText;
     @FXML
@@ -110,10 +110,9 @@ public class ModifyAppointment implements Initializable {
         typeText.setText(modAppointment.getType());
         titleText.setText(modAppointment.getTitle());
         descText.setText(modAppointment.getDescription());
-        //customerCombo.setValue(modAppointment.getCustomerID());
-        //userCombo.setValue(modAppointment.getUserID());
-    }catch (Exception e){
-        System.out.println(e.getMessage());}
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
     
         /**
@@ -221,7 +220,6 @@ public class ModifyAppointment implements Initializable {
         Alert noChange = new Alert(Alert.AlertType.INFORMATION, "There were no changes made to this " +
                 "appointment.", ButtonType.OK);
         noChange.showAndWait();
-
         MainMenu.toMainMenu(actionEvent);
     }
 }
