@@ -6,6 +6,7 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -205,7 +206,10 @@ public class MainMenu implements Initializable {
         // error message if end-user does not make a selection
         if(mainApptTable.getSelectionModel().isEmpty()){
             Alert modApptSelect = new Alert(Alert.AlertType.WARNING, "Please select an appointment to be modified.");
-            modApptSelect.showAndWait();
+            Optional<ButtonType> results = modApptSelect.showAndWait();
+            if (results.isPresent() && results.get() == ButtonType.OK)
+                modApptSelect.setOnCloseRequest(Event::consume);
+                return;
         }
 
         FXMLLoader loader = new FXMLLoader();
@@ -283,11 +287,14 @@ public class MainMenu implements Initializable {
      * @throws IOException The exception to throw if I/O error occurs.
      */
 
-    public void updateCustomer(ActionEvent actionEvent) throws IOException {
+    public void updateCustomer(ActionEvent actionEvent) throws IOException, SQLException {
 
         if(mainCustomerTable.getSelectionModel().isEmpty()){
             Alert modCustomerSelect = new Alert(Alert.AlertType.WARNING, "Please select a customer to be modified.");
-           modCustomerSelect.showAndWait();
+            Optional<ButtonType> results = modCustomerSelect.showAndWait();
+            if (results.isPresent() && results.get() == ButtonType.OK)
+                modCustomerSelect.setOnCloseRequest(Event::consume);
+                return;
         }
 
         FXMLLoader loader = new FXMLLoader();
@@ -315,6 +322,7 @@ public class MainMenu implements Initializable {
             Alert deleteCust = new Alert(Alert.AlertType.WARNING, "Please select a customer to be deleted.");
             Optional<ButtonType> result = deleteCust.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK)
+                deleteCust.setOnCloseRequest(Event::consume);
                 return;
         }
 
@@ -336,7 +344,8 @@ public class MainMenu implements Initializable {
                         mainCustomerTable.getSelectionModel().clearSelection();
                     }
                         if (results.isPresent() && results.get() == ButtonType.NO ) {
-                        mainCustomerTable.getSelectionModel().clearSelection();
+                            associatedAppt.setOnCloseRequest(Event::consume);
+                            mainCustomerTable.getSelectionModel().clearSelection();
                         }
 
             } else {
