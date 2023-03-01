@@ -88,7 +88,6 @@
             <font>
                 <Font name="Gill Sans MT" size="13.0" />
             </font></RadioButton>
-      <Label layoutX="615.0" layoutY="250.0" prefHeight="17.0" prefWidth="141.0" />
     </Pane>
     <Button layoutX="940.0" layoutY="457.0" mnemonicParsing="false" onAction="#toReports" prefHeight="32.0" prefWidth="131.0" style="-fx-background-color: #50add7;" text="Reports" textFill="#fcfefc">
         <font>

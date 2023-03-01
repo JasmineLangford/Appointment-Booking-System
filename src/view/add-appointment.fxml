@@ -79,7 +79,7 @@
          </font>
       </Label>
     </Pane>
-    <TextField fx:id="apptID" disable="true" layoutX="232.0" layoutY="255.0" prefHeight="25.0" prefWidth="71.0" promptText="Auto Gen-Disabled" />
+    <TextField fx:id="apptID" layoutX="232.0" layoutY="255.0" prefHeight="25.0" prefWidth="71.0" promptText="Auto Gen-Disabled" />
     <TextField fx:id="typeTextfield" layoutX="235.0" layoutY="332.0" prefHeight="25.0" prefWidth="196.0" />
     <TextField fx:id="titleTextfield" layoutX="235.0" layoutY="372.0" prefHeight="25.0" prefWidth="196.0" />
     <Label layoutX="296.0" layoutY="124.0" text="End Date" textAlignment="RIGHT" textFill="#373436">
