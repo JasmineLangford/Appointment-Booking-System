@@ -10,6 +10,7 @@ import model.Appointment;
 import model.DateTimeUtil;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.*;
 import java.util.*;
@@ -85,7 +86,7 @@ public class Login implements Initializable {
      * @param actionEvent Login button is clicked.
      * @throws IOException The exception to throw if I/O error occurs.
      */
-    public void loginButton(ActionEvent actionEvent) throws IOException {
+    public void loginButton(ActionEvent actionEvent) throws IOException, SQLException {
 
         // end-user input
         String username = usernameLogin.getText();
@@ -99,11 +100,10 @@ public class Login implements Initializable {
             MainMenu.toMainMenu(actionEvent);
 
             // check for appointments within 15 minutes on login
-            if(AppointmentDAO.appointmentAlert){
-                Appointment appointmentAlert = AppointmentDAO.appointmentAlert();
+            Appointment appointmentAlert = AppointmentDAO.appointmentAlert();
 
-                assert appointmentAlert != null;
-                Alert fifteenAlertTrue = new Alert(Alert.AlertType.INFORMATION,"You have an upcoming " +
+            if (appointmentAlert != null) {
+                Alert fifteenAlertTrue = new Alert(Alert.AlertType.INFORMATION, "You have an upcoming " +
                         "appointment: " + '\n' + '\n' + "Appointment ID: " + appointmentAlert.getAppointmentID()
                         + '\n' + "Date and Time: " +
                         DateTimeUtil.toLocalDT(Timestamp.valueOf(appointmentAlert.getStart())) + '\n' + "User ID: " +
