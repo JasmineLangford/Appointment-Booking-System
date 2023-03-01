@@ -8,18 +8,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Class for contact query
+ * This Class for contact query
+ *
+ * Extends from Appointment model class
  */
-public class ContactDAO extends Appointment{
+public class ContactDAO extends Appointment {
 
-    //private int contactID;
-    //private String contactName;
 
-    // override format for combo box selection display
+    // override data type for combo box selection display
     @Override
     public String toString(){
-        return (getContactName());
+        return (getContactID() + " " + getContactName());
     }
+
     /**
      * Constructor
      */
@@ -49,19 +50,4 @@ public class ContactDAO extends Appointment{
     }
 }
 
-    /*public int getContactID() {
-        return contactID;
-    }
-
-    public void setContactID(int contactID) {
-        this.contactID = contactID;
-    }
-
-    public String getContactName() {
-        return contactName;
-    }
-
-    public void setContactName(String contactName) {
-        this.contactName = contactName;
-    }*/
 
