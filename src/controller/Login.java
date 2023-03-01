@@ -1,18 +1,23 @@
 package controller;
 
 import DAO.AppointmentDAO;
+import DAO.CustomerDAO;
 import DAO.UserDAO;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import model.Appointment;
+import model.Customer;
 import model.DateTimeUtil;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -100,9 +105,34 @@ public class Login implements Initializable {
             MainMenu.toMainMenu(actionEvent);
 
             // check for appointments within 15 minutes on login
-            Appointment appointmentAlert = AppointmentDAO.appointmentAlert();
+            ObservableList<Appointment> checkAppointments = AppointmentDAO.allAppointments();
+            LocalDateTime currentDT = LocalDateTime.now();
+            LocalDateTime currentDTFifteen = LocalDateTime.now().plusMinutes(15);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
+            for(Appointment a : checkAppointments){
+                if((a.getStart().isAfter(currentDT) || a.getStart().isEqual(currentDT)) && ((a.getStart().isBefore(currentDTFifteen) || a.getStart().isEqual(currentDTFifteen)))){
+                    Alert fifteenAlertTrue = new Alert(Alert.AlertType.INFORMATION, "You have an upcoming " +
+                            "appointment: " + '\n' + '\n' + "Appointment ID: " + a.getAppointmentID()
+                            + '\n' + "Date and Time: " +
+                            a.getStart().format(formatter)+ '\n' + "User ID: " +
+                            a.getUserID(), ButtonType.OK);
+                    Optional<ButtonType> results = fifteenAlertTrue.showAndWait();
+                    if (results.isPresent() && results.get() == ButtonType.OK)
+                        fifteenAlertTrue.setOnCloseRequest(Event::consume);
+                    return;
+                }else {
+                    Alert fifteenAlertFalse = new Alert(Alert.AlertType.INFORMATION, "You do not have any upcoming appointments.", ButtonType.OK);
+                    Optional<ButtonType> results = fifteenAlertFalse.showAndWait();
+                    if (results.isPresent() && results.get() == ButtonType.OK)
+                        fifteenAlertFalse.setOnCloseRequest(Event::consume);
+                    return;
+                }
+            }
+
+            /*Appointment appointmentAlert = AppointmentDAO.appointmentAlert();
             if (appointmentAlert != null) {
+
                 Alert fifteenAlertTrue = new Alert(Alert.AlertType.INFORMATION, "You have an upcoming " +
                         "appointment: " + '\n' + '\n' + "Appointment ID: " + appointmentAlert.getAppointmentID()
                         + '\n' + "Date and Time: " +
@@ -119,7 +149,7 @@ public class Login implements Initializable {
             Alert blankUser = new Alert(Alert.AlertType.ERROR, blankUserInput);
             blankUser.setTitle(" ");
             blankUser.setHeaderText(invalidLoginHeader);
-            blankUser.showAndWait();
+            blankUser.showAndWait();*/
 
         } else {
                 // error control message - end-user did not enter valid login credentials
