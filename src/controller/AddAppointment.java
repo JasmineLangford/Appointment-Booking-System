@@ -70,7 +70,7 @@ public class AddAppointment implements Initializable {
         System.out.println("Add appointment is initialized!");
 
         // combo box for time selection
-        LocalTime start = LocalTime.of(3,0);
+        LocalTime start = LocalTime.of(4,0);
         LocalTime end = LocalTime.of(23,0);
 
         while(start.isBefore(end.plusSeconds(1))){
@@ -178,9 +178,11 @@ public class AddAppointment implements Initializable {
             System.out.println("Caught NullPointerException");
             }
 
+        LocalDateTime localStart = LocalDateTime.of(startDatePicker.getValue(),startCombo.getValue());
+        LocalDateTime localEnd = LocalDateTime.of(endDatePicker.getValue(),endCombo.getValue());
         try {
-            if (endCombo.getValue().isBefore(startCombo.getValue())) {
-                Alert invalidTime = new Alert(Alert.AlertType.ERROR, "End time cannot be before start time.");
+            if (localEnd.isBefore(localStart)) {
+                Alert invalidTime = new Alert(Alert.AlertType.ERROR, "End date/time cannot be before start date/time.");
                 Optional<ButtonType> results = invalidTime.showAndWait();
                 if (results.isPresent() && results.get() == ButtonType.OK)
                     invalidTime.setOnCloseRequest(Event::consume);
@@ -255,7 +257,7 @@ public class AddAppointment implements Initializable {
                 Optional<ButtonType> results = noSelection.showAndWait();
                 if (results.isPresent() && results.get() == ButtonType.OK)
                     noSelection.setOnCloseRequest(Event::consume);
-                return;
+                    return;
             }
         }catch(NullPointerException e) {
             e.printStackTrace();
@@ -289,6 +291,7 @@ public class AddAppointment implements Initializable {
             Alert businessHourConflict = new Alert(Alert.AlertType.ERROR, "Time is outside of normal business hours (8am-10pm EST).");
             Optional<ButtonType> results = businessHourConflict.showAndWait();
             if (results.isPresent() && results.get() == ButtonType.OK)
+                businessHourConflict.setOnCloseRequest(Event::consume);
                 return;
         }
 
@@ -305,7 +308,8 @@ public class AddAppointment implements Initializable {
                     apptConflict.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
                     Optional<ButtonType> results = apptConflict.showAndWait();
                         if (results.isPresent() && results.get() == ButtonType.OK)
-                        return;
+                            apptConflict.setOnCloseRequest(Event::consume);
+                            return;
                 }
 
                 if(addCustID == apptConflicts.getCustomerID() && ((dateTimeStart.isBefore(apptConflicts.getStart()) ||
@@ -317,7 +321,8 @@ public class AddAppointment implements Initializable {
                     apptConflict.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
                     Optional<ButtonType> results = apptConflict.showAndWait();
                         if (results.isPresent() && results.get() == ButtonType.OK)
-                        return;
+                            apptConflict.setOnCloseRequest(Event::consume);
+                            return;
                 }
 
                 if(addCustID == apptConflicts.getCustomerID() && ((dateTimeStart.isAfter(apptConflicts.getStart()) &&
@@ -327,7 +332,8 @@ public class AddAppointment implements Initializable {
                         "appointment.");
                     Optional<ButtonType> results = apptConflict.showAndWait();
                         if (results.isPresent() && results.get() == ButtonType.OK)
-                        return;
+                            apptConflict.setOnCloseRequest(Event::consume);
+                            return;
                 }
 
                 if(addCustID == apptConflicts.getCustomerID() && ((dateTimeEnd.isAfter(apptConflicts.getStart()) &&
@@ -337,7 +343,8 @@ public class AddAppointment implements Initializable {
                         "appointment.");
                     Optional<ButtonType> results = apptConflict.showAndWait();
                         if (results.isPresent() && results.get() == ButtonType.OK)
-                        return;
+                            apptConflict.setOnCloseRequest(Event::consume);
+                            return;
                 }
             }
         }catch (Exception AppointmentConflicts){
