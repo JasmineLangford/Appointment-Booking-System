@@ -5,16 +5,14 @@ import javafx.collections.ObservableList;
 import model.Appointment;
 import model.DateTimeUtil;
 import java.sql.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 /**
  * This class contains the database queries for appointments.
  */
 public class AppointmentDAO {
 
-    public static boolean appointmentAlert;
+    //public static boolean appointmentAlert;
 
     /**
      * Method to query all appointments from appointments table in database.
@@ -103,7 +101,7 @@ public class AppointmentDAO {
     /**
      * Method to insert new appointment in appointments table in database.
      */
-    public static void addAppointment(LocalDate addStartDate, LocalTime addStartTime, LocalDate addEndDate, LocalTime addEndTime,
+    public static void addAppointment(LocalDateTime startDateTime, LocalDateTime endDateTime,
                                       String addContact, String addType, String addTitle, String addDescription, String
                                               addLocation, int addCustID, int addUserID) throws SQLException {
         try {
@@ -114,8 +112,8 @@ public class AppointmentDAO {
         ps.setString(2, addDescription);
         ps.setString(3, addLocation);
         ps.setString(4, addType);
-        ps.setTimestamp(5, DateTimeUtil.toUTCStartDT(addStartDate,addStartTime));
-        ps.setTimestamp(6, DateTimeUtil.toUTCEndDT(addEndDate,addEndTime));
+        ps.setTimestamp(5, DateTimeUtil.toUTCStartDT(startDateTime));
+        ps.setTimestamp(6, DateTimeUtil.toUTCEndDT(endDateTime));
         ps.setString(7, null);
         ps.setString(8,null);
         ps.setString(9,null);
@@ -129,29 +127,38 @@ public class AppointmentDAO {
         }
     }
 
-    public static void modifyAppointment(int modApptId,LocalDate modStartDate,LocalTime modStartTime,LocalDate modEndDate,LocalTime modEndTime,String modContact,
-                                         String modType,String modTitle,String modDescription,String modLocation,int modCustomerID,int modUserID) {
+    /**
+     * Method to insert new appointment in appointments table in database.
+     */
+    public static void modifyAppointment (int modApptID,String modTitle,String modDescription,String modLocation,
+                                          String modType,LocalDateTime modStartDateTime, LocalDateTime modEndDateTime,
+                                          int modCustID,int modUserID,String modContact) throws SQLException {
 
-        try{
-            String modApptQuery = "UPDATE appointments SET Customer_Name = ?,Address = ?,Postal_Code = ?, Phone = ?," +
-                    "Create_Date = ?,Created_By = ?,Last_Update = ?,Last_Updated_By = ?,Division_ID = ?, WHERE Appointment_ID = ?";
+        try {
+            String modApptQuery =
+                    "UPDATE appointments SET Appointment_ID = ?, Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?," +
+                            "Create_Date = ?, Created_By = ?, Last_Update = ?, Last_Updated_By = ?, Customer_ID = ?," +
+                            " User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";
+
             PreparedStatement ps = JDBC.connection.prepareStatement(modApptQuery);
-            ps.setInt(1, modApptId);
+            ps.setInt(1, modApptID);
             ps.setString(2, modTitle);
             ps.setString(3, modDescription);
             ps.setString(4, modLocation);
             ps.setString(5, modType);
-            ps.setTimestamp(6, DateTimeUtil.toLocalStartDT(LocalTime.from(modStartDate),modStartTime));
-            ps.setTimestamp(7, DateTimeUtil.toLocalEndDT(LocalTime.from(modEndDate),modEndTime));
+            ps.setTimestamp(6, DateTimeUtil.toUTCModStart(modStartDateTime));
+            ps.setTimestamp(7, DateTimeUtil.toUTCModEnd(modEndDateTime));
             ps.setString(8, null);
             ps.setString(9,null);
             ps.setString(10,null);
             ps.setString(11,null);
-            ps.setInt(12,modCustomerID);
+            ps.setInt(12,modCustID);
             ps.setInt(13,modUserID);
             ps.setString(14,modContact);
+            ps.setInt(15,modApptID);
             ps.executeUpdate();
-        } catch (SQLException e) {
+
+        } catch (SQLException e){
             e.printStackTrace();
         }
     }
@@ -159,25 +166,26 @@ public class AppointmentDAO {
     /**
      * Method to query for 15 minute appointment alert.
      */
-
     public static Appointment appointmentAlert() {
 
-        // check for appointments
+        // check for appointments within 15 minutes of login
         Appointment alertAppointments;
 
         LocalDateTime localDateTime = LocalDateTime.now();
         Timestamp plusFifteenUTC = DateTimeUtil.localToUTC(localDateTime.plusMinutes(15));
 
         try {
-            String alertFifteenQuery = "SELECT * FROM appointments WHERE Start >='" + DateTimeUtil.localToUTC(localDateTime) + "'AND'" + plusFifteenUTC + "'";
+            String alertFifteenQuery = "SELECT * FROM appointments WHERE Start >='" +
+                    DateTimeUtil.localToUTC(localDateTime) + "'AND'" + plusFifteenUTC + "'";
             PreparedStatement ps = JDBC.connection.prepareStatement(alertFifteenQuery);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                alertAppointments = new Appointment(
-                        rs.getInt("Appointment_ID"),
-                        rs.getTimestamp("Start").toLocalDateTime(),
-                        rs.getTimestamp("End").toLocalDateTime());
+                alertAppointments = new Appointment();
+                alertAppointments.setAppointmentID(rs.getInt("Appointment_ID"));
+                alertAppointments.setStart(rs.getTimestamp("Start").toLocalDateTime());
+                alertAppointments.setEnd(rs.getTimestamp("End").toLocalDateTime());
+                alertAppointments.setUserID(rs.getInt("User_ID"));
 
                 return alertAppointments;
             }
@@ -197,4 +205,5 @@ public class AppointmentDAO {
         ps.setInt(1, appointment.getAppointmentID());
         ps.executeUpdate();
     }
+
 }
