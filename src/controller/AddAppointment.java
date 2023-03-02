@@ -76,7 +76,7 @@ public class AddAppointment implements Initializable {
         while(start.isBefore(end.plusSeconds(1))){
             startCombo.getItems().add(start);
             endCombo.getItems().add(start);
-            start = start.plusMinutes(30);
+            start = start.plusMinutes(15);
         }
 
         startCombo.setPromptText("Select Start Time");
