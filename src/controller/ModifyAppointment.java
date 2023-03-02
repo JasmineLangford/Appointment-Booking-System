@@ -74,7 +74,7 @@ public class ModifyAppointment implements Initializable {
         while(start.isBefore(end.plusSeconds(1))){
             startCombo.getItems().add(start);
             endCombo.getItems().add(start);
-            start = start.plusMinutes(30);
+            start = start.plusMinutes(15);
         }
 
         // contact combo box
@@ -343,13 +343,13 @@ public class ModifyAppointment implements Initializable {
                         "appointment.", ButtonType.OK);
                 noChange.showAndWait();
             }
-            } catch (IOException | SQLException e) {
+        } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
     }
 
     /**
-     * This method navigates the end-user back to the Main Menu.
+     * This method takes the end-user back to the Main Menu.
      *
      * @param actionEvent The cancel button is clicked.
      * @throws IOException The exception thrown if there is an I/O error for the alert.
