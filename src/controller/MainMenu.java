@@ -36,7 +36,6 @@ import java.util.ResourceBundle;
  * End-user can also navigate to the reports screen.
  */
 public class MainMenu implements Initializable {
-
     // radio buttons for appointment View
     public ToggleGroup apptViewToggle;
     public RadioButton viewByMonth;
@@ -151,12 +150,12 @@ public class MainMenu implements Initializable {
 
     // show all appointments if All Appointments radio button selected - default selection
     public void changeToAllAppts() throws SQLException {
-            ObservableList<Appointment> allAppointments = AppointmentDAO.allAppointments();
-            for(Appointment ignored : allAppointments){
-                mainApptTable.setItems(allAppointments);
-                mainApptTable.setPlaceholder(new Label("No appointments available"));
+        ObservableList<Appointment> allAppointments = AppointmentDAO.allAppointments();
+        for(Appointment ignored : allAppointments){
+            mainApptTable.setItems(allAppointments);
+            mainApptTable.setPlaceholder(new Label("No appointments available"));
 
-            }
+        }
     }
 
     // show appointments for current month if radio button selected
@@ -170,11 +169,11 @@ public class MainMenu implements Initializable {
 
     // show appointments for current week if radio button selected
     public void changeToWeek() throws SQLException {
-            ObservableList<Appointment> currentWeek = AppointmentDAO.currentWeek();
-            for(Appointment ignored : currentWeek){
-                mainApptTable.setItems(currentWeek);
+        ObservableList<Appointment> currentWeek = AppointmentDAO.currentWeek();
+        for(Appointment ignored : currentWeek){
+            mainApptTable.setItems(currentWeek);
 
-        mainApptTable.setPlaceholder(new Label("No appointments for this week"));
+            mainApptTable.setPlaceholder(new Label("No appointments for this week"));
         }
     }
 
@@ -209,7 +208,7 @@ public class MainMenu implements Initializable {
             Optional<ButtonType> results = modApptSelect.showAndWait();
             if (results.isPresent() && results.get() == ButtonType.OK)
                 modApptSelect.setOnCloseRequest(Event::consume);
-                return;
+            return;
         }
 
         FXMLLoader loader = new FXMLLoader();
@@ -242,22 +241,22 @@ public class MainMenu implements Initializable {
                 mainApptTable.getSelectionModel().clearSelection();
         } else {
             Alert deleteApptConfirm = new Alert(Alert.AlertType.CONFIRMATION,"Are you sure you want to delete this " +
-                "appointment?", ButtonType.YES, ButtonType.NO);
+                    "appointment?", ButtonType.YES, ButtonType.NO);
             Optional<ButtonType> result = deleteApptConfirm.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.YES) {
-            try {
-            Appointment selectedAppt = mainApptTable.getSelectionModel().getSelectedItem();
-            AppointmentDAO.deleteAppt(selectedAppt);
-            loadApptTable();
+            if (result.isPresent() && result.get() == ButtonType.YES) {
+                try {
+                    Appointment selectedAppt = mainApptTable.getSelectionModel().getSelectedItem();
+                    AppointmentDAO.deleteAppt(selectedAppt);
+                    loadApptTable();
 
-            Alert apptInfo = new Alert(Alert.AlertType.INFORMATION,"You have deleted the following appointment: " +
-                    '\n' + '\n' + "Appointment ID: " + selectedAppt.getAppointmentID() + '\n' + "Type: " +
-                    selectedAppt.getType(), ButtonType.OK);
-            apptInfo.showAndWait();
-            }catch (SQLException e){
-                e.printStackTrace();
+                    Alert apptInfo = new Alert(Alert.AlertType.INFORMATION,"You have deleted the following appointment: " +
+                            '\n' + '\n' + "Appointment ID: " + selectedAppt.getAppointmentID() + '\n' + "Type: " +
+                            selectedAppt.getType(), ButtonType.OK);
+                    apptInfo.showAndWait();
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
             }
-        }
             mainApptTable.getSelectionModel().clearSelection();
         }
     }
@@ -294,7 +293,7 @@ public class MainMenu implements Initializable {
             Optional<ButtonType> results = modCustomerSelect.showAndWait();
             if (results.isPresent() && results.get() == ButtonType.OK)
                 modCustomerSelect.setOnCloseRequest(Event::consume);
-                return;
+            return;
         }
 
         FXMLLoader loader = new FXMLLoader();
@@ -323,7 +322,7 @@ public class MainMenu implements Initializable {
             Optional<ButtonType> result = deleteCust.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK)
                 deleteCust.setOnCloseRequest(Event::consume);
-                return;
+            return;
         }
 
         Customer deleteAssociatedAppts = mainCustomerTable.getSelectionModel().getSelectedItem();
@@ -332,27 +331,27 @@ public class MainMenu implements Initializable {
         try {
             if(associatedAppts.size() > 0){
                 Alert associatedAppt = new Alert(Alert.AlertType.WARNING, "All associated appointments will be " +
-                    "deleted along with this customer. Are you sure you want to delete this customer?", ButtonType.YES, ButtonType.NO);
+                        "deleted along with this customer. Are you sure you want to delete this customer?", ButtonType.YES, ButtonType.NO);
                 associatedAppt.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
                 associatedAppt.setTitle(" ");
                 associatedAppt.setHeaderText("Associated Appointment Found!");
                 Optional<ButtonType> results = associatedAppt.showAndWait();
-                    if (results.isPresent() && results.get() == ButtonType.YES ) {
-                        CustomerDAO.deleteCustomer(deleteAssociatedAppts);
-                        loadApptTable();
-                        loadCustomerTable();
-                        mainCustomerTable.getSelectionModel().clearSelection();
-                    }
-                        if (results.isPresent() && results.get() == ButtonType.NO ) {
-                            associatedAppt.setOnCloseRequest(Event::consume);
-                            mainCustomerTable.getSelectionModel().clearSelection();
-                        }
+                if (results.isPresent() && results.get() == ButtonType.YES ) {
+                    CustomerDAO.deleteCustomer(deleteAssociatedAppts);
+                    loadApptTable();
+                    loadCustomerTable();
+                    mainCustomerTable.getSelectionModel().clearSelection();
+                }
+                if (results.isPresent() && results.get() == ButtonType.NO ) {
+                    associatedAppt.setOnCloseRequest(Event::consume);
+                    mainCustomerTable.getSelectionModel().clearSelection();
+                }
 
             } else {
                 Alert deleteCustConfirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete "
                         + "this customer?", ButtonType.YES, ButtonType.NO);
                 Optional<ButtonType> result = deleteCustConfirm.showAndWait();
-                    if (result.isPresent() && result.get() == ButtonType.YES) {
+                if (result.isPresent() && result.get() == ButtonType.YES) {
                     Customer selectedCustomer = mainCustomerTable.getSelectionModel().getSelectedItem();
                     CustomerDAO.deleteCustomer(selectedCustomer);
                     loadCustomerTable();
@@ -361,9 +360,9 @@ public class MainMenu implements Initializable {
                     Alert apptInfo = new Alert(Alert.AlertType.INFORMATION,"You have deleted the following " +
                             "customer: " + selectedCustomer.getCustomerName(), ButtonType.OK);
                     apptInfo.showAndWait();
-                    }
                 }
-            } catch (Exception e){
+            }
+        } catch (Exception e){
             e.printStackTrace();
         }
     }
