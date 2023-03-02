@@ -1,21 +1,16 @@
 package controller;
 
 import DAO.AppointmentDAO;
-import DAO.CustomerDAO;
 import DAO.UserDAO;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import model.Appointment;
-import model.Customer;
-import model.DateTimeUtil;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -58,8 +53,6 @@ public class Login implements Initializable {
 
     // error control message for language translations
     @FXML
-    private String blankUserInput;
-    @FXML
     private String invalidLoginHeader;
     @FXML
     private String invalidLoginContent;
@@ -76,7 +69,6 @@ public class Login implements Initializable {
         logoTagline.setText(rb.getString("tagline"));
         signInLabel.setText(rb.getString("signInLabel"));
         loginButtonLabel.setText(rb.getString("loginButtonLabel"));
-        blankUserInput = rb.getString("blankUserInput");
         invalidLoginHeader = rb.getString("invalidLoginHeader");
         invalidLoginContent = rb.getString("invalidLoginContent");
 
@@ -98,65 +90,43 @@ public class Login implements Initializable {
         String password = passwordLogin.getText();
 
         // check database for valid user
-        boolean validUser = UserDAO.validateUser(username, password);
+        boolean isValidUser = UserDAO.validateUser(username, password);
 
-        if (validUser) {
-            // change from login screen to main menu
-            MainMenu.toMainMenu(actionEvent);
+        if (isValidUser) {
 
             // check for appointments within 15 minutes on login
             ObservableList<Appointment> checkAppointments = AppointmentDAO.allAppointments();
             LocalDateTime currentDT = LocalDateTime.now();
             LocalDateTime currentDTFifteen = LocalDateTime.now().plusMinutes(15);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            boolean fifteenMinAppt = false;
 
-            for(Appointment a : checkAppointments){
-                if((a.getStart().isAfter(currentDT) || a.getStart().isEqual(currentDT)) && ((a.getStart().isBefore(currentDTFifteen) || a.getStart().isEqual(currentDTFifteen)))){
+            for(Appointment a : checkAppointments) {
+                if ((a.getStart().isAfter(currentDT) || a.getStart().isEqual(currentDT)) &&
+                        ((a.getStart().isBefore(currentDTFifteen) || a.getStart().isEqual(currentDTFifteen)))) {
                     Alert fifteenAlertTrue = new Alert(Alert.AlertType.INFORMATION, "You have an upcoming " +
                             "appointment: " + '\n' + '\n' + "Appointment ID: " + a.getAppointmentID()
                             + '\n' + "Date and Time: " +
-                            a.getStart().format(formatter)+ '\n' + "User ID: " +
-                            a.getUserID(), ButtonType.OK);
-                    Optional<ButtonType> results = fifteenAlertTrue.showAndWait();
-                    if (results.isPresent() && results.get() == ButtonType.OK)
-                        fifteenAlertTrue.setOnCloseRequest(Event::consume);
-                    return;
-                }else {
-                    Alert fifteenAlertFalse = new Alert(Alert.AlertType.INFORMATION, "You do not have any upcoming appointments.", ButtonType.OK);
-                    Optional<ButtonType> results = fifteenAlertFalse.showAndWait();
-                    if (results.isPresent() && results.get() == ButtonType.OK)
-                        fifteenAlertFalse.setOnCloseRequest(Event::consume);
-                    return;
+                            a.getStart().format(formatter) + '\n' + "User ID: " + a.getUserID(), ButtonType.OK);
+                    fifteenAlertTrue.showAndWait();
+                    fifteenMinAppt = true;
+                    break;
                 }
             }
-
-            /*Appointment appointmentAlert = AppointmentDAO.appointmentAlert();
-            if (appointmentAlert != null) {
-
-                Alert fifteenAlertTrue = new Alert(Alert.AlertType.INFORMATION, "You have an upcoming " +
-                        "appointment: " + '\n' + '\n' + "Appointment ID: " + appointmentAlert.getAppointmentID()
-                        + '\n' + "Date and Time: " +
-                        DateTimeUtil.toLocalDT(Timestamp.valueOf(appointmentAlert.getStart())) + '\n' + "User ID: " +
-                        appointmentAlert.getUserID(), ButtonType.OK);
+            if(!fifteenMinAppt){
+                Alert fifteenAlertTrue = new Alert(Alert.AlertType.INFORMATION, "There are no upcoming " +
+                        "appointments.", ButtonType.OK);
                 fifteenAlertTrue.showAndWait();
-            } else {
-                Alert fifteenAlertFalse = new Alert(Alert.AlertType.INFORMATION, "You do not have any upcoming appointments.", ButtonType.OK);
-                fifteenAlertFalse.showAndWait();
             }
-
-        // error control message for blank username/password fields
-        } else if (usernameLogin.getText().isEmpty() || passwordLogin.getText().isEmpty()) {
-            Alert blankUser = new Alert(Alert.AlertType.ERROR, blankUserInput);
-            blankUser.setTitle(" ");
-            blankUser.setHeaderText(invalidLoginHeader);
-            blankUser.showAndWait();*/
-
         } else {
-                // error control message - end-user did not enter valid login credentials
-                Alert invalidUser = new Alert(Alert.AlertType.ERROR, invalidLoginContent);
-                invalidUser.setTitle(" ");
-                invalidUser.setHeaderText(invalidLoginHeader);
-                invalidUser.showAndWait();
-            }
+            // error control message - end-user did not enter valid login credentials
+            Alert invalidUser = new Alert(Alert.AlertType.ERROR, invalidLoginContent);
+            invalidUser.setTitle(" ");
+            invalidUser.setHeaderText(invalidLoginHeader);
+            invalidUser.showAndWait();
+            return;
         }
+        // change from login screen to main menu
+        MainMenu.toMainMenu(actionEvent);
     }
+}
