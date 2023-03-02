@@ -12,10 +12,11 @@ import java.time.LocalDateTime;
  */
 public class AppointmentDAO {
 
-    //public static boolean appointmentAlert;
-
     /**
-     * Method to query all appointments from appointments table in database.
+     * This method queries all appointments from the appointments table in the database.
+     *
+     * @throws SQLException The exception to throw if there is an error with database connection or with the query.
+     * @return The list of appointments.
      */
     public static ObservableList<Appointment> allAppointments() throws SQLException{
 
@@ -43,7 +44,10 @@ public class AppointmentDAO {
     }
 
     /**
-     * Method to query current month appointments
+     * This method queries the current month's appointments.
+     *
+     * @throws SQLException The exception to throw if there are errors with database connection or the query.
+     * @return All appointments for the current month.
      */
     public static ObservableList<Appointment> currentMonth() throws SQLException{
 
@@ -71,7 +75,10 @@ public class AppointmentDAO {
     }
 
     /**
-     * Method to query current week appointments
+     * This method queries the current week's appointments.
+     *
+     * @throws SQLException The exception to throw if there are errors with database connection or the query.
+     * @return All appointments for the current week.
      */
     public static ObservableList<Appointment> currentWeek() throws SQLException{
 
@@ -99,7 +106,18 @@ public class AppointmentDAO {
     }
 
     /**
-     * Method to insert new appointment in appointments table in database.
+     * This method inserts a new appointment in appointments table in the database.
+     *
+     * @param addContact The contact to add.
+     * @param addCustID The customer ID to add.
+     * @param addDescription The description to add.
+     * @param addLocation The location to add.
+     * @param addTitle The title to add.
+     * @param addType The type to add.
+     * @param addUserID The user to add.
+     * @param endDateTime The end date/time to add.
+     * @param startDateTime The start date/time to add.
+     * @throws SQLException The exception to throw if there are errors with database connection or the query.
      */
     public static void addAppointment(LocalDateTime startDateTime, LocalDateTime endDateTime,
                                       String addContact, String addType, String addTitle, String addDescription, String
@@ -128,7 +146,19 @@ public class AppointmentDAO {
     }
 
     /**
-     * Method to insert new appointment in appointments table in database.
+     * This method modifies data that is part of an existing appointment.
+     *
+     * @param modApptID The appointment ID to reference when making the modification.
+     * @param modContact The contact to modify.
+     * @param modCustID The customer ID to modify.
+     * @param modDescription The description to modify.
+     * @param modEndDateTime The end date/time to modify.
+     * @param modLocation The location to modify.
+     * @param modStartDateTime The start date/time to modify.
+     * @param modTitle The title to modify.
+     * @param modType The type to modify.
+     * @param modUserID The user ID to modify.
+     * @throws SQLException The exception to throw if there are errors with database connection or the query.
      */
     public static void modifyAppointment (int modApptID,String modTitle,String modDescription,String modLocation,
                                           String modType,LocalDateTime modStartDateTime, LocalDateTime modEndDateTime,
@@ -146,8 +176,8 @@ public class AppointmentDAO {
             ps.setString(3, modDescription);
             ps.setString(4, modLocation);
             ps.setString(5, modType);
-            ps.setTimestamp(6, DateTimeUtil.toUTCModStart(modStartDateTime));
-            ps.setTimestamp(7, DateTimeUtil.toUTCModEnd(modEndDateTime));
+            ps.setTimestamp(6, DateTimeUtil.toUTCStartDT(modStartDateTime));
+            ps.setTimestamp(7, DateTimeUtil.toUTCEndDT(modEndDateTime));
             ps.setString(8, null);
             ps.setString(9,null);
             ps.setString(10,null);
@@ -164,39 +194,9 @@ public class AppointmentDAO {
     }
 
     /**
-     * Method to query for 15 minute appointment alert.
-     */
-    public static Appointment appointmentAlert() {
-
-        // check for appointments within 15 minutes of login
-        Appointment alertAppointments;
-
-        LocalDateTime localDateTime = LocalDateTime.now();
-        Timestamp plusFifteenUTC = DateTimeUtil.localToUTC(localDateTime.plusMinutes(15));
-
-        try {
-            String alertFifteenQuery = "SELECT * FROM appointments WHERE Start >='" +
-                    DateTimeUtil.localToUTC(localDateTime) + "'AND'" + plusFifteenUTC + "'";
-            PreparedStatement ps = JDBC.connection.prepareStatement(alertFifteenQuery);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                alertAppointments = new Appointment();
-                alertAppointments.setAppointmentID(rs.getInt("Appointment_ID"));
-                alertAppointments.setStart(rs.getTimestamp("Start").toLocalDateTime());
-                alertAppointments.setEnd(rs.getTimestamp("End").toLocalDateTime());
-                alertAppointments.setUserID(rs.getInt("User_ID"));
-
-                return alertAppointments;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * Method to query deletion from appointments table in database.
+     * This method deletes a selected appointment from the appointments table in the database.
+     *
+     * @throws SQLException The exception to throw if there are errors with database connection or the query.
      */
     public static void deleteAppt(Appointment appointment) throws SQLException {
 
