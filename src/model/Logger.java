@@ -23,7 +23,7 @@ public class Logger {
         try{
             BufferedWriter bw = new BufferedWriter(new FileWriter(log, true));
             bw.write ("Username: " + username + " " + "Date/Time Stamp: " + trackerFormat.format(ZonedDateTime.now())
-                     + " " + "Attempt: " + (success ? "Successful" : "Failed") + "\n");
+                    + " " + "Attempt: " + (success ? "Successful" : "Failed") + "\n");
             bw.close();
         } catch (IOException e) {
             e.printStackTrace();

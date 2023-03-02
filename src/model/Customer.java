@@ -5,6 +5,12 @@ package model;
  */
 public class Customer {
 
+    // override format for combo box selection display
+    @Override
+    public String toString(){
+        return (getCustomerId() + " " + getCustomerName());
+    }
+
     private int customerId;
     private String customerName;
     private String customerAddress;
@@ -17,7 +23,7 @@ public class Customer {
     private int totalCustomers;
 
     /**
-     * This is the constructor representing all customer information.
+     * This constructor represents all customer data fields.
      *
      * @param customerId Auto-incremented ID from the database.
      * @param customerName The customer's first and last name.
@@ -70,7 +76,7 @@ public class Customer {
         this.customerCountry = customerCountry;
     }
 
-    /**
+     /**
      * This is the constructor representing customer's state or province.
      * This is used for the state/province combo box selection.
      *
