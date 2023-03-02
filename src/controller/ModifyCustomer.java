@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
  * changes if the end-user no longer wants to modify the customer details.
  */
 public class ModifyCustomer implements Initializable {
-
     // form fields to be pre-populated
     @FXML
     private TextField customerIdField;
@@ -136,11 +135,11 @@ public class ModifyCustomer implements Initializable {
 
             Alert emptyField = new Alert(Alert.AlertType.ERROR, "One or more text fields are empty. Please enter a "
                     + "value in each field.");
-                    emptyField.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+            emptyField.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
             Optional<ButtonType> result = emptyField.showAndWait();
-                if (result.isPresent() && result.get() == ButtonType.OK)
+            if (result.isPresent() && result.get() == ButtonType.OK)
                 return;
-            }
+        }
 
         try{
             int modDivision = firstLevelModCombo.getSelectionModel().getSelectedItem().getDivisionId();
@@ -156,13 +155,13 @@ public class ModifyCustomer implements Initializable {
             Alert modCustomer = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to modify this " +
                     "customer?", ButtonType.YES, ButtonType.NO);
             Optional<ButtonType> result = modCustomer.showAndWait();
-                if (result.isPresent() && result.get() == ButtonType.YES){
+            if (result.isPresent() && result.get() == ButtonType.YES){
                 CustomerDAO.modifyCustomer(modCustomerID,modCustomerName,modAddress,modPostal,modPhone,modDivision);
                 toMainMenu(actionEvent);
-                }
+            }
         }catch (IOException e){
             e.printStackTrace();
-            }
+        }
     }
 
     /**
@@ -172,6 +171,6 @@ public class ModifyCustomer implements Initializable {
      * @throws IOException The exception to throw if end-user cannot return to the Main Menu.
      */
     public void toMainMenu(ActionEvent actionEvent) throws IOException {
-       MainMenu.toMainMenu(actionEvent);
+        MainMenu.toMainMenu(actionEvent);
     }
 }

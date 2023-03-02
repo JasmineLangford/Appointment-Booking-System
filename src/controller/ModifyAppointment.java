@@ -25,7 +25,6 @@ import java.util.ResourceBundle;
  * of the screen or cancel changes if the end-user no longer wants to modify the appointment.
  */
 public class ModifyAppointment implements Initializable {
-
     // form fields
     @FXML
     private TextField apptId;
@@ -118,21 +117,21 @@ public class ModifyAppointment implements Initializable {
                 }
             }
 
-        apptId.setText(String.valueOf(modAppointment.getAppointmentID()));
-        startDatePicker.setValue(modAppointment.getStart().toLocalDate());
-        startCombo.setValue(modAppointment.getStart().toLocalTime());
-        endDatePicker.setValue(modAppointment.getEnd().toLocalDate());
-        endCombo.setValue(modAppointment.getEnd().toLocalTime());
-        locationText.setText(modAppointment.getLocation());
-        typeText.setText(modAppointment.getType());
-        titleText.setText(modAppointment.getTitle());
-        descText.setText(modAppointment.getDescription());
+            apptId.setText(String.valueOf(modAppointment.getAppointmentID()));
+            startDatePicker.setValue(modAppointment.getStart().toLocalDate());
+            startCombo.setValue(modAppointment.getStart().toLocalTime());
+            endDatePicker.setValue(modAppointment.getEnd().toLocalDate());
+            endCombo.setValue(modAppointment.getEnd().toLocalTime());
+            locationText.setText(modAppointment.getLocation());
+            typeText.setText(modAppointment.getType());
+            titleText.setText(modAppointment.getTitle());
+            descText.setText(modAppointment.getDescription());
 
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
     }
-    
+
     /**
      * This method will save the modified appointment data.
      *

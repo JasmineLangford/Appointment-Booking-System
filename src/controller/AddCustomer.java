@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
  * screen or cancel if the end-user no longer wants to add a customer.
  */
 public class AddCustomer implements Initializable {
-
     // form fields
     @FXML
     private TextField custNameTextfield;
@@ -113,17 +112,17 @@ public class AddCustomer implements Initializable {
         try{
             int addFirstLevel = firstLevelCombo.getSelectionModel().getSelectedItem().getDivisionId();
 
-           // setting new customer
-           newCustomer.setCustomerName(addCustomerName);
-           newCustomer.setCustomerAddress(addAddress);
-           newCustomer.setCustomerPhone(addPhoneNumber);
-           newCustomer.setCustomerPostal(addPostalCode);
-           newCustomer.setCustomerCountry(addCountry);
-           newCustomer.setDivisionId(addFirstLevel);
+            // setting new customer
+            newCustomer.setCustomerName(addCustomerName);
+            newCustomer.setCustomerAddress(addAddress);
+            newCustomer.setCustomerPhone(addPhoneNumber);
+            newCustomer.setCustomerPostal(addPostalCode);
+            newCustomer.setCustomerCountry(addCountry);
+            newCustomer.setDivisionId(addFirstLevel);
 
-        Alert addCustomer = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to add this new " +
-                "customer?", ButtonType.YES, ButtonType.NO);
-        Optional<ButtonType> result = addCustomer.showAndWait();
+            Alert addCustomer = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to add this new " +
+                    "customer?", ButtonType.YES, ButtonType.NO);
+            Optional<ButtonType> result = addCustomer.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.YES){
                 CustomerDAO.addCustomer(addCustomerName,addAddress,addPhoneNumber,addPostalCode,addFirstLevel);
                 MainMenu.toMainMenu(actionEvent);
@@ -142,4 +141,5 @@ public class AddCustomer implements Initializable {
     public void toMainMenu(ActionEvent actionEvent) throws IOException {
         MainMenu.toMainMenu(actionEvent);
     }
+
 }

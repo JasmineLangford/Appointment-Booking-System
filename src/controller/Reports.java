@@ -46,7 +46,6 @@ import java.util.stream.Collectors;
  */
 
 public class Reports implements Initializable {
-
     // appointments by contact table
     @FXML
     private TableView<Appointment> byContactView;
@@ -146,21 +145,21 @@ public class Reports implements Initializable {
             e.printStackTrace();
         }
     }
-        /**
-         * This method uses a lambda expression to filter contact appointments based on end-user selection from
-         * the contact combo box.
-         */
-        public void selectedContact() {
-            ContactDAO contactSelected = contactCombo.getSelectionModel().getSelectedItem();
-            try {
-                byContactView.setItems(AppointmentDAO.allAppointments().stream()
-                        .filter(contactAppts -> contactAppts.getContactID() == contactSelected.getContactID())
-                        .collect(Collectors.toCollection(FXCollections::observableArrayList))
-                );
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+    /**
+     * This method uses a lambda expression to filter contact appointments based on end-user selection from
+     * the contact combo box.
+     */
+    public void selectedContact() {
+        ContactDAO contactSelected = contactCombo.getSelectionModel().getSelectedItem();
+        try {
+            byContactView.setItems(AppointmentDAO.allAppointments().stream()
+                    .filter(contactAppts -> contactAppts.getContactID() == contactSelected.getContactID())
+                    .collect(Collectors.toCollection(FXCollections::observableArrayList))
+            );
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+    }
 
     /**
      * This method navigates the user back to the Main Menu.
@@ -169,14 +168,15 @@ public class Reports implements Initializable {
      * @throws IOException The exception to throw if I/O error occurs.
      */
     public void toMainMenu(ActionEvent actionEvent) throws IOException {
-       MainMenu.toMainMenu(actionEvent);
+        MainMenu.toMainMenu(actionEvent);
     }
 
     /**
      * This method closes the application and an alert will ask the end-user to confirm close.
      */
     public void toCloseApplication () {
-        Alert closeConfirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to close the program?", ButtonType.YES, ButtonType.NO);
+        Alert closeConfirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to close the program?",
+                ButtonType.YES, ButtonType.NO);
         Optional<ButtonType> result = closeConfirm.showAndWait();
         if(result.isPresent() && result.get() == ButtonType.YES) {
             Platform.exit();

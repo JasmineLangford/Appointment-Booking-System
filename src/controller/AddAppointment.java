@@ -117,7 +117,7 @@ public class AddAppointment implements Initializable {
                 Optional<ButtonType> results = noSelection.showAndWait();
                 if (results.isPresent() && results.get() == ButtonType.OK)
                     noSelection.setOnCloseRequest(Event::consume);
-                    return;
+                return;
             }
         } catch (NullPointerException e) {
             System.out.println("Caught NullPointerException");
@@ -146,7 +146,7 @@ public class AddAppointment implements Initializable {
             }
         } catch (Exception DateException) {
             System.out.println("Caught DateException");
-            }
+        }
 
         try {
             if (startDatePicker.getValue().getDayOfWeek().equals(DayOfWeek.SATURDAY) ||
@@ -162,7 +162,7 @@ public class AddAppointment implements Initializable {
             }
         } catch (Exception DateException) {
             System.out.println("Caught DateException");
-            }
+        }
 
         // input validation messages: start and end time combo boxes
         try {
@@ -176,7 +176,7 @@ public class AddAppointment implements Initializable {
             }
         }catch (NullPointerException e){
             System.out.println("Caught NullPointerException");
-            }
+        }
 
         LocalDateTime localStart = LocalDateTime.of(startDatePicker.getValue(),startCombo.getValue());
         LocalDateTime localEnd = LocalDateTime.of(endDatePicker.getValue(),endCombo.getValue());
@@ -190,7 +190,7 @@ public class AddAppointment implements Initializable {
             }
         }catch (Exception TimeException){
             System.out.println("Caught TimeException");
-            }
+        }
 
         try{
             if (startCombo.getValue().equals(endCombo.getValue())) {
@@ -257,7 +257,7 @@ public class AddAppointment implements Initializable {
                 Optional<ButtonType> results = noSelection.showAndWait();
                 if (results.isPresent() && results.get() == ButtonType.OK)
                     noSelection.setOnCloseRequest(Event::consume);
-                    return;
+                return;
             }
         }catch(NullPointerException e) {
             e.printStackTrace();
@@ -292,7 +292,7 @@ public class AddAppointment implements Initializable {
             Optional<ButtonType> results = businessHourConflict.showAndWait();
             if (results.isPresent() && results.get() == ButtonType.OK)
                 businessHourConflict.setOnCloseRequest(Event::consume);
-                return;
+            return;
         }
 
         // input validation messages for conflicting appointments
@@ -301,55 +301,55 @@ public class AddAppointment implements Initializable {
             for(Appointment apptConflicts : getAllAppointments) {
 
                 if(addCustID == apptConflicts.getCustomerID() && (dateTimeStart.isEqual(apptConflicts.getStart()) &&
-                    dateTimeEnd.isEqual(apptConflicts.getEnd()) ) ){
+                        dateTimeEnd.isEqual(apptConflicts.getEnd()) ) ){
 
                     Alert apptConflict = new Alert(Alert.AlertType.ERROR, "This customer already has an existing " +
-                    "appointment for this date and time.");
+                            "appointment for this date and time.");
                     apptConflict.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
                     Optional<ButtonType> results = apptConflict.showAndWait();
-                        if (results.isPresent() && results.get() == ButtonType.OK)
-                            apptConflict.setOnCloseRequest(Event::consume);
-                            return;
+                    if (results.isPresent() && results.get() == ButtonType.OK)
+                        apptConflict.setOnCloseRequest(Event::consume);
+                    return;
                 }
 
                 if(addCustID == apptConflicts.getCustomerID() && ((dateTimeStart.isBefore(apptConflicts.getStart()) ||
-                    dateTimeStart.isEqual(apptConflicts.getStart()))) && ((dateTimeEnd.isAfter(apptConflicts.getEnd()) ||
-                    dateTimeEnd.isEqual(apptConflicts.getEnd())))) {
+                        dateTimeStart.isEqual(apptConflicts.getStart()))) && ((dateTimeEnd.isAfter(apptConflicts.getEnd()) ||
+                        dateTimeEnd.isEqual(apptConflicts.getEnd())))) {
 
                     Alert apptConflict = new Alert(Alert.AlertType.ERROR, "This meeting overlaps with the " +
                             "customer's existing appointment.");
                     apptConflict.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
                     Optional<ButtonType> results = apptConflict.showAndWait();
-                        if (results.isPresent() && results.get() == ButtonType.OK)
-                            apptConflict.setOnCloseRequest(Event::consume);
-                            return;
+                    if (results.isPresent() && results.get() == ButtonType.OK)
+                        apptConflict.setOnCloseRequest(Event::consume);
+                    return;
                 }
 
                 if(addCustID == apptConflicts.getCustomerID() && ((dateTimeStart.isAfter(apptConflicts.getStart()) &&
-                    dateTimeStart.isBefore(apptConflicts.getEnd())))){
+                        dateTimeStart.isBefore(apptConflicts.getEnd())))){
 
                     Alert apptConflict = new Alert(Alert.AlertType.ERROR, "Start time overlaps with existing " +
-                        "appointment.");
+                            "appointment.");
                     Optional<ButtonType> results = apptConflict.showAndWait();
-                        if (results.isPresent() && results.get() == ButtonType.OK)
-                            apptConflict.setOnCloseRequest(Event::consume);
-                            return;
+                    if (results.isPresent() && results.get() == ButtonType.OK)
+                        apptConflict.setOnCloseRequest(Event::consume);
+                    return;
                 }
 
                 if(addCustID == apptConflicts.getCustomerID() && ((dateTimeEnd.isAfter(apptConflicts.getStart()) &&
-                    ((dateTimeEnd.isBefore(apptConflicts.getEnd()) || dateTimeEnd.isEqual(apptConflicts.getEnd())))))){
+                        ((dateTimeEnd.isBefore(apptConflicts.getEnd()) || dateTimeEnd.isEqual(apptConflicts.getEnd())))))){
 
                     Alert apptConflict = new Alert(Alert.AlertType.ERROR, "End time overlaps with existing " +
-                        "appointment.");
+                            "appointment.");
                     Optional<ButtonType> results = apptConflict.showAndWait();
-                        if (results.isPresent() && results.get() == ButtonType.OK)
-                            apptConflict.setOnCloseRequest(Event::consume);
-                            return;
+                    if (results.isPresent() && results.get() == ButtonType.OK)
+                        apptConflict.setOnCloseRequest(Event::consume);
+                    return;
                 }
             }
         }catch (Exception AppointmentConflicts){
             System.out.println("Caught AppointmentConflicts");
-            }
+        }
 
         try {
             newAppointment.setStart(startDateTime);
@@ -365,12 +365,12 @@ public class AddAppointment implements Initializable {
             Alert addAppointmentConfirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to save " +
                     "this appointment?", ButtonType.YES, ButtonType.NO);
             Optional<ButtonType> result = addAppointmentConfirm.showAndWait();
-                if (result.isPresent() && result.get() == ButtonType.YES) {
-                    AppointmentDAO.addAppointment(startDateTime,endDateTime,String.valueOf(addContact),
-                     addType,addTitle,addDescription,addLocation,addCustID, addUserID);
+            if (result.isPresent() && result.get() == ButtonType.YES) {
+                AppointmentDAO.addAppointment(startDateTime,endDateTime,String.valueOf(addContact),
+                        addType,addTitle,addDescription,addLocation,addCustID, addUserID);
 
-                    toMainMenu(actionEvent);
-                }
+                toMainMenu(actionEvent);
+            }
         }catch (IOException | SQLException e) {
             e.printStackTrace();
         }
