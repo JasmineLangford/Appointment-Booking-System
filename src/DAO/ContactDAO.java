@@ -8,13 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * This Class for contact query
- *
- * Extends from Appointment model class
+ * This class contains the database queries for contacts.
  */
 public class ContactDAO extends Appointment {
-
-
     // override data type for combo box selection display
     @Override
     public String toString(){
@@ -22,16 +18,20 @@ public class ContactDAO extends Appointment {
     }
 
     /**
-     * Constructor
+     * This constructor represents the contact.
+     *
+     * @param contactId The contact ID.
+     * @param contactName The contact name.
      */
     public ContactDAO (int contactId, String contactName){
         super(contactId, contactName);
     }
 
     /**
-     * Method to query all contact selections for combo box
+     * This method queries all contact selections for the combo box.
      *
-     * @return list of contacts
+     * @throws SQLException The exception to throw if there is an error with database connection or with the query.
+     * @return The list of all contacts.
      */
     public static ObservableList<ContactDAO> allContacts() throws SQLException {
         ObservableList<ContactDAO> contactList = FXCollections.observableArrayList();
@@ -49,5 +49,3 @@ public class ContactDAO extends Appointment {
         return contactList;
     }
 }
-
-

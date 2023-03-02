@@ -3,17 +3,15 @@ package DAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Customer;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Class for country query
- *
- * Extends from Customer class
+ * This class contains the database queries for countries.
  */
 public class CountryDAO extends Customer {
-
     // override format for combo box selection display
     @Override
     public String toString(){
@@ -21,19 +19,20 @@ public class CountryDAO extends Customer {
     }
 
     /**
-     * Constructor
+     * This constructor represents the customer countries.
      *
-     * @param countryId to get
-     * @param customerCountry to get
+     * @param countryId The country ID.
+     * @param customerCountry The country name.
      */
     public CountryDAO (int countryId, String customerCountry) {
         super(countryId,customerCountry);
     }
 
     /**
-     * Method to query country selections for combo box.
+     * This method queries country selections for the combo box.
      *
-     * @return all country options
+     * @throws SQLException The exception to throw if there is an error with database connection or with the query.
+     * @return The list of all countries.
      */
     public static ObservableList<CountryDAO> allCountries() throws SQLException {
         ObservableList<CountryDAO> allCountries = FXCollections.observableArrayList();
@@ -50,5 +49,4 @@ public class CountryDAO extends Customer {
         }
         return allCountries;
     }
-
 }

@@ -3,14 +3,13 @@ package DAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Customer;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Class for first-level division query
- *
- * Extends from Customer class
+ * This class contains the database queries for divisions.
  */
 public class FirstLevelDAO extends Customer {
 
@@ -21,16 +20,21 @@ public class FirstLevelDAO extends Customer {
     }
 
     /**
-     * Constructor
+     * This constructor represents the customer divisions.
+     *
+     * @param division The division name.
+     * @param countryId The country ID.
+     * @param divisionId The division ID.
      */
-    public FirstLevelDAO (int divisionId, String division, int countryId) {
+    public FirstLevelDAO(int divisionId, String division, int countryId) {
         super(divisionId, division, countryId);
     }
 
     /**
-     * Method to query all first-level division selections for combo box
+     * This method queries all division selections for combo box.
      *
-     * @return all first level options
+     * @throws SQLException The exception to throw if there is an error with database connection or with the query.
+     * @return The list of all divisions.
      */
     public static ObservableList<FirstLevelDAO> allFirstLevelDivision() throws SQLException {
         ObservableList<FirstLevelDAO> firstLevelDivision = FXCollections.observableArrayList();
@@ -48,5 +52,4 @@ public class FirstLevelDAO extends Customer {
         }
         return firstLevelDivision;
     }
-
 }

@@ -123,23 +123,23 @@ public class AppointmentDAO {
                                       String addContact, String addType, String addTitle, String addDescription, String
                                               addLocation, int addCustID, int addUserID) throws SQLException {
         try {
-        String addApptQuery = "INSERT INTO appointments (Title, Description, Location, Type, Start, " +
-                "End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        PreparedStatement ps = JDBC.connection.prepareStatement(addApptQuery);
-        ps.setString(1, addTitle);
-        ps.setString(2, addDescription);
-        ps.setString(3, addLocation);
-        ps.setString(4, addType);
-        ps.setTimestamp(5, DateTimeUtil.toUTCStartDT(startDateTime));
-        ps.setTimestamp(6, DateTimeUtil.toUTCEndDT(endDateTime));
-        ps.setString(7, null);
-        ps.setString(8,null);
-        ps.setString(9,null);
-        ps.setString(10,null);
-        ps.setInt(11,addCustID);
-        ps.setInt(12,addUserID);
-        ps.setString(13,addContact);
-        ps.executeUpdate();
+            String addApptQuery = "INSERT INTO appointments (Title, Description, Location, Type, Start, " +
+                    "End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            PreparedStatement ps = JDBC.connection.prepareStatement(addApptQuery);
+            ps.setString(1, addTitle);
+            ps.setString(2, addDescription);
+            ps.setString(3, addLocation);
+            ps.setString(4, addType);
+            ps.setTimestamp(5, DateTimeUtil.toUTCStartDT(startDateTime));
+            ps.setTimestamp(6, DateTimeUtil.toUTCEndDT(endDateTime));
+            ps.setString(7, null);
+            ps.setString(8,null);
+            ps.setString(9,null);
+            ps.setString(10,null);
+            ps.setInt(11,addCustID);
+            ps.setInt(12,addUserID);
+            ps.setString(13,addContact);
+            ps.executeUpdate();
         } catch (SQLException e){
             e.printStackTrace();
         }
@@ -148,7 +148,7 @@ public class AppointmentDAO {
     /**
      * This method modifies data that is part of an existing appointment.
      *
-     * @param modApptID The appointment ID to reference when making the modification.
+     * @param modApptID The appointment ID to reference.
      * @param modContact The contact to modify.
      * @param modCustID The customer ID to modify.
      * @param modDescription The description to modify.
@@ -196,6 +196,7 @@ public class AppointmentDAO {
     /**
      * This method deletes a selected appointment from the appointments table in the database.
      *
+     * @param appointment The appointment to delete.
      * @throws SQLException The exception to throw if there are errors with database connection or the query.
      */
     public static void deleteAppt(Appointment appointment) throws SQLException {
@@ -205,5 +206,4 @@ public class AppointmentDAO {
         ps.setInt(1, appointment.getAppointmentID());
         ps.executeUpdate();
     }
-
 }

@@ -1,6 +1,5 @@
 package DAO;
 
-import controller.MainMenu;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Appointment;
@@ -8,14 +7,18 @@ import model.Customer;
 import model.DateTimeUtil;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
+/**
+ * This class contains the database queries for reports.
+ */
 public class ReportDAO {
 
     /**
      * <b>Report #1 - Total number of customer appointments by type and month</b>
+     *
+     * @throws SQLException The exception to throw if there is an error with database connection or with the query.
+     * @return List of all appointments by month and type.
      */
     public static ObservableList<Appointment> appointmentsByMonthType() throws SQLException{
 
@@ -42,7 +45,8 @@ public class ReportDAO {
     /**
      * <b>Report #2 - Schedule for each contact in the organization</b>
      *
-     * @return all appointments associated with the selected contact
+     * @throws SQLException The exception to throw if there is an error with database connection or with the query.
+     * @return The list of all appointments to be filtered by customer.
      */
     public static ObservableList<Appointment> appointmentsByCustomer() throws SQLException{
 
@@ -68,6 +72,9 @@ public class ReportDAO {
 
     /**
      * <b>Report #3 - Total number of appointments for each division</b>
+     *
+     * @throws SQLException The exception to throw if there is an error with database connection or with the query.
+     * @return The list of customers by division.
      */
     public static ObservableList<Customer> customersByDivision() throws SQLException{
 
@@ -89,5 +96,4 @@ public class ReportDAO {
         }
         return customersByDivision;
     }
-
 }

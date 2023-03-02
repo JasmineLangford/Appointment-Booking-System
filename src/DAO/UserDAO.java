@@ -33,7 +33,7 @@ public class UserDAO extends User {
      * This method queries user selections for the combo box.
      *
      * @throws SQLException The exception to throw if there is an error regarding the query for combo box selections.
-     * @return All available users.
+     * @return The list of all users.
      */
     public static ObservableList<UserDAO> allUsers() throws SQLException {
         ObservableList<UserDAO> users = FXCollections.observableArrayList();
@@ -64,22 +64,22 @@ public class UserDAO extends User {
             Statement statement = JDBC.connection.createStatement();
             ResultSet rs = statement.executeQuery(loginQuery);
 
-                if(rs.next()) {
-                    userLogin = new User();
-                    userLogin.setUsername(rs.getString("User_Name"));
+            if(rs.next()) {
+                userLogin = new User();
+                userLogin.setUsername(rs.getString("User_Name"));
 
-                    // logs end-user login attempt as successful
-                    Logger.trackerLog(username,DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"),true);
-                    return true;
-                } else {
-                    // logs end-user login attempt as failed
-                    Logger.trackerLog(username, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"),false);
-                    return false;
-                }
-            } catch (SQLException e) {
-                System.out.println("Login Error: " + e.getMessage());
+                // logs end-user login attempt as successful
+                Logger.trackerLog(username,DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"),true);
+                return true;
+            } else {
+                // logs end-user login attempt as failed
+                Logger.trackerLog(username, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"),false);
                 return false;
             }
+        } catch (SQLException e) {
+            System.out.println("Login Error: " + e.getMessage());
+            return false;
+        }
     }
 
     /**

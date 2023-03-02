@@ -12,44 +12,61 @@ import java.time.LocalDateTime;
 /**
  * This class contains the database queries for customers.
  */
-public abstract class CustomerDAO {
+public class CustomerDAO extends Customer {
 
     /**
-     * Method to show all customers queried from database - customer table
+     * This is constructor represents the customer.
+     *
+     * @param customerID The customer ID.
+     * @param customer_name The customer name.
+     */
+    public CustomerDAO(int customerID,String customer_name) {
+        super(customerID,customer_name);
+    }
+
+    /**
+     * This method queries all customers.
+     *
+     * @throws SQLException The exception to throw if there is an error with database connection or with the query.
+     * @return The list of all customers.
      */
     public static ObservableList<Customer> allCustomers() throws SQLException {
         ObservableList<Customer> listOfCustomers = FXCollections.observableArrayList();
         String customerQuery = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, countries.Country, " +
                 "first_level_divisions.Country_ID, customers.Division_ID, " +
-                     "Division FROM customers INNER JOIN first_level_divisions ON customers.Division_ID=" +
-                     "first_level_divisions.Division_ID INNER JOIN countries ON first_level_divisions.Country_ID=" +
-                     "countries.Country_ID ORDER BY Customer_ID ASC;";
+                "Division FROM customers INNER JOIN first_level_divisions ON customers.Division_ID=" +
+                "first_level_divisions.Division_ID INNER JOIN countries ON first_level_divisions.Country_ID=" +
+                "countries.Country_ID ORDER BY Customer_ID ASC;";
 
-        try {
-            PreparedStatement ps = JDBC.connection.prepareStatement(customerQuery);
-            ResultSet rs = ps.executeQuery();
+        PreparedStatement ps = JDBC.connection.prepareStatement(customerQuery);
+        ResultSet rs = ps.executeQuery();
 
-            while(rs.next()){
-                int customerId = rs.getInt("Customer_ID");
-                String customerName = rs.getString("Customer_Name");
-                String customerAddress = rs.getString("Address");
-                String customerPhone = rs.getString("Phone");
-                String customerCountry = rs.getString("Country");
-                int countryId = rs.getInt("Country_ID");
-                int divisionId = rs.getInt("Division_ID");
-                String division = rs.getString("Division");
-                String customerPostal = rs.getString("Postal_Code");
-                Customer customer = new Customer(customerId,customerName,customerAddress,customerPhone, customerCountry,
-                                    countryId, divisionId,division,customerPostal);
-                listOfCustomers.add(customer);
-        }
-        } catch (SQLException e){
-            e.printStackTrace();
+        while(rs.next()){
+            int customerId = rs.getInt("Customer_ID");
+            String customerName = rs.getString("Customer_Name");
+            String customerAddress = rs.getString("Address");
+            String customerPhone = rs.getString("Phone");
+            String customerCountry = rs.getString("Country");
+            int countryId = rs.getInt("Country_ID");
+            int divisionId = rs.getInt("Division_ID");
+            String division = rs.getString("Division");
+            String customerPostal = rs.getString("Postal_Code");
+            Customer customer = new Customer(customerId,customerName,customerAddress,customerPhone, customerCountry,
+                    countryId, divisionId,division,customerPostal);
+            listOfCustomers.add(customer);
         }
         return listOfCustomers;
     }
 
-
+    /**
+     * This method inserts a new customer in customers table in the database.
+     *
+     * @param addAddress The address to add.
+     * @param addCustomerName The customer name to add.
+     * @param addFirstLevel The state/province to add.
+     * @param addPhoneNumber The phone number to add.
+     * @param addPostalCode The postal code to add.
+     */
     public static void addCustomer(String addCustomerName, String addAddress, String addPhoneNumber,
                                    String addPostalCode, int addFirstLevel){
 
@@ -74,14 +91,25 @@ public abstract class CustomerDAO {
         }
     }
 
+    /**
+     * This method modifies data that is part of an existing customer.
+     *
+     * @param modCustomerID The customer ID to reference.
+     * @param modAddress The address to modify.
+     * @param modCustomerName The customer name to modify.
+     * @param modFirstLevel The customer state/province to modify.
+     * @param modPhone The phone number to modify.
+     * @param modPostal The postal code to modify.
+     */
     public static void modifyCustomer(int modCustomerID, String modCustomerName, String modAddress, String modPhone,
                                       String modPostal, int modFirstLevel) {
 
         String phoneNumber = modPhone.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "$1-$2-$3");
 
         try{
-            String modCustomerQuery = "UPDATE customers SET Customer_ID Customer_Name = ?,Address = ?,Postal_Code = ?, Phone = ?," +
-                    "Create_Date = ?,Created_By = ?,Last_Update = ?,Last_Updated_By = ?,Division_ID = ? WHERE Customer_ID = ?";
+            String modCustomerQuery = "UPDATE customers SET Customer_ID = ?, Customer_Name = ?, Address = ?, " +
+                    "Postal_Code = ?, Phone = ?, Create_Date = ?,Created_By = ?,Last_Update = ?,Last_Updated_By = ?," +
+                    "Division_ID = ? WHERE Customer_ID = ?";
             PreparedStatement ps = JDBC.connection.prepareStatement(modCustomerQuery);
             ps.setInt(1, modCustomerID);
             ps.setString(2, modCustomerName);
@@ -93,6 +121,8 @@ public abstract class CustomerDAO {
             ps.setString(8, null);
             ps.setString(9, null);
             ps.setInt(10, modFirstLevel);
+            ps.setInt(11,modCustomerID);
+
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -100,7 +130,9 @@ public abstract class CustomerDAO {
     }
 
     /**
-     * Method to delete customer from database.
+     * This method deletes a selected customer from the customer table in the database.
+     *
+     * @throws SQLException The exception to throw if there are errors with database connection or the query.
      */
     public static void deleteCustomer (Customer customer) throws SQLException {
 
@@ -111,7 +143,11 @@ public abstract class CustomerDAO {
     }
 
     /**
-     * Method to query appointments if the there is a matching customer ID.
+     * The method to query appointments if the there is a matching customer ID.
+     *
+     * @param customerId The customer ID to look up if there is an associated appointment.
+     * @throws SQLException The exception to throw if there are errors with database connection or the query.
+     * @return The associated appointments with this customer.
      */
     public static ObservableList<Appointment> deleteAssociated(int customerId) throws SQLException {
         ObservableList<Appointment> associatedAppts = FXCollections.observableArrayList();
@@ -139,5 +175,4 @@ public abstract class CustomerDAO {
         }
         return associatedAppts;
     }
-
 }
