@@ -15,7 +15,7 @@
    </Pane>
    <Pane layoutX="270.0" prefHeight="380.0" prefWidth="330.0" style="-fx-background-color: #000000; -fx-background-radius: 20px;">
       <children>
-         <ImageView fitHeight="111.0" fitWidth="116.0" layoutX="113.0" pickOnBounds="true" preserveRatio="true">
+         <ImageView fitHeight="111.0" fitWidth="116.0" layoutX="105.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
             <image>
                <Image url="@../resources/thecakeshop-logo.png" />
             </image>
@@ -23,29 +23,29 @@
          <Pane layoutX="17.0" layoutY="-61.0" prefHeight="200.0" prefWidth="9.0" />
          <Pane layoutX="-7.0" prefHeight="380.0" prefWidth="26.0" style="-fx-background-color: #000000;" />
       </children></Pane>
-    <TextField fx:id="usernameLogin" layoutX="341.0" layoutY="130.0" prefHeight="25.0" prefWidth="197.0" />
-    <PasswordField fx:id="passwordLogin" layoutX="341.0" layoutY="201.0" prefHeight="25.0" prefWidth="197.0" />
-    <Button fx:id="loginButtonLabel" layoutX="381.0" layoutY="259.0" mnemonicParsing="false" onAction="#loginButton" prefHeight="33.0" prefWidth="116.0" style="-fx-background-color: #F50CA0;" text="Login" textFill="WHITE">
+    <TextField fx:id="usernameLogin" layoutX="335.0" layoutY="117.0" prefHeight="33.0" prefWidth="197.0" />
+    <PasswordField fx:id="passwordLogin" layoutX="335.0" layoutY="196.0" prefHeight="33.0" prefWidth="197.0" />
+    <Button fx:id="loginButtonLabel" layoutX="375.0" layoutY="259.0" mnemonicParsing="false" onAction="#loginButton" prefHeight="33.0" prefWidth="116.0" style="-fx-background-color: #F50CA0;" text="Login" textFill="WHITE">
         <font>
             <Font name="Gill Sans MT Bold" size="13.0" />
         </font>
     </Button>
-    <Label fx:id="timeZoneLabel" layoutX="348.0" layoutY="328.0" text="Time Zone" textAlignment="RIGHT" textFill="#fcfefc">
+    <Label fx:id="timeZoneLabel" layoutX="342.0" layoutY="328.0" text="Time Zone" textAlignment="RIGHT" textFill="#fcfefc">
         <font>
             <Font name="Gill Sans MT" size="12.0" />
         </font>
     </Label>
-    <Label fx:id="zoneID" disable="true" layoutX="435.0" layoutY="328.0" prefHeight="14.0" prefWidth="116.0" text="timezone placeholder" textFill="WHITE">
+    <Label fx:id="zoneID" disable="true" layoutX="429.0" layoutY="328.0" prefHeight="14.0" prefWidth="116.0" text="timezone placeholder" textFill="WHITE">
         <font>
             <Font name="Gill Sans MT" size="12.0" />
         </font>
     </Label>
-    <Label fx:id="usernameLabel" layoutX="343.0" layoutY="107.0" text="Username" textFill="#fcfefc">
+    <Label fx:id="usernameLabel" layoutX="337.0" layoutY="94.0" text="Username" textFill="#fcfefc">
         <font>
             <Font name="Gill Sans MT" size="14.0" />
         </font>
     </Label>
-    <Label fx:id="passwordLabel" layoutX="344.0" layoutY="179.0" text="Password" textFill="#fcfefc">
+    <Label fx:id="passwordLabel" layoutX="338.0" layoutY="174.0" text="Password" textFill="#fcfefc">
         <font>
             <Font name="Gill Sans MT" size="14.0" />
         </font>
