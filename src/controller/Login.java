@@ -17,13 +17,12 @@ import java.util.*;
 
 /**
  * This class is the controller for login.fxml.
- * The end-user will sign in with their username and password.*
+ * The end-user will sign in with their username and password.
  * The language setting on the end-user's operating system will determine the language translation presented on the UI.
  * Input validation message for empty text fields (username and password text fields) and error message for
  * invalid username and/or password are also translated. For the scope of this project, there are French and
- * English translations available.
- * The end-user's operating system will also determine a timezone, which will be displayed on a label in the lower
- * right-hand corner of the login screen.
+ * English translations available. The end-user's operating system will also determine a timezone, which will be
+ * displayed on a label in the lower right-hand corner of the login screen.
  */
 public class Login implements Initializable {
 
