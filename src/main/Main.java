@@ -52,9 +52,10 @@ public class Main extends Application {
         Scene scene = new Scene(root, 600, 380);
         primaryStage.setScene(scene);
         primaryStage.initStyle(StageStyle.TRANSPARENT);
+        primaryStage.setTitle("Appointment Booking System");
         scene.setFill(Color.TRANSPARENT);
         root.setStyle("-fx-background-color: transparent;");
-        root.setStyle("-fx-background-radius: 20px 20px 20px 20px;");
+        root.setStyle("-fx-background-radius: 30px 30px 30px 30px;");
 
         // Scene is able to move on mouse drag
         scene.setOnMousePressed(event -> {
