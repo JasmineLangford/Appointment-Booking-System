@@ -24,6 +24,12 @@ It serves as an appointment booking system for a cake company, allowing employee
 
 - MySQL
 
+## Image Credits
+
+The following images are used in this project and are sourced from:
+
+- Cake with Raspberry Toppings(https://www.pexels.com/photo/cake-with-raspberry-toppings-827516/) - Photo by  Valeria Boltneva
+
 <!-- ## Getting Started
 
 To run the Cake Company Appointment Booking System locally, follow these steps:
