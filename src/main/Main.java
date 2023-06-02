@@ -4,6 +4,7 @@ import DAO.JDBC;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -41,6 +42,12 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+        // Set launch icon
+        primaryStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/resources" +
+                "/thecakeshop-launch.png"))));
+
+        // Set login scene
         AnchorPane root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/Login.fxml")));
         Scene scene = new Scene(root, 600, 380);
         primaryStage.setScene(scene);
