@@ -2,11 +2,13 @@ package controller;
 
 import DAO.AppointmentDAO;
 import DAO.UserDAO;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import model.Appointment;
 import java.io.IOException;
 import java.net.URL;
@@ -37,6 +39,8 @@ public class Login implements Initializable {
     private Button loginButtonLabel;
     @FXML
     private Label zoneID;
+    @FXML
+    private Label exit;
 
     // end-user username and password input
     @FXML
@@ -119,5 +123,9 @@ public class Login implements Initializable {
         }
         // change from login screen to main menu
         MainMenu.toMainMenu(actionEvent);
+    }
+
+    public void login_exit(MouseEvent mouseEvent) {
+        Platform.exit();
     }
 }

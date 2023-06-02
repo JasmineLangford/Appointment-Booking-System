@@ -6,7 +6,7 @@
 <?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="374.0" prefWidth="600.0" style="-fx-border-radius: 20px;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Login">
-   <Pane layoutX="-1.0" prefHeight="380.0" prefWidth="263.0" style="-fx-background-color: #ffffff; -fx-background-radius: 20px;">
+   <Pane layoutX="-1.0" onMouseClicked="#login_exit" prefHeight="380.0" prefWidth="263.0" style="-fx-background-color: #ffffff; -fx-background-radius: 20px;">
       <children>
           <ImageView fitHeight="316.0" fitWidth="467.0" layoutX="-102.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-radius: 20px;">
               <Image url="@../resources/login-image.jpg" />
@@ -22,6 +22,11 @@
          </ImageView>
          <Pane layoutX="17.0" layoutY="-61.0" prefHeight="200.0" prefWidth="9.0" />
          <Pane layoutX="-7.0" prefHeight="380.0" prefWidth="26.0" style="-fx-background-color: #000000;" />
+         <Label layoutX="291.0" layoutY="23.0" onMouseClicked="#login_exit" text="X" textFill="#fcfefc">
+            <font>
+               <Font name="Gill Sans MT" size="14.0" />
+            </font>
+         </Label>
       </children></Pane>
     <TextField fx:id="usernameLogin" layoutX="335.0" layoutY="117.0" prefHeight="33.0" prefWidth="197.0" />
     <PasswordField fx:id="passwordLogin" layoutX="335.0" layoutY="196.0" prefHeight="33.0" prefWidth="197.0" />
