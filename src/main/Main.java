@@ -9,42 +9,17 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import javax.swing.text.html.ImageView;
-import java.awt.*;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
 /**
- * This class creates the scheduler application.
+ * This class creates the appointment booking application.
  */
 
 public class Main extends Application {
-
-    /**
-     * This method opens the Login screen which will allow users to access the scheduler application upon successful
-     * login.
-     *
-     * @param primaryStage The top-level container for all scenes.
-     * @throws Exception The exception to throw.
-     */
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        AnchorPane root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/Login.fxml")));
-        root.setStyle("-fx-background-color: transparent;");
-
-        Scene scene = new Scene(root, 600, 380);
-        scene.setFill(Color.TRANSPARENT);
-
-        primaryStage.setScene(scene);
-        primaryStage.initStyle(StageStyle.TRANSPARENT);
-        root.setStyle("-fx-background-radius: 20px 20px 20px 20px;");
-        primaryStage.show();
-        primaryStage.setResizable(false);
-
-        ResourceBundle rb = ResourceBundle.getBundle("Nat", Locale.getDefault());
-        primaryStage.setTitle(rb.getString("loginScreenHeader"));
-    }
+    private double xOffset = 0;
+    private double yOffset = 0;
 
     /**
      * This method is called to run the application.
@@ -55,5 +30,39 @@ public class Main extends Application {
         JDBC.openConnection();
         launch();
         JDBC.closeConnection();
+    }
+
+    /**
+     * This method opens the Login screen which will allow users to access the appointment booking application upon
+     * successful login.
+     *
+     * @param primaryStage The top-level container for all scenes.
+     * @throws Exception The exception to throw.
+     */
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        AnchorPane root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/Login.fxml")));
+        Scene scene = new Scene(root, 600, 380);
+        primaryStage.setScene(scene);
+        primaryStage.initStyle(StageStyle.TRANSPARENT);
+        scene.setFill(Color.TRANSPARENT);
+        root.setStyle("-fx-background-color: transparent;");
+        root.setStyle("-fx-background-radius: 20px 20px 20px 20px;");
+
+        // Scene is able to move on mouse drag
+        scene.setOnMousePressed(event -> {
+            xOffset = event.getSceneX();
+            yOffset = event.getSceneY();
+        });
+        root.setOnMouseDragged(event -> {
+            primaryStage.setX(event.getScreenX() - xOffset);
+            primaryStage.setY(event.getScreenY() - yOffset);
+        });
+
+        primaryStage.centerOnScreen();
+        primaryStage.show();
+
+        ResourceBundle rb = ResourceBundle.getBundle("Nat", Locale.getDefault());
+        primaryStage.setTitle(rb.getString("loginScreenHeader"));
     }
 }
