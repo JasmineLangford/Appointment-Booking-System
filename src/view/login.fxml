@@ -1,61 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="380.0" prefWidth="600.0" style="-fx-background-color: #373436;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Login">
-    <Label fx:id="signInLabel" alignment="CENTER" layoutX="349.0" layoutY="36.0" prefHeight="34.0" prefWidth="197.0" text="Sign In" textAlignment="CENTER" textFill="#fcfefc">
-        <font>
-            <Font name="Gill Sans MT Bold" size="29.0" />
-        </font>
-    </Label>
-    <Label fx:id="usernameLabel" layoutX="353.0" layoutY="94.0" text="Username" textFill="#fcfefc">
-        <font>
-            <Font name="Gill Sans MT" size="14.0" />
-        </font>
-    </Label>
-    <TextField fx:id="usernameLogin" layoutX="351.0" layoutY="117.0" prefHeight="25.0" prefWidth="197.0" />
-    <Label fx:id="passwordLabel" layoutX="354.0" layoutY="149.0" text="Password" textFill="#fcfefc">
-        <font>
-            <Font name="Gill Sans MT" size="14.0" />
-        </font>
-    </Label>
-    <PasswordField fx:id="passwordLogin" layoutX="351.0" layoutY="171.0" prefHeight="25.0" prefWidth="197.0" />
-    <Button fx:id="loginButtonLabel" layoutX="391.0" layoutY="228.0" mnemonicParsing="false" onAction="#loginButton" prefHeight="25.0" prefWidth="116.0" style="-fx-background-color: #50add7;" text="Login" textFill="#fcfefc">
+<AnchorPane prefHeight="374.0" prefWidth="600.0" style="-fx-border-radius: 20px;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Login">
+   <Pane layoutX="-1.0" prefHeight="380.0" prefWidth="263.0" style="-fx-background-color: #ffffff; -fx-background-radius: 20px;">
+      <children>
+          <ImageView fitHeight="316.0" fitWidth="467.0" layoutX="-102.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-radius: 20px;">
+              <Image url="@../resources/login-image.jpg" />
+          </ImageView>
+      </children>
+   </Pane>
+   <Pane layoutX="270.0" prefHeight="380.0" prefWidth="330.0" style="-fx-background-color: #000000; -fx-background-radius: 20px;">
+      <children>
+         <ImageView fitHeight="111.0" fitWidth="116.0" layoutX="113.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@../resources/thecakeshop-logo.png" />
+            </image>
+         </ImageView>
+         <Pane layoutX="17.0" layoutY="-61.0" prefHeight="200.0" prefWidth="9.0" />
+         <Pane layoutX="-7.0" prefHeight="380.0" prefWidth="26.0" style="-fx-background-color: #000000;" />
+      </children></Pane>
+    <TextField fx:id="usernameLogin" layoutX="341.0" layoutY="130.0" prefHeight="25.0" prefWidth="197.0" />
+    <PasswordField fx:id="passwordLogin" layoutX="341.0" layoutY="201.0" prefHeight="25.0" prefWidth="197.0" />
+    <Button fx:id="loginButtonLabel" layoutX="381.0" layoutY="259.0" mnemonicParsing="false" onAction="#loginButton" prefHeight="33.0" prefWidth="116.0" style="-fx-background-color: #F50CA0;" text="Login" textFill="WHITE">
         <font>
             <Font name="Gill Sans MT Bold" size="13.0" />
         </font>
     </Button>
-    <Label fx:id="timeZoneLabel" layoutX="358.0" layoutY="321.0" text="Time Zone" textAlignment="RIGHT" textFill="#fcfefc">
+    <Label fx:id="timeZoneLabel" layoutX="348.0" layoutY="328.0" text="Time Zone" textAlignment="RIGHT" textFill="#fcfefc">
         <font>
             <Font name="Gill Sans MT" size="12.0" />
         </font>
     </Label>
-    <Label fx:id="zoneID" disable="true" layoutX="445.0" layoutY="321.0" prefHeight="14.0" prefWidth="116.0" text="timezone placeholder" textFill="WHITE">
+    <Label fx:id="zoneID" disable="true" layoutX="435.0" layoutY="328.0" prefHeight="14.0" prefWidth="116.0" text="timezone placeholder" textFill="WHITE">
         <font>
             <Font name="Gill Sans MT" size="12.0" />
         </font>
     </Label>
-    <Line endX="-92.0" endY="103.00003051757812" layoutX="434.0" layoutY="185.0" startX="123.0" startY="103.00003051757812" stroke="#fcfefc" strokeWidth="2.0" />
-    <Pane prefHeight="380.0" prefWidth="300.0" style="-fx-background-color: #fffefc;">
-        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#fffbfa" height="78.0" layoutX="52.0" layoutY="151.0" stroke="#342039" strokeLineJoin="ROUND" strokeType="OUTSIDE" width="197.0" />
-        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#fffbfa" height="34.0" layoutX="93.0" layoutY="212.0" stroke="#fffbfa" strokeType="INSIDE" width="116.0" />
-        <Label layoutX="57.0" layoutY="31.0" prefHeight="320.0" prefWidth="186.0" text="W" textFill="#50add757">
-            <font>
-                <Font name="Lucida Bright" size="200.0" />
-            </font>
-        </Label>
-        <Label layoutX="103.0" layoutY="93.0" prefHeight="194.0" prefWidth="96.0" text="wick" textAlignment="CENTER" textFill="#373436">
-            <font>
-                <Font name="Brush Script MT Italic" size="69.0" />
-            </font>
-        </Label>
-        <Label fx:id="logoTagline" alignment="CENTER" layoutX="50.0" layoutY="229.0" prefHeight="15.0" prefWidth="199.0" text="GLOBAL CONSULTING" textAlignment="CENTER" textFill="#373436">
-            <font>
-                <Font name="Bodoni MT" size="18.0" />
-            </font>
-        </Label>
-    </Pane>
+    <Label fx:id="usernameLabel" layoutX="343.0" layoutY="107.0" text="Username" textFill="#fcfefc">
+        <font>
+            <Font name="Gill Sans MT" size="14.0" />
+        </font>
+    </Label>
+    <Label fx:id="passwordLabel" layoutX="344.0" layoutY="179.0" text="Password" textFill="#fcfefc">
+        <font>
+            <Font name="Gill Sans MT" size="14.0" />
+        </font>
+    </Label>
 </AnchorPane>
