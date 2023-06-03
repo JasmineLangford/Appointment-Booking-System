@@ -18,17 +18,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
- * This class is the controller for login.fxml.
- * The end-user will sign in with their username and password.
- * The language setting on the end-user's operating system will determine the language translation presented on the UI.
- * Input validation message for empty text fields (username and password text fields) and error message for
- * invalid username and/or password are also translated. For the scope of this project, there are French and
- * English translations available. The end-user's operating system will also determine a timezone, which will be
- * displayed on a label in the lower right-hand corner of the login screen.
+ * This class is the controller for login.fxml. The end-user will sign in with their credentials. The operating system
+ * being used by the end-user will also determine the timezone, which is displayed below the login button.
  */
 public class Login implements Initializable {
-
-    // login screen labels
     @FXML
     private Label usernameLabel;
     @FXML
@@ -40,15 +33,9 @@ public class Login implements Initializable {
     @FXML
     private Label zoneID;
     @FXML
-    private Label exit;
-
-    // end-user username and password input
-    @FXML
     private TextField usernameLogin;
     @FXML
     private PasswordField passwordLogin;
-
-    // error control message for language translations
     @FXML
     private String invalidLoginHeader;
     @FXML
@@ -58,7 +45,6 @@ public class Login implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Login initialized!");
 
-        // language translation
         ResourceBundle rb = ResourceBundle.getBundle("Nat", Locale.getDefault());
         usernameLabel.setText(rb.getString("usernameLabel"));
         passwordLabel.setText(rb.getString("passwordLabel"));
@@ -88,31 +74,31 @@ public class Login implements Initializable {
         boolean isValidUser = UserDAO.validateUser(username, password);
 
         if (isValidUser) {
-
+            MainMenu.toMainMenu(actionEvent);
             // check for appointments within 15 minutes on login
-            ObservableList<Appointment> checkAppointments = AppointmentDAO.allAppointments();
-            LocalDateTime currentDT = LocalDateTime.now();
-            LocalDateTime currentDTFifteen = LocalDateTime.now().plusMinutes(15);
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            boolean fifteenMinAppt = false;
-
-            for(Appointment a : checkAppointments) {
-                if ((a.getStart().isAfter(currentDT) || a.getStart().isEqual(currentDT)) &&
-                        ((a.getStart().isBefore(currentDTFifteen) || a.getStart().isEqual(currentDTFifteen)))) {
-                    Alert fifteenAlertTrue = new Alert(Alert.AlertType.INFORMATION, "You have an upcoming " +
-                            "appointment: " + '\n' + '\n' + "Appointment ID: " + a.getAppointmentID()
-                            + '\n' + "Date and Time: " +
-                            a.getStart().format(formatter) + '\n' + "User ID: " + a.getUserID(), ButtonType.OK);
-                    fifteenAlertTrue.showAndWait();
-                    fifteenMinAppt = true;
-                    break;
-                }
-            }
-            if(!fifteenMinAppt){
-                Alert fifteenAlertTrue = new Alert(Alert.AlertType.INFORMATION, "There are no upcoming " +
-                        "appointments.", ButtonType.OK);
-                fifteenAlertTrue.showAndWait();
-            }
+//            ObservableList<Appointment> checkAppointments = AppointmentDAO.allAppointments();
+//            LocalDateTime currentDT = LocalDateTime.now();
+//            LocalDateTime currentDTFifteen = LocalDateTime.now().plusMinutes(15);
+//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//            boolean fifteenMinAppt = false;
+//
+//            for(Appointment a : checkAppointments) {
+//                if ((a.getStart().isAfter(currentDT) || a.getStart().isEqual(currentDT)) &&
+//                        ((a.getStart().isBefore(currentDTFifteen) || a.getStart().isEqual(currentDTFifteen)))) {
+//                    Alert fifteenAlertTrue = new Alert(Alert.AlertType.INFORMATION, "You have an upcoming " +
+//                            "appointment: " + '\n' + '\n' + "Appointment ID: " + a.getAppointmentID()
+//                            + '\n' + "Date and Time: " +
+//                            a.getStart().format(formatter) + '\n' + "User ID: " + a.getUserID(), ButtonType.OK);
+//                    fifteenAlertTrue.showAndWait();
+//                    fifteenMinAppt = true;
+//                    break;
+//                }
+//            }
+//            if(!fifteenMinAppt){
+//                Alert fifteenAlertTrue = new Alert(Alert.AlertType.INFORMATION, "There are no upcoming " +
+//                        "appointments.", ButtonType.OK);
+//                fifteenAlertTrue.showAndWait();
+//            }
         } else {
             // error control message - end-user did not enter valid login credentials
             Alert invalidUser = new Alert(Alert.AlertType.ERROR, invalidLoginContent);
@@ -122,7 +108,7 @@ public class Login implements Initializable {
             return;
         }
         // change from login screen to main menu
-        MainMenu.toMainMenu(actionEvent);
+        //MainMenu.toMainMenu(actionEvent);
     }
 
     public void login_exit(MouseEvent mouseEvent) {
