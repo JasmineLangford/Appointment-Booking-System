@@ -10,6 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import model.Appointment;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -22,6 +23,10 @@ import java.util.*;
  * being used by the end-user will also determine the timezone, which is displayed below the login button.
  */
 public class Login implements Initializable {
+    @FXML
+    private Label validationIcon;
+    @FXML
+    private Label validationLabel;
     @FXML
     private Label usernameLabel;
     @FXML
@@ -41,6 +46,7 @@ public class Login implements Initializable {
     @FXML
     private String invalidLoginContent;
 
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Login initialized!");
@@ -52,6 +58,10 @@ public class Login implements Initializable {
         loginButtonLabel.setText(rb.getString("loginButtonLabel"));
         invalidLoginHeader = rb.getString("invalidLoginHeader");
         invalidLoginContent = rb.getString("invalidLoginContent");
+
+        // set input validation
+        validationIcon.setVisible(false);
+        validationLabel.setVisible(false);
 
         // set end-user timezone
         zoneID.setText(ZoneId.systemDefault().toString());
@@ -99,16 +109,19 @@ public class Login implements Initializable {
 //                        "appointments.", ButtonType.OK);
 //                fifteenAlertTrue.showAndWait();
 //            }
+        } else if (usernameLogin.getText().isBlank()) {
+            validationIcon.setVisible(true);
+            validationLabel.setVisible(true);
+            validationLabel.setText("Please enter valid username.");
+        } else if (passwordLogin.getText().isBlank()) {
+            validationIcon.setVisible(true);
+            validationLabel.setVisible(true);
+            validationLabel.setText("Please enter valid password.");
         } else {
-            // error control message - end-user did not enter valid login credentials
-            Alert invalidUser = new Alert(Alert.AlertType.ERROR, invalidLoginContent);
-            invalidUser.setTitle(" ");
-            invalidUser.setHeaderText(invalidLoginHeader);
-            invalidUser.showAndWait();
-            return;
+            validationIcon.setVisible(true);
+            validationLabel.setVisible(true);
+            validationLabel.setText("Username and/or password is incorrect.");
         }
-        // change from login screen to main menu
-        //MainMenu.toMainMenu(actionEvent);
     }
 
     public void login_exit(MouseEvent mouseEvent) {

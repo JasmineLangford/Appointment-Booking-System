@@ -6,31 +6,42 @@
 <?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="374.0" prefWidth="600.0" style="-fx-border-radius: 20px;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Login">
-   <Pane layoutX="-1.0" onMouseClicked="#login_exit" prefHeight="380.0" prefWidth="263.0" style="-fx-background-color: #ffffff; -fx-background-radius: 20px;">
-      <children>
-          <ImageView fitHeight="316.0" fitWidth="467.0" layoutX="-102.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-radius: 20px;">
-              <Image url="@../resources/login-image.jpg" />
-          </ImageView>
-      </children>
-   </Pane>
-   <Pane layoutX="270.0" prefHeight="380.0" prefWidth="330.0" style="-fx-background-color: #000000; -fx-background-radius: 20px;">
-      <children>
-         <ImageView fitHeight="111.0" fitWidth="116.0" layoutX="105.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
-            <image>
-               <Image url="@../resources/thecakeshop-logo.png" />
-            </image>
-         </ImageView>
-         <Pane layoutX="17.0" layoutY="-61.0" prefHeight="200.0" prefWidth="9.0" />
-         <Pane layoutX="-7.0" prefHeight="380.0" prefWidth="26.0" style="-fx-background-color: #000000;" />
-         <Label layoutX="291.0" layoutY="23.0" onMouseClicked="#login_exit" text="X" textFill="#fcfefc">
+    <Pane layoutX="-1.0" onMouseClicked="#login_exit" prefHeight="380.0" prefWidth="263.0"
+          style="-fx-background-color: #ffffff; -fx-background-radius: 20px;">
+        <ImageView fitHeight="316.0" fitWidth="467.0" layoutX="-102.0" layoutY="34.0" pickOnBounds="true"
+                   preserveRatio="true" style="-fx-border-radius: 20px;">
+            <Image url="@../resources/login-image.jpg"/>
+        </ImageView>
+    </Pane>
+    <Pane layoutX="270.0" prefHeight="380.0" prefWidth="330.0"
+          style="-fx-background-color: #000000; -fx-background-radius: 20px;">
+        <ImageView fitHeight="111.0" fitWidth="116.0" layoutX="105.0" layoutY="-1.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <Image url="@../resources/thecakeshop-logo.png"/>
+        </ImageView>
+        <Pane layoutX="17.0" layoutY="-61.0" prefHeight="200.0" prefWidth="9.0"/>
+        <Pane layoutX="-7.0" prefHeight="380.0" prefWidth="26.0" style="-fx-background-color: #000000;"/>
+        <Label layoutX="291.0" layoutY="23.0" onMouseClicked="#login_exit" text="X" textFill="#fcfefc">
             <font>
-               <Font name="Gill Sans MT" size="14.0" />
+                <Font name="Gill Sans MT" size="14.0"/>
             </font>
-         </Label>
-      </children></Pane>
-    <TextField fx:id="usernameLogin" layoutX="335.0" layoutY="117.0" prefHeight="33.0" prefWidth="197.0" />
-    <PasswordField fx:id="passwordLogin" layoutX="335.0" layoutY="196.0" prefHeight="33.0" prefWidth="197.0" />
-    <Button fx:id="loginButtonLabel" layoutX="375.0" layoutY="259.0" mnemonicParsing="false" onAction="#loginButton" prefHeight="33.0" prefWidth="116.0" style="-fx-background-color: #F50CA0;" text="Login" textFill="WHITE">
+        </Label>
+        <Label fx:id="validationIcon" alignment="CENTER" layoutX="67.0" layoutY="227.0" prefHeight="14.0"
+               prefWidth="18.0" style="-fx-background-color: #ff0033; -fx-background-radius: 4px;" text="!"
+               textAlignment="RIGHT" textFill="WHITE">
+           <font>
+               <Font name="System Bold" size="19.0"/>
+           </font>
+        </Label>
+        <Label fx:id="validationLabel" layoutX="91.0" layoutY="232.0" text="Label" textFill="WHITE">
+           <font>
+               <Font size="10.0"/>
+           </font>
+        </Label>
+    </Pane>
+    <TextField fx:id="usernameLogin" layoutX="335.0" layoutY="124.0" prefHeight="33.0" prefWidth="197.0" />
+    <PasswordField fx:id="passwordLogin" layoutX="335.0" layoutY="191.0" prefHeight="33.0" prefWidth="197.0" />
+    <Button fx:id="loginButtonLabel" layoutX="375.0" layoutY="262.0" mnemonicParsing="false" onAction="#loginButton" prefHeight="33.0" prefWidth="116.0" style="-fx-background-color: #F50CA0;" text="Login" textFill="WHITE">
         <font>
             <Font name="Gill Sans MT Bold" size="13.0" />
         </font>
@@ -45,12 +56,12 @@
             <Font name="Gill Sans MT" size="12.0" />
         </font>
     </Label>
-    <Label fx:id="usernameLabel" layoutX="337.0" layoutY="94.0" text="Username" textFill="#fcfefc">
+    <Label fx:id="usernameLabel" layoutX="337.0" layoutY="101.0" text="Username" textFill="#fcfefc">
         <font>
             <Font name="Gill Sans MT" size="14.0" />
         </font>
     </Label>
-    <Label fx:id="passwordLabel" layoutX="338.0" layoutY="174.0" text="Password" textFill="#fcfefc">
+    <Label fx:id="passwordLabel" layoutX="338.0" layoutY="169.0" text="Password" textFill="#fcfefc">
         <font>
             <Font name="Gill Sans MT" size="14.0" />
         </font>
