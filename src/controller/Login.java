@@ -41,11 +41,6 @@ public class Login implements Initializable {
     private TextField usernameLogin;
     @FXML
     private PasswordField passwordLogin;
-    @FXML
-    private String invalidLoginHeader;
-    @FXML
-    private String invalidLoginContent;
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -56,8 +51,6 @@ public class Login implements Initializable {
         passwordLabel.setText(rb.getString("passwordLabel"));
         timeZoneLabel.setText(rb.getString("timezone"));
         loginButtonLabel.setText(rb.getString("loginButtonLabel"));
-        invalidLoginHeader = rb.getString("invalidLoginHeader");
-        invalidLoginContent = rb.getString("invalidLoginContent");
 
         // set input validation
         validationIcon.setVisible(false);
@@ -124,7 +117,10 @@ public class Login implements Initializable {
         }
     }
 
-    public void login_exit(MouseEvent mouseEvent) {
+    /**
+     * This method closes the login screen.
+     */
+    public void login_exit() {
         Platform.exit();
     }
 }
