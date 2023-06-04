@@ -52,7 +52,6 @@ public class Main extends Application {
         Scene scene = new Scene(root, 600, 380);
         primaryStage.setScene(scene);
         primaryStage.initStyle(StageStyle.TRANSPARENT);
-        primaryStage.setTitle("Appointment Booking System");
         scene.setFill(Color.TRANSPARENT);
         root.setStyle("-fx-background-color: transparent;");
         root.setStyle("-fx-background-radius: 30px 30px 30px 30px;");

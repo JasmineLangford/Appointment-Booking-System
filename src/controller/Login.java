@@ -1,21 +1,16 @@
 package controller;
 
-import DAO.AppointmentDAO;
 import DAO.UserDAO;
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
-import model.Appointment;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.*;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -61,7 +56,7 @@ public class Login implements Initializable {
     }
 
     /**
-     * This method navigates the end-user to the Main Menu upon successful login.
+     * This method navigates the end-user to the home screen upon successful login.
      * Error message is displayed if login is unsuccessful.
      *
      * @param actionEvent Login button is clicked.
@@ -77,7 +72,7 @@ public class Login implements Initializable {
         boolean isValidUser = UserDAO.validateUser(username, password);
 
         if (isValidUser) {
-            MainMenu.toMainMenu(actionEvent);
+            Home.toHomeScreen(actionEvent);
             // check for appointments within 15 minutes on login
 //            ObservableList<Appointment> checkAppointments = AppointmentDAO.allAppointments();
 //            LocalDateTime currentDT = LocalDateTime.now();
