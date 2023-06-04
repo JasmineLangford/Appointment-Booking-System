@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Font?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.Customers"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <TableView fx:id="mainCustomerTable" layoutX="145.0" layoutY="167.0" prefHeight="176.0" prefWidth="827.0">
+        <columns>
+            <TableColumn fx:id="customerIdCol" prefWidth="75.0" text="Customer ID" />
+            <TableColumn fx:id="customerNameCol" prefWidth="128.0000228881836" text="Name" />
+            <TableColumn fx:id="customerAddressCol" prefWidth="137.66665649414062" text="Address" />
+            <TableColumn fx:id="customerStateCol" prefWidth="139.33334350585938" text="State/Province" />
+            <TableColumn fx:id="customerCountryCol" prefWidth="90.00006103515625" text="Country" />
+            <TableColumn fx:id="customerPostalCol" prefWidth="116.6666259765625" text="Postal Code" />
+            <TableColumn fx:id="customerPhoneCol" prefWidth="138.33331298828125" text="Phone Number" />
+        </columns>
+    </TableView>
+
+    <Button layoutX="629.0" layoutY="255.0" mnemonicParsing="false" onAction="#addCustomer" prefHeight="25.0" prefWidth="70.0" style="-fx-background-color: #50add7;" text="Add" textFill="#fcfefc">
+        <font>
+            <Font name="Gill Sans MT Bold" size="13.0" />
+        </font>
+    </Button>
+    <Button layoutX="710.0" layoutY="255.0" mnemonicParsing="false" onAction="#updateCustomer" prefHeight="25.0" prefWidth="70.0" style="-fx-background-color: #50add7;" text="Update" textFill="#fcfefc">
+        <font>
+            <Font name="Gill Sans MT Bold" size="13.0" />
+        </font>
+    </Button>
+    <Button layoutX="791.0" layoutY="255.0" mnemonicParsing="false" onAction="#deleteCustomerRow" prefHeight="25.0" prefWidth="70.0" style="-fx-background-color: #50add7;" text="Delete" textFill="#fcfefc">
+        <font>
+            <Font name="Gill Sans MT Bold" size="13.0" />
+        </font>
+    </Button>
+
+</AnchorPane>
