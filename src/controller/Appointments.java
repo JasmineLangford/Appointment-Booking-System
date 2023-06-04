@@ -1,6 +1,8 @@
 package controller;
 
 import DAO.AppointmentDAO;
+import DAO.UserDAO;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,93 +14,204 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Label;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.Appointment;
+import DAO.CustomerDAO;
+import model.Customer;
+import model.User;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+
+/**
+ * This class is the controller for appointments.fxml.
+ * End-user can also navigate to the reports screen.
+ */
 public class Appointments implements Initializable {
+    @FXML
+    public Label currentDate;
+    @FXML
+    public Label currentUser;
     public DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     public ToggleGroup apptViewToggle;
     public RadioButton viewByMonth;
     public RadioButton viewByWeek;
     public RadioButton viewAllAppts;
-    public Label currentDate;
+    @FXML
+    public TableColumn<Appointment,String> apptEndCol;
     @FXML
     private TableView<Appointment> mainApptTable;
     @FXML
-    private TableColumn<Appointment, String> apptIDCol;
-    @FXML
     private TableColumn<Appointment, String> apptTitleCol;
     @FXML
-    private TableColumn<Appointment, String> apptDescCol;
-    @FXML
     private TableColumn<Appointment, String> apptLocationCol;
-    @FXML
-    private TableColumn<Appointment, String> apptContactCol;
     @FXML
     private TableColumn<Appointment, String> apptTypeCol;
     @FXML
     private TableColumn<Appointment, String> apptStartCol;
     @FXML
-    private TableColumn<Appointment, String> apptEndCol;
-    @FXML
     private TableColumn<Appointment, String> apptCustCol;
     @FXML
     private TableColumn<Appointment, String> apptUserCol;
 
+    /**
+     * This method launches the home screen.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // appointment table columns
-        apptIDCol.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
-        apptTitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
-        apptDescCol.setCellValueFactory(new PropertyValueFactory<>("description"));
-        apptLocationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
-        apptContactCol.setCellValueFactory(new PropertyValueFactory<>("contactID"));
-        apptTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-        apptCustCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
-        apptUserCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
+        System.out.println("Main Menu initialized!");
 
-    // appointment table columns
-        apptIDCol.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
-        apptTitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
-        apptDescCol.setCellValueFactory(new PropertyValueFactory<>("description"));
-        apptLocationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
-        apptContactCol.setCellValueFactory(new PropertyValueFactory<>("contactID"));
-        apptTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-        apptCustCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
-        apptUserCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
+        // Display current date
+        LocalDate current = LocalDate.now();
+        DateTimeFormatter formatCurrentDate = DateTimeFormatter.ofPattern("MMMM d, yyyy");
+        String formattedDate = current.format(formatCurrentDate);
+        currentDate.setText("Today," + " " + formattedDate);
 
-    // lambda
+        // Set appointment table columns
+        apptTitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+        apptLocationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
+        apptTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        apptCustCol.setCellValueFactory(cellData -> {
+            Appointment appointment = cellData.getValue();
+            int customerId = appointment.getCustomerID();
+            Customer customer = null;
+            try {
+                customer = CustomerDAO.allCustomers().get(customerId);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            String customerName = (customer != null) ? customer.getCustomerName() : "";
+            return new SimpleStringProperty(customerName);
+        });
+        apptUserCol.setCellValueFactory(cellData -> {
+            Appointment appointment = cellData.getValue();
+            int userId = appointment.getUserID();
+            User user;
+            try {
+                user = UserDAO.allUsers().get(userId);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            String userFirstLastName = (user != null) ? user.getUserFirstName() + " " + user.getUserLastName(): "";
+            return new SimpleStringProperty(userFirstLastName);
+        });
+
         apptStartCol.setCellValueFactory(cellData ->
-            new SimpleStringProperty(cellData.getValue().getStart().format(formatter)));
+                new SimpleStringProperty(cellData.getValue().getStart().format(formatter)));
         apptEndCol.setCellValueFactory(cellData ->
-            new SimpleStringProperty(cellData.getValue().getEnd().format(formatter)));
-
+                new SimpleStringProperty(cellData.getValue().getEnd().format(formatter)));
         try {
-        loadApptTable();
-    } catch (SQLException e) {
-        e.printStackTrace();
+            loadApptTable();
+            showApptAlert();
+        } catch (
+                SQLException e) {
+            e.printStackTrace();
+        }
     }
-}
 
+    private static void showApptAlert() {
+        ObservableList<Appointment> checkAppointments;
+        try {
+            checkAppointments = AppointmentDAO.allAppointments();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        LocalDateTime currentDT = LocalDateTime.now();
+        LocalDateTime currentDTFifteen = LocalDateTime.now().plusMinutes(15);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        boolean fifteenMinAppt = false;
 
-    // load appointment tableview
+        for(Appointment a : checkAppointments) {
+            if ((a.getStart().isAfter(currentDT) || a.getStart().isEqual(currentDT)) &&
+                    ((a.getStart().isBefore(currentDTFifteen) || a.getStart().isEqual(currentDTFifteen)))) {
+                Alert fifteenAlertTrue = new Alert(Alert.AlertType.INFORMATION, "You have an upcoming " +
+                        "appointment: " + '\n' + '\n' + "Appointment ID: " + a.getAppointmentID()
+                        + '\n' + "Date and Time: " +
+                        a.getStart().format(formatter) + '\n' + "User ID: " + a.getUserID(), ButtonType.OK);
+                fifteenAlertTrue.setTitle("Appointment Alert");
+                fifteenAlertTrue.showAndWait();
+                fifteenMinAppt = true;
+                break;
+            }
+        }
+        if(!fifteenMinAppt){
+            Alert fifteenAlertTrue = new Alert(Alert.AlertType.INFORMATION, "There are no upcoming " +
+                    "appointments.", ButtonType.OK);
+            fifteenAlertTrue.setTitle("Appointment Alert");
+            fifteenAlertTrue.showAndWait();
+        }
+    }
+
+    /**
+     * This method takes the end-user to the main menu from another screen.
+     *
+     * @param actionEvent When button is clicked.
+     * @throws IOException The exception to throw if I/O error occurs.
+     */
+    public static void toAppointments(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load((Objects.requireNonNull(Appointments.class.getResource("/view/appointments.fxml"))));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, 1108, 538);
+        scene.setFill(Color.TRANSPARENT);
+        root.setStyle("-fx-background-radius: 30px 30px 30px 30px;");
+        stage.setScene(scene);
+        stage.show();
+        stage.centerOnScreen();
+        stage.setResizable(false);
+    }
+
+    public void toCustomers(MouseEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/customers.fxml"))));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, 1108, 620);
+        stage.setScene(scene);
+        stage.show();
+        stage.centerOnScreen();
+        stage.setResizable(false);
+    }
+    /**
+     * This method takes the end-user to view reports on the Reports screen.
+     *
+     * @param actionEvent Reports button is clicked (located on the right panel).
+     * @throws IOException The exception to throw if I/O error occurs.
+     */
+    public void toReports(MouseEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/reports.fxml"))));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, 1108, 620);
+        stage.setScene(scene);
+        stage.show();
+        stage.centerOnScreen();
+        stage.setResizable(false);
+    }
+
     public void loadApptTable() throws SQLException {
         ObservableList<Appointment> allAppointments = AppointmentDAO.allAppointments();
+
+        for (Appointment appointment : allAppointments) {
+            int customerId = appointment.getCustomerID();
+            Customer customer = CustomerDAO.allCustomers().get(customerId);
+            String customerName = (customer != null) ? customer.getCustomerName() : "";
+            assert customer != null;
+            customer.setCustomerName(customerName);
+        }
+
         mainApptTable.setItems(allAppointments);
         mainApptTable.getSelectionModel().clearSelection();
     }
 
-    // show all appointments if All Appointments radio button selected - default selection
     public void changeToAllAppts() throws SQLException {
         ObservableList<Appointment> allAppointments = AppointmentDAO.allAppointments();
         for (Appointment ignored : allAppointments) {
@@ -210,7 +323,20 @@ public class Appointments implements Initializable {
             mainApptTable.getSelectionModel().clearSelection();
         }
     }
-
-    public void toAppointments(MouseEvent mouseEvent) {
+    /**
+     * This method closes the application and an alert will ask the end-user to confirm close.
+     */
+    public void closeApp() {
+        exitApp();
+    }
+    public void exitApp() {
+        Alert closeConfirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to exit the " +
+                "application?", ButtonType.YES, ButtonType.NO);
+        closeConfirm.setTitle("Exit Application");
+        Optional<ButtonType> result = closeConfirm.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.YES) {
+            Platform.exit();
+            System.out.println("Application Closed");
+        }
     }
 }

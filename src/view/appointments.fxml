@@ -6,125 +6,129 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Appointments">
-
-<Pane prefHeight="620.0" prefWidth="270.0" style="-fx-background-color: black; -fx-background-radius: 30px;">
-    <ImageView fitHeight="107.0" fitWidth="93.0" layoutX="9.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true" />
-    <Label layoutX="77.0" layoutY="188.0" text="Home" textFill="WHITE">
-        <font>
-            <Font name="Century Gothic" size="16.0" />
-        </font>
-    </Label>
-    <Pane layoutX="31.0" layoutY="249.0" onMouseClicked="#toAppointments">
-        <Label layoutX="44.0" layoutY="3.0" text="Appointments" textFill="WHITE">
-            <font>
-                <Font name="Century Gothic" size="16.0" />
-            </font>
-        </Label>
-        <ImageView fitHeight="25.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="@../resources/appointments.png" />
-        </ImageView>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="537.0" prefWidth="1108.0" style="-fx-background-radius: 20px;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Appointments">
+    <Pane prefHeight="539.0" prefWidth="296.0" style="-fx-background-color: black; -fx-background-radius: 30px;">
+        <ImageView fitHeight="107.0" fitWidth="93.0" layoutX="9.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true" />
+        <Pane layoutX="34.0" layoutY="195.0">
+            <Label layoutX="43.0" layoutY="3.0" text="Appointments" textFill="WHITE">
+                <font>
+                    <Font name="Gill Sans MT" size="16.0" />
+                </font>
+            </Label>
+            <ImageView fitHeight="25.0" fitWidth="31.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+                <Image url="@../resources/appointments.png" />
+            </ImageView>
+        </Pane>
+        <Pane layoutX="34.0" layoutY="307.0" onMouseClicked="#toCustomers" />
+        <Pane layoutX="34.0" layoutY="368.0" onMouseClicked="#toReports" />
+        <Pane layoutX="24.0" layoutY="522.0" onMouseClicked="#exitApp" />
+       <Line endX="94.33341979980469" layoutX="76.0" layoutY="230.0" startX="1.33331298828125" stroke="#f50ca0" strokeWidth="5.0" />
+         <Label layoutX="76.0" layoutY="260.0" text="Customers" textFill="WHITE">
+             <font>
+                 <Font name="Gill Sans MT" size="16.0" />
+             </font>
+         </Label>
+         <ImageView fitHeight="25.0" fitWidth="31.0" layoutX="34.0" layoutY="257.0" pickOnBounds="true" preserveRatio="true">
+             <Image url="@../resources/customers.png" />
+         </ImageView>
+         <Label layoutX="77.0" layoutY="318.0" text="Reports" textFill="WHITE">
+             <font>
+                 <Font name="Gill Sans MT" size="16.0" />
+             </font>
+         </Label>
+         <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="34.0" layoutY="315.0" pickOnBounds="true" preserveRatio="true">
+             <Image url="@../resources/reports.png" />
+         </ImageView>
+         <Label layoutX="75.0" layoutY="463.0" text="Logout" textFill="WHITE">
+             <font>
+                 <Font name="Gill Sans MT" size="16.0" />
+             </font>
+         </Label>
+         <ImageView fitHeight="44.0" fitWidth="39.0" layoutX="27.0" layoutY="453.0" pickOnBounds="true" preserveRatio="true">
+             <Image url="@../resources/arrow-exit.png" />
+         </ImageView>
     </Pane>
-    <Pane layoutX="34.0" layoutY="307.0">
-        <Label layoutX="42.0" layoutY="3.0" text="Customers" textFill="WHITE">
-            <font>
-                <Font name="Century Gothic" size="16.0" />
-            </font>
-        </Label>
-        <ImageView fitHeight="25.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="@../resources/customers.png" />
+    <Pane layoutX="218.0" layoutY="-1.0" prefHeight="539.0" prefWidth="891.0" style="-fx-background-radius: 30px; -fx-background-color: #323232;">
+        <TableView fx:id="mainApptTable" layoutX="45.0" layoutY="236.0" prefHeight="171.0" prefWidth="789.0">
+            <columns>
+                <TableColumn fx:id="apptStartCol" prefWidth="102.99996948242188" text="Start Date/Time" />
+                <TableColumn fx:id="apptEndCol" prefWidth="107.0" text="End Date/Time" />
+                <TableColumn fx:id="apptCustCol" prefWidth="156.66671752929688" text="Customer Name" />
+                <TableColumn fx:id="apptTypeCol" prefWidth="98.0" text="Type" />
+                <TableColumn fx:id="apptTitleCol" minWidth="3.33331298828125" prefWidth="99.66668701171875" text="Title" />
+                <TableColumn fx:id="apptUserCol" minWidth="5.3333740234375" prefWidth="106.3333740234375" text="Employee" />
+                <TableColumn fx:id="apptLocationCol" prefWidth="115.0" text="Location" />
+            </columns>
+        </TableView>
+        <ImageView fitHeight="25.0" fitWidth="24.0" layoutX="615.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../resources/today.png" />
         </ImageView>
-    </Pane>
-    <Pane layoutX="34.0" layoutY="368.0">
-        <Label layoutX="42.0" layoutY="2.0" text="Reports" textFill="WHITE">
-            <font>
-                <Font name="Century Gothic" size="16.0" />
-            </font>
-        </Label>
-        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="@../resources/reports.png" />
-        </ImageView>
-    </Pane>
-    <Pane layoutX="24.0" layoutY="522.0">
-        <Label layoutX="44.0" layoutY="10.0" text="Logout" textFill="WHITE">
-            <font>
-                <Font name="Century Gothic" size="16.0" />
-            </font>
-        </Label>
-        <ImageView fitHeight="44.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="@../resources/arrow-exit.png" />
-        </ImageView>
-    </Pane>
-    <ImageView fitHeight="32.0" fitWidth="25.0" layoutX="34.0" layoutY="185.0" pickOnBounds="true" preserveRatio="true">
-        <Image url="@../resources/home.png" />
-    </ImageView>
-</Pane>
-<Pane layoutX="218.0" layoutY="-1.0" prefHeight="621.0" prefWidth="891.0" style="-fx-background-radius: 30px; -fx-background-color: #323232;">
-    <Line endX="720.6666870117188" layoutX="137.0" layoutY="312.0" startX="-100.0" stroke="#373436" strokeWidth="3.0" />
-
-    <ImageView fitHeight="25.0" fitWidth="24.0" layoutX="627.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true">
-        <Image url="@../resources/today.png" />
-    </ImageView>
-    <Label layoutX="848.0" layoutY="24.0" text="X" textFill="WHITE">
-        <font>
+      <Label layoutX="848.0" layoutY="24.0" onMouseClicked="#closeApp" text="X" textFill="WHITE">
+         <font>
             <Font name="Century Gothic Bold" size="18.0" />
-        </font>
-    </Label>
-    <Label fx:id="currentDate" layoutX="660.0" layoutY="48.0" text="Today's Date" textFill="WHITE">
-        <font>
-            <Font name="Century Gothic Bold" size="12.0" />
-        </font>
-    </Label>
-       <TableView fx:id="mainApptTable" layoutX="27.0" layoutY="159.0" prefHeight="167.0" prefWidth="827.0">
-           <columns>
-               <TableColumn fx:id="apptIDCol" prefWidth="50.66667556762695" text="Appt ID" />
-               <TableColumn fx:id="apptTitleCol" prefWidth="59.33332061767578" text="Title" />
-               <TableColumn fx:id="apptDescCol" prefWidth="103.66670227050781" text="Description" />
-               <TableColumn fx:id="apptLocationCol" prefWidth="70.00001525878906" text="Location" />
-               <TableColumn fx:id="apptContactCol" prefWidth="68.0" text="Contact ID" />
-               <TableColumn fx:id="apptTypeCol" prefWidth="100.99996948242188" text="Type" />
-               <TableColumn fx:id="apptStartCol" prefWidth="125.33328247070312" text="Start Date/Time" />
-               <TableColumn fx:id="apptEndCol" prefWidth="126.0" text="End Date/time" />
-               <TableColumn fx:id="apptCustCol" prefWidth="74.66668701171875" text="Customer ID" />
-               <TableColumn fx:id="apptUserCol" prefWidth="47.0" text="User ID" />
-           </columns>
-       </TableView>
-       <RadioButton fx:id="viewAllAppts" layoutX="396.0" layoutY="121.0" mnemonicParsing="false" onAction="#changeToAllAppts" selected="true" text="All Appointments" textFill="WHITE">
+         </font>
+      </Label>
+       <Label fx:id="currentDate" layoutX="648.0" layoutY="29.0" text="Today's Date" textFill="WHITE">
+           <font>
+               <Font name="Century Gothic Bold" size="12.0" />
+           </font>
+       </Label>
+      <Label layoutX="44.0" layoutY="38.0" text="Welcome," textFill="WHITE">
+         <font>
+            <Font name="Century Gothic Bold" size="36.0" />
+         </font>
+      </Label>
+      <Label fx:id="currentUser" layoutX="228.0" layoutY="38.0" text="User!" textFill="WHITE">
+         <font>
+            <Font name="Century Gothic Bold" size="36.0" />
+         </font>
+      </Label>
+      <Label layoutX="45.0" layoutY="86.0" text="Check out the new appointment booking system" textFill="WHITE">
+         <font>
+            <Font name="Century Gothic Bold" size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="45.0" layoutY="147.0" text="Appointments" textFill="WHITE">
+         <font>
+            <Font name="Century Gothic Bold" size="20.0" />
+         </font>
+      </Label>
+      <Line endX="1.33331298828125" endY="-4.3333282470703125" layoutX="197.0" layoutY="156.0" startX="1.33331298828125" startY="10.666671752929688" stroke="#f50ca0" strokeWidth="5.0" />
+       <Button layoutX="687.0" layoutY="143.0" mnemonicParsing="false" onAction="#addAppt" prefHeight="32.0" prefWidth="142.0" style="-fx-background-color: #f50ca0;" text="+ Add Appointment" textFill="#fcfefc">
+           <font>
+               <Font name="Gill Sans MT Bold" size="13.0" />
+           </font>
+       </Button>
+       <Button layoutX="571.0" layoutY="429.0" mnemonicParsing="false" onAction="#updateAppt" prefHeight="32.0" prefWidth="98.0" style="-fx-background-color: #f50ca0;" text="View Details" textFill="#fcfefc">
+           <font>
+               <Font name="Gill Sans MT Bold" size="13.0" />
+           </font>
+       </Button>
+       <Button layoutX="681.0" layoutY="429.0" mnemonicParsing="false" onAction="#deleteApptRow" prefHeight="32.0" prefWidth="153.0" style="-fx-background-color: #f50ca0;" text="Cancel Appointment" textFill="#fcfefc">
+           <font>
+               <Font name="Gill Sans MT Bold" size="13.0" />
+           </font>
+       </Button>
+       <RadioButton fx:id="viewAllAppts" layoutX="44.0" layoutY="199.0" mnemonicParsing="false" onAction="#changeToAllAppts" selected="true" text="All Appointments" textFill="WHITE">
            <font>
                <Font name="Gill Sans MT" size="13.0" />
            </font>
            <toggleGroup>
                <ToggleGroup fx:id="apptViewToggle" />
            </toggleGroup>
-      </RadioButton>
-       <RadioButton fx:id="viewByMonth" layoutX="676.0" layoutY="121.0" mnemonicParsing="false" onAction="#changeToMonth" text="Current Month View" textFill="WHITE" toggleGroup="$apptViewToggle">
+       </RadioButton>
+       <RadioButton fx:id="viewByMonth" layoutX="324.0" layoutY="199.0" mnemonicParsing="false" onAction="#changeToMonth" text="Current Month View" textFill="WHITE" toggleGroup="$apptViewToggle">
            <font>
                <Font name="Gill Sans MT" size="13.0" />
            </font>
-      </RadioButton>
-       <RadioButton fx:id="viewByWeek" layoutX="528.0" layoutY="121.0" mnemonicParsing="false" onAction="#changeToWeek" text="Current Week View" textFill="WHITE" toggleGroup="$apptViewToggle">
+       </RadioButton>
+       <RadioButton fx:id="viewByWeek" layoutX="176.0" layoutY="199.0" mnemonicParsing="false" onAction="#changeToWeek" text="Current Week View" textFill="WHITE" toggleGroup="$apptViewToggle">
            <font>
                <Font name="Gill Sans MT" size="13.0" />
            </font>
-      </RadioButton>
-       <Button layoutX="616.0" layoutY="359.0" mnemonicParsing="false" onAction="#addAppt" prefHeight="25.0" prefWidth="70.0" style="-fx-background-color: #50add7;" text="Add" textFill="#fcfefc">
-           <font>
-               <Font name="Gill Sans MT Bold" size="13.0" />
-           </font>
-       </Button>
-       <Button layoutX="697.0" layoutY="359.0" mnemonicParsing="false" onAction="#updateAppt" prefHeight="25.0" prefWidth="70.0" style="-fx-background-color: #50add7;" text="Update" textFill="#fcfefc">
-           <font>
-               <Font name="Gill Sans MT Bold" size="13.0" />
-           </font>
-       </Button>
-       <Button layoutX="778.0" layoutY="359.0" mnemonicParsing="false" onAction="#deleteApptRow" prefHeight="25.0" prefWidth="70.0" style="-fx-background-color: #50add7;" text="Delete" textFill="#fcfefc">
-           <font>
-               <Font name="Gill Sans MT Bold" size="13.0" />
-           </font>
-       </Button>
-</Pane>
-<ImageView fitHeight="107.0" fitWidth="100.0" layoutX="13.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
-    <Image url="@../resources/thecakeshop-logo.png" />
-</ImageView>
-<Line endX="108.0" layoutX="76.0" layoutY="283.0" startX="1.33331298828125" stroke="#f50ca0" strokeWidth="5.0" />
+       </RadioButton>
+    </Pane>
+    <ImageView fitHeight="107.0" fitWidth="100.0" layoutX="13.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
+        <Image url="@../resources/thecakeshop-logo.png" />
+    </ImageView>
 </AnchorPane>
