@@ -9,7 +9,6 @@ import javafx.scene.control.*;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.time.*;
 import java.util.*;
 
@@ -56,13 +55,13 @@ public class Login implements Initializable {
     }
 
     /**
-     * This method navigates the end-user to the home screen upon successful login.
+     * This method navigates the end-user to the appointments screen upon successful login.
      * Error message is displayed if login is unsuccessful.
      *
      * @param actionEvent Login button is clicked.
      * @throws IOException The exception to throw if I/O error occurs.
      */
-    public void loginButton(ActionEvent actionEvent) throws IOException, SQLException {
+    public void loginButton(ActionEvent actionEvent) throws IOException {
 
         // end-user input
         String username = usernameLogin.getText();
@@ -72,31 +71,7 @@ public class Login implements Initializable {
         boolean isValidUser = UserDAO.validateUser(username, password);
 
         if (isValidUser) {
-            Home.toHomeScreen(actionEvent);
-            // check for appointments within 15 minutes on login
-//            ObservableList<Appointment> checkAppointments = AppointmentDAO.allAppointments();
-//            LocalDateTime currentDT = LocalDateTime.now();
-//            LocalDateTime currentDTFifteen = LocalDateTime.now().plusMinutes(15);
-//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-//            boolean fifteenMinAppt = false;
-//
-//            for(Appointment a : checkAppointments) {
-//                if ((a.getStart().isAfter(currentDT) || a.getStart().isEqual(currentDT)) &&
-//                        ((a.getStart().isBefore(currentDTFifteen) || a.getStart().isEqual(currentDTFifteen)))) {
-//                    Alert fifteenAlertTrue = new Alert(Alert.AlertType.INFORMATION, "You have an upcoming " +
-//                            "appointment: " + '\n' + '\n' + "Appointment ID: " + a.getAppointmentID()
-//                            + '\n' + "Date and Time: " +
-//                            a.getStart().format(formatter) + '\n' + "User ID: " + a.getUserID(), ButtonType.OK);
-//                    fifteenAlertTrue.showAndWait();
-//                    fifteenMinAppt = true;
-//                    break;
-//                }
-//            }
-//            if(!fifteenMinAppt){
-//                Alert fifteenAlertTrue = new Alert(Alert.AlertType.INFORMATION, "There are no upcoming " +
-//                        "appointments.", ButtonType.OK);
-//                fifteenAlertTrue.showAndWait();
-//            }
+            Appointments.toAppointments(actionEvent);
         } else if (usernameLogin.getText().isBlank()) {
             validationIcon.setVisible(true);
             validationLabel.setVisible(true);
