@@ -383,6 +383,6 @@ public class AddAppointment implements Initializable {
      * @throws IOException The exception to throw if I/O error occurs.
      */
     public void toMainMenu(ActionEvent actionEvent) throws IOException {
-        MainMenu.toMainMenu(actionEvent);
+        Home.toHomeScreen(actionEvent);
     }
 }

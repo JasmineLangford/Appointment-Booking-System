@@ -171,6 +171,6 @@ public class ModifyCustomer implements Initializable {
      * @throws IOException The exception to throw if end-user cannot return to the Main Menu.
      */
     public void toMainMenu(ActionEvent actionEvent) throws IOException {
-        MainMenu.toMainMenu(actionEvent);
+        Home.toHomeScreen(actionEvent);
     }
 }

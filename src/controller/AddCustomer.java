@@ -125,7 +125,7 @@ public class AddCustomer implements Initializable {
             Optional<ButtonType> result = addCustomer.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.YES){
                 CustomerDAO.addCustomer(addCustomerName,addAddress,addPhoneNumber,addPostalCode,addFirstLevel);
-                MainMenu.toMainMenu(actionEvent);
+                Home.toHomeScreen(actionEvent);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -139,7 +139,7 @@ public class AddCustomer implements Initializable {
      * @throws IOException The exception to throw if I/O error occurs.
      */
     public void toMainMenu(ActionEvent actionEvent) throws IOException {
-        MainMenu.toMainMenu(actionEvent);
+        Home.toHomeScreen(actionEvent);
     }
 
 }
