@@ -377,12 +377,12 @@ public class AddAppointment implements Initializable {
     }
 
     /**
-     * This method navigates the user back to the Main Menu.
+     * This method navigates the user to appointments screen.
      *
      * @param actionEvent Cancel button is clicked.
      * @throws IOException The exception to throw if I/O error occurs.
      */
     public void toMainMenu(ActionEvent actionEvent) throws IOException {
-        Home.toHomeScreen(actionEvent);
+        Appointments.toAppointments(actionEvent);
     }
 }

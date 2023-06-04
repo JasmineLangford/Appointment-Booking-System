@@ -336,7 +336,7 @@ public class ModifyAppointment implements Initializable {
                 AppointmentDAO.modifyAppointment(modApptID,modTitle, modDescription, modLocation, modType,
                         startDateTime,endDateTime,modCustID, modUserID, String.valueOf(modContact));
 
-                Home.toHomeScreen(actionEvent);
+                Appointments.toAppointments(actionEvent);
             } else {
                 Alert noChange = new Alert(Alert.AlertType.INFORMATION, "There were no changes made to this " +
                         "appointment.", ButtonType.OK);
@@ -357,6 +357,6 @@ public class ModifyAppointment implements Initializable {
         Alert noChange = new Alert(Alert.AlertType.INFORMATION, "There were no changes made to this " +
                 "appointment.", ButtonType.OK);
         noChange.showAndWait();
-        Home.toHomeScreen(actionEvent);
+        Appointments.toAppointments(actionEvent);
     }
 }
