@@ -25,8 +25,8 @@ public class UserDAO extends User {
      * @param userName The username.
      * @param password The password.
      */
-    public UserDAO(int userID, String userName, String password){
-        super(userID, userName, password);
+    public UserDAO(int userID, String userName, String password, String userFirstName, String userLastName){
+        super(userID, userName, password,userFirstName,userLastName);
     }
 
     /**
@@ -37,7 +37,7 @@ public class UserDAO extends User {
      */
     public static ObservableList<UserDAO> allUsers() throws SQLException {
         ObservableList<UserDAO> users = FXCollections.observableArrayList();
-        String userQuery = "SELECT User_ID, User_Name, Password FROM users ORDER BY User_ID ASC";
+        String userQuery = "SELECT User_ID, User_Name, Password, First_Name, Last_Name FROM users ORDER BY User_ID ASC";
         PreparedStatement ps = JDBC.connection.prepareStatement(userQuery);
         ResultSet rs = ps.executeQuery();
 
@@ -45,8 +45,10 @@ public class UserDAO extends User {
             int userID = rs.getInt("User_ID");
             String userName = rs.getString("User_Name");
             String password = rs.getString("Password");
+            String userFirstName = rs.getString("First_Name");
+            String userLastName = rs.getString("Last_Name");
 
-            UserDAO userDAO = new UserDAO (userID,userName,password);
+            UserDAO userDAO = new UserDAO(userID, userName, password, userFirstName, userLastName);
             users.add(userDAO);
         }
         return users;

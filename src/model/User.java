@@ -17,6 +17,8 @@ public class User {
     private String username;
     private String password;
     private int userID;
+    private String userFirstName;
+    private String userLastName;
 
     /**
      * This is the constructor for user credentials for login.
@@ -25,10 +27,12 @@ public class User {
      * @param userName The user's username.
      * @param userID The user ID.
      */
-    public User (int userID, String userName, String password){
+    public User (int userID, String userName, String password, String userFirstName, String userLastName){
         this.userID = userID;
         this.username = userName;
         this.password = password;
+        this.userFirstName = userFirstName;
+        this.userLastName = userLastName;
     }
 
     /**
@@ -83,5 +87,21 @@ public class User {
      */
     public void setUserID(int userID) {
         this.userID = userID;
+    }
+
+    public String getUserFirstName() {
+        return userFirstName;
+    }
+
+    public void setUserFirstName(String userFirstName) {
+        this.userFirstName = userFirstName;
+    }
+
+    public String getUserLastName() {
+        return userLastName;
+    }
+
+    public void setUserLastName(String userLastName) {
+        this.userLastName = userLastName;
     }
 }
