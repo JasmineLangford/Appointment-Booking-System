@@ -23,30 +23,42 @@
         <Pane layoutX="34.0" layoutY="368.0" onMouseClicked="#toReports" />
         <Pane layoutX="24.0" layoutY="522.0" onMouseClicked="#exitApp" />
        <Line endX="94.33341979980469" layoutX="76.0" layoutY="230.0" startX="1.33331298828125" stroke="#f50ca0" strokeWidth="5.0" />
-         <Label layoutX="76.0" layoutY="260.0" text="Customers" textFill="WHITE">
-             <font>
-                 <Font name="Gill Sans MT" size="16.0" />
-             </font>
-         </Label>
-         <ImageView fitHeight="25.0" fitWidth="31.0" layoutX="34.0" layoutY="257.0" pickOnBounds="true" preserveRatio="true">
-             <Image url="@../resources/customers.png" />
-         </ImageView>
-         <Label layoutX="77.0" layoutY="318.0" text="Reports" textFill="WHITE">
-             <font>
-                 <Font name="Gill Sans MT" size="16.0" />
-             </font>
-         </Label>
-         <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="34.0" layoutY="315.0" pickOnBounds="true" preserveRatio="true">
-             <Image url="@../resources/reports.png" />
-         </ImageView>
-         <Label layoutX="75.0" layoutY="463.0" text="Logout" textFill="WHITE">
-             <font>
-                 <Font name="Gill Sans MT" size="16.0" />
-             </font>
-         </Label>
-         <ImageView fitHeight="44.0" fitWidth="39.0" layoutX="27.0" layoutY="453.0" pickOnBounds="true" preserveRatio="true">
-             <Image url="@../resources/arrow-exit.png" />
-         </ImageView>
+      <Pane layoutX="34.0" layoutY="256.0" onMouseClicked="#toCustomers">
+         <children>
+               <Label layoutX="42.0" layoutY="3.0" text="Customers" textFill="WHITE">
+                   <font>
+                       <Font name="Gill Sans MT" size="16.0" />
+                   </font>
+               </Label>
+               <ImageView fitHeight="25.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                   <Image url="@../resources/customers.png" />
+               </ImageView>
+         </children>
+      </Pane>
+      <Pane layoutX="34.0" layoutY="315.0" onMouseClicked="#toReports">
+         <children>
+               <Label layoutX="43.0" layoutY="3.0" text="Reports" textFill="WHITE">
+                   <font>
+                       <Font name="Gill Sans MT" size="16.0" />
+                   </font>
+               </Label>
+               <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                   <Image url="@../resources/reports.png" />
+               </ImageView>
+         </children>
+      </Pane>
+      <Pane layoutX="27.0" layoutY="453.0" onMouseClicked="#toClose">
+         <children>
+               <Label layoutX="48.0" layoutY="10.0" text="Logout" textFill="WHITE">
+                   <font>
+                       <Font name="Gill Sans MT" size="16.0" />
+                   </font>
+               </Label>
+               <ImageView fitHeight="44.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
+                   <Image url="@../resources/arrow-exit.png" />
+               </ImageView>
+         </children>
+      </Pane>
     </Pane>
     <Pane layoutX="218.0" layoutY="-1.0" prefHeight="539.0" prefWidth="891.0" style="-fx-background-radius: 30px; -fx-background-color: #323232;">
         <TableView fx:id="mainApptTable" layoutX="45.0" layoutY="236.0" prefHeight="171.0" prefWidth="789.0">
@@ -63,7 +75,7 @@
         <ImageView fitHeight="25.0" fitWidth="24.0" layoutX="615.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
             <Image url="@../resources/today.png" />
         </ImageView>
-      <Label layoutX="848.0" layoutY="24.0" onMouseClicked="#closeApp" text="X" textFill="WHITE">
+      <Label layoutX="848.0" layoutY="24.0" onMouseClicked="#exitApp" text="X" textFill="WHITE">
          <font>
             <Font name="Century Gothic Bold" size="18.0" />
          </font>

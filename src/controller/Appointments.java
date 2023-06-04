@@ -17,6 +17,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.Appointment;
@@ -72,6 +73,10 @@ public class Appointments implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Main Menu initialized!");
+
+        // Display current user for welcome tagline
+        String firstName = UserDAO.getUserLogin().getUserFirstName();
+        currentUser.setText(firstName + "!");
 
         // Display current date
         LocalDate current = LocalDate.now();
@@ -323,12 +328,10 @@ public class Appointments implements Initializable {
             mainApptTable.getSelectionModel().clearSelection();
         }
     }
+
     /**
      * This method closes the application and an alert will ask the end-user to confirm close.
      */
-    public void closeApp() {
-        exitApp();
-    }
     public void exitApp() {
         Alert closeConfirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to exit the " +
                 "application?", ButtonType.YES, ButtonType.NO);
@@ -338,5 +341,8 @@ public class Appointments implements Initializable {
             Platform.exit();
             System.out.println("Application Closed");
         }
+    }
+    public void toClose() {
+        exitApp();
     }
 }
