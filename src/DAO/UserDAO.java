@@ -69,6 +69,7 @@ public class UserDAO extends User {
             if(rs.next()) {
                 userLogin = new User();
                 userLogin.setUsername(rs.getString("User_Name"));
+                userLogin.setUserFirstName(rs.getString("First_Name"));
 
                 // logs end-user login attempt as successful
                 Logger.trackerLog(username,DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"),true);

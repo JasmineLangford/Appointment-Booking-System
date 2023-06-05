@@ -1,43 +1,107 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
-<?import javafx.scene.text.Font?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controller.Customers"
-            prefHeight="400.0" prefWidth="600.0">
+<AnchorPane prefHeight="537.0" prefWidth="1108.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Customers">
+    <Pane prefHeight="539.0" prefWidth="296.0" style="-fx-background-color: black; -fx-background-radius: 30px;">
+        <ImageView fitHeight="107.0" fitWidth="93.0" layoutX="9.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true" />
+        <Pane layoutX="34.0" layoutY="195.0" onMouseClicked="#toAppointments">
+            <Label layoutX="43.0" layoutY="3.0" text="Appointments" textFill="WHITE">
+                <font>
+                    <Font name="Gill Sans MT" size="16.0" />
+                </font>
+            </Label>
+            <ImageView fitHeight="25.0" fitWidth="31.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+                <Image url="@../resources/appointments.png" />
+            </ImageView>
+        </Pane>
 
-    <TableView fx:id="mainCustomerTable" layoutX="145.0" layoutY="167.0" prefHeight="176.0" prefWidth="827.0">
-        <columns>
-            <TableColumn fx:id="customerIdCol" prefWidth="75.0" text="Customer ID" />
-            <TableColumn fx:id="customerNameCol" prefWidth="128.0000228881836" text="Name" />
-            <TableColumn fx:id="customerAddressCol" prefWidth="137.66665649414062" text="Address" />
-            <TableColumn fx:id="customerStateCol" prefWidth="139.33334350585938" text="State/Province" />
-            <TableColumn fx:id="customerCountryCol" prefWidth="90.00006103515625" text="Country" />
-            <TableColumn fx:id="customerPostalCol" prefWidth="116.6666259765625" text="Postal Code" />
-            <TableColumn fx:id="customerPhoneCol" prefWidth="138.33331298828125" text="Phone Number" />
-        </columns>
-    </TableView>
+        <Pane layoutX="34.0" layoutY="368.0" onMouseClicked="#toReports" />
+        <Line endX="69.0" layoutX="78.0" layoutY="284.0" startX="1.33331298828125" stroke="#f50ca0" strokeWidth="5.0" />
+        <Pane layoutX="34.0" layoutY="251.0">
+            <Label layoutX="42.0" layoutY="3.0" text="Customers" textFill="WHITE">
+                <font>
+                    <Font name="Gill Sans MT" size="16.0" />
+                </font>
+            </Label>
+            <ImageView fitHeight="25.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                <Image url="@../resources/customers.png" />
+            </ImageView>
+        </Pane>
+        <Pane layoutX="34.0" layoutY="315.0" onMouseClicked="#toReports">
+            <Label layoutX="43.0" layoutY="3.0" text="Reports" textFill="WHITE">
+                <font>
+                    <Font name="Gill Sans MT" size="16.0" />
+                </font>
+            </Label>
+            <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                <Image url="@../resources/reports.png" />
+            </ImageView>
+        </Pane>
+        <Pane layoutX="27.0" layoutY="453.0" onMouseClicked="#toClose">
+            <Label layoutX="48.0" layoutY="10.0" text="Logout" textFill="WHITE">
+                <font>
+                    <Font name="Gill Sans MT" size="16.0" />
+                </font>
+            </Label>
+            <ImageView fitHeight="44.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
+                <Image url="@../resources/arrow-exit.png" />
+            </ImageView>
+        </Pane>
+    </Pane>
+    <Pane layoutX="218.0" layoutY="-1.0" prefHeight="539.0" prefWidth="891.0" style="-fx-background-radius: 30px; -fx-background-color: #323232;">
+        <TableView fx:id="mainCustomerTable" layoutX="46.0" layoutY="196.0" prefHeight="204.0" prefWidth="788.0">
+            <columns>
+                <TableColumn fx:id="customerNameCol" prefWidth="159.66668701171875" text="Customer Name" />
+                <TableColumn fx:id="customerAddressCol" prefWidth="159.66665649414062" text="Address" />
+                <TableColumn fx:id="customerStateCol" prefWidth="137.66668701171875" text="State" />
+                <TableColumn fx:id="customerCountryCol" prefWidth="137.66668701171875" text="Country" />
+                <TableColumn fx:id="customerPostalCol" prefWidth="81.66668701171875" text="Postal Code" />
+                <TableColumn fx:id="customerPhoneCol" prefWidth="135.33343505859375" text="Phone Number" />
+            </columns>
+        </TableView>
 
-    <Button layoutX="629.0" layoutY="255.0" mnemonicParsing="false" onAction="#addCustomer" prefHeight="25.0" prefWidth="70.0" style="-fx-background-color: #50add7;" text="Add" textFill="#fcfefc">
-        <font>
-            <Font name="Gill Sans MT Bold" size="13.0" />
-        </font>
-    </Button>
-    <Button layoutX="710.0" layoutY="255.0" mnemonicParsing="false" onAction="#updateCustomer" prefHeight="25.0" prefWidth="70.0" style="-fx-background-color: #50add7;" text="Update" textFill="#fcfefc">
-        <font>
-            <Font name="Gill Sans MT Bold" size="13.0" />
-        </font>
-    </Button>
-    <Button layoutX="791.0" layoutY="255.0" mnemonicParsing="false" onAction="#deleteCustomerRow" prefHeight="25.0" prefWidth="70.0" style="-fx-background-color: #50add7;" text="Delete" textFill="#fcfefc">
-        <font>
-            <Font name="Gill Sans MT Bold" size="13.0" />
-        </font>
-    </Button>
-
+        <Button layoutX="695.0" layoutY="95.0" mnemonicParsing="false" onAction="#addCustomer" prefHeight="32.0" prefWidth="142.0" style="-fx-background-color: #f50ca0;" text="+ Add Customer" textFill="#fcfefc">
+            <font>
+                <Font name="Gill Sans MT Bold" size="13.0" />
+            </font>
+        </Button>
+        <Button layoutX="593.0" layoutY="431.0" mnemonicParsing="false" onAction="#updateCustomer" prefHeight="32.0" prefWidth="102.0" style="-fx-background-color: #f50ca0;" text="View Details" textFill="#fcfefc">
+            <font>
+                <Font name="Gill Sans MT Bold" size="13.0" />
+            </font>
+        </Button>
+        <Button layoutX="706.0" layoutY="431.0" mnemonicParsing="false" onAction="#deleteCustomerRow" prefHeight="32.0" prefWidth="127.0" style="-fx-background-color: #f50ca0;" text="Delete Customer" textFill="#fcfefc">
+            <font>
+                <Font name="Gill Sans MT Bold" size="13.0" />
+            </font>
+        </Button>
+       <Label layoutX="831.0" layoutY="30.0" onMouseClicked="#exitCustomers" text="X" textFill="WHITE">
+           <font>
+               <Font name="Century Gothic Bold" size="18.0" />
+           </font>
+       </Label>
+        <Label layoutX="45.0" layoutY="97.0" text="Customers" textFill="WHITE">
+            <font>
+                <Font name="Century Gothic Bold" size="20.0" />
+            </font>
+        </Label>
+        <Line endX="1.33331298828125" endY="-4.3333282470703125" layoutX="171.0" layoutY="108.0" startX="1.33331298828125" startY="10.666671752929688" stroke="#f50ca0" strokeWidth="5.0" />
+       <Label fx:id="currentDate" layoutX="634.0" layoutY="37.0" text="Today's Date" textFill="WHITE">
+           <font>
+               <Font name="Century Gothic Bold" size="12.0" />
+           </font>
+       </Label>
+       <ImageView fitHeight="25.0" fitWidth="24.0" layoutX="601.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
+           <Image url="@../resources/today.png" />
+       </ImageView>
+      <TextField fx:id="searchCustomer" layoutX="46.0" layoutY="149.0" prefHeight="26.0" prefWidth="212.0" promptText="Search by Customer Name" />
+    </Pane>
+    <ImageView fitHeight="107.0" fitWidth="100.0" layoutX="13.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
+        <Image url="@../resources/thecakeshop-logo.png" />
+    </ImageView>
 </AnchorPane>

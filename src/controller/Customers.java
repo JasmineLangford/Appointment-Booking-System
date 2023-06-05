@@ -1,7 +1,10 @@
 package controller;
 
 import DAO.CustomerDAO;
+import com.mysql.cj.jdbc.MysqlSQLXML;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -10,12 +13,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.Appointment;
 import model.Customer;
@@ -23,15 +25,18 @@ import model.Customer;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class Customers implements Initializable {
+    public Label currentDate;
+    @FXML
+    private TextField searchCustomer;
     @FXML
     private TableView<Customer> mainCustomerTable;
-    @FXML
-    private TableColumn<Customer, String> customerIdCol;
     @FXML
     private TableColumn<Customer, String> customerNameCol;
     @FXML
@@ -47,8 +52,13 @@ public class Customers implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // customer table columns
-        customerIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        // Display current date
+        LocalDate current = LocalDate.now();
+        DateTimeFormatter formatCurrentDate = DateTimeFormatter.ofPattern("MMMM d, yyyy");
+        String formattedDate = current.format(formatCurrentDate);
+        currentDate.setText("Today," + " " + formattedDate);
+
+        // Set customer table columns
         customerNameCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         customerAddressCol.setCellValueFactory(new PropertyValueFactory<>("customerAddress"));
         customerPhoneCol.setCellValueFactory(new PropertyValueFactory<>("customerPhone"));
@@ -62,6 +72,35 @@ public class Customers implements Initializable {
                 SQLException e) {
             e.printStackTrace();
         }
+
+        // Search customers
+        FilteredList<Customer> filteredCustomers;
+        try {
+            filteredCustomers = new FilteredList<>(CustomerDAO.allCustomers());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        searchCustomer.textProperty().addListener((observable, oldValue, newValue) ->
+                filteredCustomers.setPredicate(customer -> {
+
+                    if(newValue == null || newValue.isEmpty()){
+                        return true;
+                    }
+
+                    String searchKeyword = newValue.toLowerCase();
+
+                    if (customer.getCustomerName().toLowerCase().contains(searchKeyword)) {
+                        return true;
+                    } else return Integer.toString(customer.getCustomerId()).contains(searchKeyword);
+
+                }));
+
+        SortedList<Customer> sortedParts = new SortedList<>(filteredCustomers);
+        sortedParts.comparatorProperty().bind(mainCustomerTable.comparatorProperty());
+        mainCustomerTable.setItems(sortedParts);
+
+        // Message displayed on customer tableview if there are no matching items.
+        mainCustomerTable.setPlaceholder(new Label("No matching customers."));
     }
     // load customer tableview
     public void loadCustomerTable() throws SQLException {
@@ -171,6 +210,40 @@ public class Customers implements Initializable {
         stage.show();
         stage.centerOnScreen();
         stage.setResizable(false);
+    }
+
+    public void toClose() {
+        exitCustomers();
+    }
+
+    public void toReports(MouseEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/reports.fxml"))));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, 1108, 538);
+        scene.setFill(Color.TRANSPARENT);
+        root.setStyle("-fx-background-radius: 30px 30px 30px 30px;");
+        stage.setScene(scene);
+        stage.show();
+        stage.centerOnScreen();
+        stage.setResizable(false);
+    }
+
+    public void toAppointments(MouseEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load((Objects.requireNonNull(Appointments.class.getResource("/view/appointments.fxml"))));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, 1108, 538);
+        scene.setFill(Color.TRANSPARENT);
+        root.setStyle("-fx-background-radius: 30px 30px 30px 30px;");
+        stage.setScene(scene);
+        stage.show();
+        stage.centerOnScreen();
+        stage.setResizable(false);
+    }
+
+
+    public void exitCustomers() {
+        Appointments exitApplication = new Appointments();
+        exitApplication.exitApp();
     }
 }
 
