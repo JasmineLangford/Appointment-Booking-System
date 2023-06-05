@@ -94,20 +94,21 @@ public class Login implements Initializable {
                             "appointment: " + '\n' + '\n' + "Appointment ID: " + a.getAppointmentID()
                             + '\n' + "Date and Time: " +
                             a.getStart().format(formatter) + '\n' + "User ID: " + a.getUserID(), ButtonType.OK);
-                    fifteenAlertTrue.setTitle("Appointment Alert");
+                    fifteenAlertTrue.setTitle("Appointment Booking System");
+                    fifteenAlertTrue.setHeaderText("Appointment Alert");
                     fifteenAlertTrue.showAndWait();
                     fifteenMinAppt = true;
                     break;
                 }
             }
             if(!fifteenMinAppt){
-                Alert fifteenAlertTrue = new Alert(Alert.AlertType.INFORMATION, "There are no upcoming " +
+                Alert fifteenAlertFalse = new Alert(Alert.AlertType.INFORMATION, "There are no upcoming " +
                         "appointments.", ButtonType.OK);
-                fifteenAlertTrue.setTitle("Appointment Alert");
-                fifteenAlertTrue.showAndWait();
+                fifteenAlertFalse.setTitle("Appointment Booking System");
+                fifteenAlertFalse.setHeaderText("Appointment Alert");
+                fifteenAlertFalse.showAndWait();
 
                 Appointments.toAppointments(actionEvent);
-
             }
         } else if (usernameLogin.getText().isBlank()) {
             validationIcon.setVisible(true);
