@@ -252,8 +252,8 @@ public class AddAppointment implements Initializable {
 
         // input validation: empty text fields
         try {
-            if (contactCombo.getValue() == null || typeTextfield.getText().isEmpty() || titleTextfield.getText().isEmpty() ||
-                    descTextfield.getText().isEmpty() || locationTextfield.getText().isEmpty()) {
+            if (contactCombo.getValue() == null || typeCombo.getValue() == null|| titleTextfield.getText().isEmpty() ||
+                    descTextfield.getText().isEmpty() || locationCombo.getValue() == null) {
                 Alert emptyField = new Alert(Alert.AlertType.ERROR, "One or more fields are empty. Please enter a" +
                         " value in each field.");
                 emptyField.setTitle("Appointment Booking System");
@@ -411,17 +411,24 @@ public class AddAppointment implements Initializable {
             newAppointment.setCustomerID(addCustID);
             newAppointment.setUserID(addUserID);
 
-            Alert addAppointmentConfirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to add " +
-                    "this appointment?", ButtonType.YES, ButtonType.NO);
-            addAppointmentConfirm.setTitle("Appointment Booking System");
-            addAppointmentConfirm.setHeaderText("Add Appointment");
-            Optional<ButtonType> result = addAppointmentConfirm.showAndWait();
-            if (result.isPresent() && result.get() == ButtonType.YES) {
+//            Alert addAppointmentConfirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to add " +
+//                    "this appointment?", ButtonType.YES, ButtonType.NO);
+//            addAppointmentConfirm.setTitle("Appointment Booking System");
+//            addAppointmentConfirm.setHeaderText("Add Appointment");
+//            Optional<ButtonType> result = addAppointmentConfirm.showAndWait();
+//            if (result.isPresent() && result.get() == ButtonType.YES) {
+
                 AppointmentDAO.addAppointment(startDateTime, endDateTime, String.valueOf(addContact),
                         addType, addTitle, addDescription, addLocation, addCustID, addUserID);
-
-                toMainMenu(actionEvent);
+            Alert addedSuccessful = new Alert(Alert.AlertType.CONFIRMATION, "The appointment was successfully " +
+                    "added.", ButtonType.OK);
+            addedSuccessful.setTitle("Appointment Booking System");
+            addedSuccessful.setHeaderText("Add Appointment");
+            Optional<ButtonType> result = addedSuccessful.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+            toMainMenu(actionEvent);
             }
+
         } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
