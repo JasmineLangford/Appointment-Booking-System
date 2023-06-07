@@ -7,7 +7,7 @@
 <?import javafx.scene.text.*?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="537.0" prefWidth="1108.0" style="-fx-background-radius: 20px;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Appointments">
-    <Pane prefHeight="539.0" prefWidth="296.0" style="-fx-background-color: black; -fx-background-radius: 30px;">
+    <Pane prefHeight="539.0" prefWidth="296.0" style="-fx-background-color: black;">
         <ImageView fitHeight="107.0" fitWidth="93.0" layoutX="9.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true" />
         <Pane layoutX="34.0" layoutY="195.0">
             <Label layoutX="43.0" layoutY="3.0" text="Appointments" textFill="WHITE">
@@ -21,7 +21,6 @@
         </Pane>
         <Pane layoutX="34.0" layoutY="307.0" onMouseClicked="#toCustomers" />
         <Pane layoutX="34.0" layoutY="368.0" onMouseClicked="#toReports" />
-        <Pane layoutX="24.0" layoutY="522.0" onMouseClicked="#exitApp" />
        <Line endX="94.33341979980469" layoutX="76.0" layoutY="230.0" startX="1.33331298828125" stroke="#f50ca0" strokeWidth="5.0" />
         <Pane layoutX="34.0" layoutY="256.0" onMouseClicked="#toCustomers">
             <Label layoutX="42.0" layoutY="3.0" text="Customers" textFill="WHITE">
@@ -54,27 +53,21 @@
             </ImageView>
         </Pane>
     </Pane>
-    <Pane layoutX="218.0" layoutY="-1.0" prefHeight="539.0" prefWidth="891.0" style="-fx-background-radius: 30px; -fx-background-color: #323232;">
+    <Pane layoutX="218.0" layoutY="-1.0" prefHeight="539.0" prefWidth="891.0" style="-fx-background-color: #323232;">
         <TableView fx:id="mainApptTable" layoutX="50.0" layoutY="235.0" prefHeight="198.0" prefWidth="789.0">
             <columns>
-                <TableColumn fx:id="apptStartCol" prefWidth="122.66665649414062" text="Start Date/Time" />
-                <TableColumn fx:id="apptEndCol" prefWidth="122.66665649414062" text="End Date/Time" />
+                <TableColumn fx:id="apptDate" prefWidth="122.66665649414062" text="Date" />
+                <TableColumn fx:id="apptTimes" prefWidth="122.66665649414062" text="Start/End Time" />
                 <TableColumn fx:id="apptCustCol" prefWidth="139.33331298828125" text="Customer Name" />
-                <TableColumn fx:id="apptTypeCol" prefWidth="107.0" text="Type" />
-                <TableColumn fx:id="apptTitleCol" minWidth="3.33331298828125" prefWidth="107.33331298828125" text="Title" />
-                <TableColumn fx:id="apptUserCol" minWidth="5.3333740234375" prefWidth="99.33331298828125" text="Employee" />
-                <TableColumn fx:id="apptLocationCol" prefWidth="88.666748046875" text="Location" />
+                <TableColumn fx:id="apptTitleCol" minWidth="3.33331298828125" prefWidth="172.33331298828125" text="Appointment Title" />
+                <TableColumn fx:id="apptUserCol" minWidth="5.3333740234375" prefWidth="125.66668701171875" text="Assigned Baker" />
+                <TableColumn fx:id="apptLocationCol" prefWidth="106.333251953125" text="Location" />
             </columns>
         </TableView>
-        <ImageView fitHeight="25.0" fitWidth="24.0" layoutX="615.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="25.0" fitWidth="24.0" layoutX="643.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true">
             <Image url="@../resources/today.png" />
         </ImageView>
-      <Label layoutX="848.0" layoutY="24.0" onMouseClicked="#exitApp" text="X" textFill="WHITE">
-         <font>
-            <Font name="Century Gothic Bold" size="18.0" />
-         </font>
-      </Label>
-       <Label fx:id="currentDate" layoutX="648.0" layoutY="29.0" text="Today's Date" textFill="WHITE">
+       <Label fx:id="currentDate" layoutX="676.0" layoutY="38.0" text="Today's Date" textFill="WHITE">
            <font>
                <Font name="Century Gothic Bold" size="12.0" />
            </font>
@@ -133,11 +126,6 @@
                <Font name="Gill Sans MT" size="13.0" />
            </font>
        </RadioButton>
-      <Label layoutX="810.0" layoutY="24.0" onMouseClicked="#exitApp" textFill="WHITE">
-         <font>
-            <Font name="Century Gothic Bold" size="18.0" />
-         </font>
-      </Label>
     </Pane>
     <ImageView fitHeight="107.0" fitWidth="100.0" layoutX="13.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
         <Image url="@../resources/thecakeshop-logo.png" />

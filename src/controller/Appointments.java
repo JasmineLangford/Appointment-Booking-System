@@ -18,9 +18,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import model.Appointment;
 import DAO.CustomerDAO;
 import model.Customer;
@@ -30,6 +28,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.Optional;
@@ -40,10 +39,7 @@ import java.util.ResourceBundle;
  * This class is the controller for appointments.fxml.
  */
 public class Appointments implements Initializable {
-    private static double xOffset = 0;
-    private static double yOffset = 0;
 
-    public DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     @FXML
     private Label currentDate;
     @FXML
@@ -53,17 +49,15 @@ public class Appointments implements Initializable {
     public RadioButton viewByWeek;
     public RadioButton viewAllAppts;
     @FXML
-    public TableColumn<Appointment,String> apptEndCol;
-    @FXML
     private TableView<Appointment> mainApptTable;
+    @FXML
+    private TableColumn<Appointment,String> apptTimes;
     @FXML
     private TableColumn<Appointment, String> apptTitleCol;
     @FXML
     private TableColumn<Appointment, String> apptLocationCol;
     @FXML
-    private TableColumn<Appointment, String> apptTypeCol;
-    @FXML
-    private TableColumn<Appointment, String> apptStartCol;
+    private TableColumn<Appointment, String> apptDate;
     @FXML
     private TableColumn<Appointment, String> apptCustCol;
     @FXML
@@ -88,11 +82,7 @@ public class Appointments implements Initializable {
 
         // Set appointment table columns
         apptTitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
-        apptTitleCol.setStyle("-fx-alignment: center;");
         apptLocationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
-        apptLocationCol.setStyle("-fx-alignment: center;");
-        apptTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-        apptTypeCol.setStyle("-fx-alignment: center;");
         apptCustCol.setCellValueFactory(cellData -> {
             Appointment appointment = cellData.getValue();
             int customerId = appointment.getCustomerID();
@@ -105,7 +95,6 @@ public class Appointments implements Initializable {
             String customerName = (customer != null) ? customer.getCustomerName() : "";
             return new SimpleStringProperty(customerName);
         });
-        apptCustCol.setStyle("-fx-alignment: center;");
         apptUserCol.setCellValueFactory(cellData -> {
             Appointment appointment = cellData.getValue();
             int userId = appointment.getUserID();
@@ -118,20 +107,27 @@ public class Appointments implements Initializable {
             String userFirstLastName = (user != null) ? user.getUserFirstName() + " " + user.getUserLastName(): "";
             return new SimpleStringProperty(userFirstLastName);
         });
-        apptUserCol.setStyle("-fx-alignment: center;");
 
-        apptStartCol.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getStart().format(formatter)));
-        apptEndCol.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getEnd().format(formatter)));
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MMMM d, yyyy");
+        apptDate.setCellValueFactory(cellData -> {
+            String dateTimeValue = cellData.getValue().getStart().format(dateFormatter);
+            return new SimpleStringProperty(dateTimeValue);
+        });
+
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:mm a");
+        apptTimes.setCellValueFactory(cellData -> {
+            LocalTime startTime = cellData.getValue().getStart().toLocalTime();
+            LocalTime endTime = cellData.getValue().getEnd().toLocalTime();
+            String timeRange = startTime.format(timeFormatter) + " - " + endTime.format(timeFormatter);
+            return new SimpleStringProperty(timeRange);
+        });
+
         try {
             loadApptTable();
         } catch (
                 SQLException e) {
             e.printStackTrace();
         }
-        apptStartCol.setStyle("-fx-alignment: center;");
-        apptEndCol.setStyle("-fx-alignment: center;");
     }
 
     /**
@@ -146,17 +142,6 @@ public class Appointments implements Initializable {
         Scene scene = new Scene(root, 1108, 538);
         scene.setFill(Color.TRANSPARENT);
         root.setStyle("-fx-background-radius: 30px 30px 30px 30px;");
-
-        // Scene is able to move on mouse drag
-        scene.setOnMousePressed(event -> {
-            xOffset = event.getSceneX();
-            yOffset = event.getSceneY();
-        });
-        root.setOnMouseDragged(event -> {
-            stage.setX(event.getScreenX() - xOffset);
-            stage.setY(event.getScreenY() - yOffset);
-        });
-
         stage.setScene(scene);
         stage.show();
         stage.centerOnScreen();
@@ -206,20 +191,10 @@ public class Appointments implements Initializable {
      */
     public void loadApptTable() throws SQLException {
         ObservableList<Appointment> allAppointments = AppointmentDAO.allAppointments();
-
-//        for (Appointment appointment : allAppointments) {
-//            int customerId = appointment.getCustomerID();
-//            Customer customer = CustomerDAO.allCustomers().get(customerId);
-//            String customerName = (customer != null) ? customer.getCustomerName() : "";
-//            assert customer != null;
-//            customer.setCustomerName(customerName);
-//        }
-
         mainApptTable.setItems(allAppointments);
         mainApptTable.getSelectionModel().clearSelection();
     }
 
-    // TODO: Test radio button selections once there are more appointments on the table.
     /**
      * This method filters the appointments to display all appointments.
      *
@@ -267,7 +242,6 @@ public class Appointments implements Initializable {
      * @throws IOException The exception to throw if I/O error occurs.
      */
     public void addAppt(ActionEvent actionEvent) throws IOException {
-
         Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/add-appointment.fxml"))));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, 560, 625);
@@ -332,7 +306,7 @@ public class Appointments implements Initializable {
             Alert deleteApptConfirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to cancel this " +
                     "appointment?", ButtonType.YES, ButtonType.NO);
             deleteApptConfirm.setTitle("Appointment Booking System");
-            deleteApptConfirm.setHeaderText("Cancel Appointment");
+            deleteApptConfirm.setHeaderText("Confirm Cancellation");
             Optional<ButtonType> result = deleteApptConfirm.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.YES) {
                 try {
@@ -341,8 +315,8 @@ public class Appointments implements Initializable {
                     loadApptTable();
 
                     Alert apptInfo = new Alert(Alert.AlertType.INFORMATION, "You have cancelled the following " +
-                            "appointment: '\n' + '\n' + Appointment ID: " + selectedAppt.getAppointmentID() + '\n' +
-                            "Type: " + selectedAppt.getType(), ButtonType.OK);
+                            "appointment:" + '\n' + "Appointment ID: " + selectedAppt.getAppointmentID() + '\n' +
+                            "Appointment Title: " + selectedAppt.getTitle(), ButtonType.OK);
                     apptInfo.setTitle("Appointment Booking System");
                     apptInfo.setHeaderText("Cancel Appointment");
                     apptInfo.showAndWait();
@@ -357,7 +331,7 @@ public class Appointments implements Initializable {
     /**
      * This method closes the application and an alert will ask the user to confirm close.
      */
-    public void exitApp() {
+    public void toClose() {
         Alert closeConfirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to exit the " +
                 "application?", ButtonType.YES, ButtonType.NO);
         closeConfirm.setTitle("Appointment Booking System");
@@ -367,8 +341,5 @@ public class Appointments implements Initializable {
             Platform.exit();
             System.out.println("Application Closed");
         }
-    }
-    public void toClose() {
-        exitApp();
     }
 }
