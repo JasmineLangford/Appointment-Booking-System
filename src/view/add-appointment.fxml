@@ -5,7 +5,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="625.0" prefWidth="560.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddAppointment">
+<AnchorPane prefHeight="625.0" prefWidth="565.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddAppointment">
     <DatePicker fx:id="startDatePicker" editable="false" layoutX="131.0" layoutY="119.0" prefHeight="25.0" prefWidth="141.0" promptText="Select Start Date" />
     <Label layoutX="193.0" layoutY="334.0" text="Title" textAlignment="RIGHT" textFill="#373436">
         <font>
@@ -99,6 +99,6 @@
    <ComboBox fx:id="custIDCombo" layoutX="237.0" layoutY="490.0" prefHeight="25.0" prefWidth="196.0" />
    <ComboBox fx:id="locationCombo" layoutX="238.0" layoutY="451.0" prefHeight="25.0" prefWidth="196.0" />
    <ComboBox fx:id="typeCombo" layoutX="234.0" layoutY="290.0" prefHeight="25.0" prefWidth="196.0" />
-   <Line endX="387.16668701171875" layoutX="171.0" layoutY="87.0" startX="-171.0" stroke="#f50ca0" strokeWidth="7.0" />
+   <Line endX="388.05023193359375" layoutX="172.0" layoutY="87.0" startX="-171.0" stroke="#f50ca0" strokeWidth="7.0" />
    <TextArea fx:id="descTextField" layoutX="236.0" layoutY="368.0" prefHeight="70.0" prefWidth="196.0" wrapText="true" />
 </AnchorPane>

@@ -79,6 +79,7 @@ public class AddAppointment implements Initializable {
         startCombo.setPromptText("Select Start Time");
         endCombo.setPromptText("Select End Time");
 
+        // Set end date same as start date
         startDatePicker.setOnAction(event -> {
             LocalDate selectedDate = startDatePicker.getValue();
             endDatePicker.setValue(selectedDate);
@@ -120,7 +121,7 @@ public class AddAppointment implements Initializable {
      */
     public void onSaveAppt(ActionEvent actionEvent) throws SQLException {
 
-        // input validation messages: start and end date pickers
+        // input validation messages: Dates
         try {
             if (startDatePicker == null) {
 
