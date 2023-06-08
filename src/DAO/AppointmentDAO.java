@@ -21,7 +21,7 @@ public class AppointmentDAO {
     public static ObservableList<Appointment> allAppointments() throws SQLException{
 
         ObservableList<Appointment> listOfAppointments = FXCollections.observableArrayList();
-        String apptQuery = "SELECT * FROM appointments ORDER BY Appointment_ID ASC";
+        String apptQuery = "SELECT * FROM appointments ORDER BY Start ASC";
         PreparedStatement ps = JDBC.connection.prepareStatement(apptQuery);
         ResultSet rs = ps.executeQuery();
 
