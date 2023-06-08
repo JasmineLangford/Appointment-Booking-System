@@ -4,7 +4,6 @@ import DAO.AppointmentDAO;
 import DAO.UserDAO;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -267,7 +266,7 @@ public class Appointments implements Initializable {
 
         // error message if user does not make a selection
         if (mainApptTable.getSelectionModel().isEmpty()) {
-            Alert modApptSelect = new Alert(Alert.AlertType.WARNING, "Please select an appointment to view the " +
+            Alert modApptSelect = new Alert(Alert.AlertType.WARNING, "Please select an appointment to view " +
                     "details.");
             modApptSelect.setTitle("Appointment Booking System");
             modApptSelect.setHeaderText("Appointment Details");
