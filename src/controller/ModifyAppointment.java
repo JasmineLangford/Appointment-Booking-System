@@ -1,6 +1,7 @@
 package controller;
 
 import DAO.*;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -39,13 +40,13 @@ public class ModifyAppointment implements Initializable {
     @FXML
     private ComboBox<ContactDAO> contactModCombo;
     @FXML
-    private TextField locationText;
+    private ComboBox<String> locationCombo;
     @FXML
-    private TextField typeText;
+    private ComboBox<String> typeCombo;
     @FXML
     private TextField titleText;
     @FXML
-    private TextField descText;
+    private TextArea descText;
     @FXML
     private ComboBox<Customer> customerCombo;
     @FXML
@@ -67,8 +68,8 @@ public class ModifyAppointment implements Initializable {
         System.out.println("Modify Appointment initialized.");
 
         // combo box for time selection
-        LocalTime start = LocalTime.of(4,0);
-        LocalTime end = LocalTime.of(23,0);
+        LocalTime start = LocalTime.of(8,0);
+        LocalTime end = LocalTime.of(17,0);
 
         while(start.isBefore(end.plusSeconds(1))){
             startCombo.getItems().add(start);
@@ -84,6 +85,24 @@ public class ModifyAppointment implements Initializable {
 
         // customer combo box
         customerCombo.setItems(customers);
+
+        // Set end date same as start date
+        startDatePicker.setOnAction(event -> {
+            LocalDate selectedDate = startDatePicker.getValue();
+            endDatePicker.setValue(selectedDate);
+        });
+
+        // appointment type combo box
+        ObservableList<String> types = FXCollections.observableArrayList(
+                "In-Person","Virtual"
+        );
+        typeCombo.setItems(types);
+
+        // location combo box
+        ObservableList<String> locations = FXCollections.observableArrayList(
+                "Manhattan", "Newark"
+        );
+        locationCombo.setItems(locations);
     }
 
     /**
@@ -93,9 +112,9 @@ public class ModifyAppointment implements Initializable {
      */
     public void sendAppointment(Appointment appointment) {
 
+        // input validation messages: Dates
         try{
             modAppointment = appointment;
-
             for (ContactDAO a:contactModCombo.getItems()) {
                 if(a.getContactID() == appointment.getContactID()){
                     contactModCombo.getSelectionModel().select(a);
@@ -122,8 +141,8 @@ public class ModifyAppointment implements Initializable {
             startCombo.setValue(modAppointment.getStart().toLocalTime());
             endDatePicker.setValue(modAppointment.getEnd().toLocalDate());
             endCombo.setValue(modAppointment.getEnd().toLocalTime());
-            locationText.setText(modAppointment.getLocation());
-            typeText.setText(modAppointment.getType());
+            locationCombo.setValue(modAppointment.getLocation());
+            typeCombo.setValue(modAppointment.getType());
             titleText.setText(modAppointment.getTitle());
             descText.setText(modAppointment.getDescription());
 
@@ -139,23 +158,27 @@ public class ModifyAppointment implements Initializable {
      */
     public void onSaveModAppointment(ActionEvent actionEvent) throws SQLException {
 
-        // input validation messages: start and end date pickers
         try {
-            if (endDatePicker.getValue().isBefore(startDatePicker.getValue())) {
-                Alert invalidDate = new Alert(Alert.AlertType.ERROR, "End date cannot be before start date.");
-                Optional<ButtonType> results = invalidDate.showAndWait();
+            if (startDatePicker == null) {
+
+                Alert noSelection = new Alert(Alert.AlertType.ERROR, "Please select appointment date.");
+                noSelection.setTitle("Appointment Booking System");
+                noSelection.setHeaderText("Add Appointment");
+                Optional<ButtonType> results = noSelection.showAndWait();
                 if (results.isPresent() && results.get() == ButtonType.OK)
-                    invalidDate.setOnCloseRequest(Event::consume);
+                    noSelection.setOnCloseRequest(Event::consume);
                 return;
             }
-        } catch (Exception DateException) {
-            System.out.println("Caught DateException");
+        } catch (NullPointerException e) {
+            System.out.println("Caught NullPointerException");
         }
 
         try {
             if (startDatePicker.getValue().isBefore(LocalDate.now())) {
-                Alert invalidDate = new Alert(Alert.AlertType.ERROR, "Start date has already passed. Please " +
+                Alert invalidDate = new Alert(Alert.AlertType.ERROR, "Selected date has already passed. Please " +
                         "select another date.");
+                invalidDate.setTitle("Appointment Booking System");
+                invalidDate.setHeaderText("Add Appointment");
                 Optional<ButtonType> results = invalidDate.showAndWait();
                 if (results.isPresent() && results.get() == ButtonType.OK)
                     invalidDate.setOnCloseRequest(Event::consume);
@@ -167,11 +190,11 @@ public class ModifyAppointment implements Initializable {
 
         try {
             if (startDatePicker.getValue().getDayOfWeek().equals(DayOfWeek.SATURDAY) ||
-                    startDatePicker.getValue().getDayOfWeek().equals(DayOfWeek.SUNDAY) ||
-                    endDatePicker.getValue().getDayOfWeek().equals(DayOfWeek.SATURDAY) ||
-                    endDatePicker.getValue().getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
-                Alert invalidDate = new Alert(Alert.AlertType.ERROR, "Start/End dates must be a weekday " +
+                    startDatePicker.getValue().getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+                Alert invalidDate = new Alert(Alert.AlertType.ERROR, "Appointment date must be a weekday " +
                         "(Monday-Friday).");
+                invalidDate.setTitle("Appointment Booking System");
+                invalidDate.setHeaderText("Add Appointment");
                 Optional<ButtonType> results = invalidDate.showAndWait();
                 if (results.isPresent() && results.get() == ButtonType.OK)
                     invalidDate.setOnCloseRequest(Event::consume);
@@ -182,43 +205,113 @@ public class ModifyAppointment implements Initializable {
         }
 
         // input validation messages: start and end time combo boxes
-        LocalDateTime localStart = LocalDateTime.of(startDatePicker.getValue(),startCombo.getValue());
-        LocalDateTime localEnd = LocalDateTime.of(endDatePicker.getValue(),endCombo.getValue());
+        try {
+            if (startCombo.getSelectionModel().isEmpty() || endCombo.getSelectionModel().isEmpty()) {
+
+                Alert noSelection = new Alert(Alert.AlertType.ERROR, "Please select start and end times.");
+                noSelection.setTitle("Appointment Booking System");
+                noSelection.setHeaderText("Add Appointment");
+                Optional<ButtonType> results = noSelection.showAndWait();
+                if (results.isPresent() && results.get() == ButtonType.OK)
+                    noSelection.setOnCloseRequest(Event::consume);
+                return;
+            }
+        } catch (NullPointerException e) {
+            System.out.println("Caught NullPointerException");
+        }
+
+        LocalDateTime localStart = LocalDateTime.of(startDatePicker.getValue(), startCombo.getValue());
+        LocalDateTime localEnd = LocalDateTime.of(endDatePicker.getValue(), endCombo.getValue());
         try {
             if (localEnd.isBefore(localStart)) {
-                Alert invalidTime = new Alert(Alert.AlertType.ERROR, "End date/time cannot be before start date/time.");
+                Alert invalidTime = new Alert(Alert.AlertType.ERROR, "End date/time cannot be before start " +
+                        "date/time.");
+                invalidTime.setTitle("Appointment Booking System");
+                invalidTime.setHeaderText("Add Appointment");
                 Optional<ButtonType> results = invalidTime.showAndWait();
                 if (results.isPresent() && results.get() == ButtonType.OK)
                     invalidTime.setOnCloseRequest(Event::consume);
                 return;
             }
-        }catch (Exception TimeException){
+        } catch (Exception TimeException) {
             System.out.println("Caught TimeException");
         }
 
-        try{
+        try {
             if (startCombo.getValue().equals(endCombo.getValue())) {
                 Alert invalidTime = new Alert(Alert.AlertType.ERROR, "End time cannot be the same as start " +
                         "time. Please select another end time.");
+                invalidTime.setTitle("Appointment Booking System");
+                invalidTime.setHeaderText("Add Appointment");
                 invalidTime.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
                 Optional<ButtonType> results = invalidTime.showAndWait();
                 if (results.isPresent() && results.get() == ButtonType.OK)
                     invalidTime.setOnCloseRequest(Event::consume);
                 return;
             }
-        }catch (Exception TimeException){
+        } catch (Exception TimeException) {
             System.out.println("Caught TimeException");
+        }
+
+        // input validation: empty selection for contact combo
+        try {
+            if (contactModCombo.getValue() == null) {
+
+                Alert noSelection = new Alert(Alert.AlertType.ERROR, "Please select a contact.");
+                noSelection.setTitle("Appointment Booking System");
+                noSelection.setHeaderText("Add Appointment");
+                Optional<ButtonType> results = noSelection.showAndWait();
+                if (results.isPresent() && results.get() == ButtonType.OK)
+                    noSelection.setOnCloseRequest(Event::consume);
+                return;
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
 
         // input validation: empty text fields
         try {
-            if (typeText.getText().isEmpty() || titleText.getText().isEmpty() ||
-                    descText.getText().isEmpty() || locationText.getText().isEmpty()) {
+            if (contactModCombo.getValue() == null || typeCombo.getValue() == null|| titleText.getText().isEmpty() ||
+                    descText.getText().isEmpty() || locationCombo.getValue() == null) {
                 Alert emptyField = new Alert(Alert.AlertType.ERROR, "One or more fields are empty. Please enter a" +
                         " value in each field.");
+                emptyField.setTitle("Appointment Booking System");
+                emptyField.setHeaderText("Add Appointment");
                 Optional<ButtonType> results = emptyField.showAndWait();
                 if (results.isPresent() && results.get() == ButtonType.OK)
                     emptyField.setOnCloseRequest(Event::consume);
+                return;
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
+        // input validation: empty customer ID combo
+        try {
+            if (customerCombo.getValue() == null) {
+
+                Alert noSelection = new Alert(Alert.AlertType.ERROR, "Please select a customer ID.");
+                noSelection.setTitle("Appointment Booking System");
+                noSelection.setHeaderText("Add Appointment");
+                Optional<ButtonType> results = noSelection.showAndWait();
+                if (results.isPresent() && results.get() == ButtonType.OK)
+                    noSelection.setOnCloseRequest(Event::consume);
+                return;
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
+        // input validation: empty user ID combo
+        try {
+            if (userCombo.getValue() == null) {
+
+                Alert noSelection = new Alert(Alert.AlertType.ERROR, "Please select a user ID.");
+                noSelection.setTitle("Appointment Booking System");
+                noSelection.setHeaderText("Add Appointment");
+                Optional<ButtonType> results = noSelection.showAndWait();
+                if (results.isPresent() && results.get() == ButtonType.OK)
+                    noSelection.setOnCloseRequest(Event::consume);
                 return;
             }
         } catch (NullPointerException e) {
@@ -233,10 +326,10 @@ public class ModifyAppointment implements Initializable {
         LocalDateTime startDateTime = LocalDateTime.of(startDatePicker.getValue(),startCombo.getValue());
         LocalDateTime endDateTime = LocalDateTime.of(endDatePicker.getValue(),endCombo.getValue());
         int modContact = contactModCombo.getSelectionModel().getSelectedItem().getContactID();
-        String modType = typeText.getText();
+        String modType = typeCombo.getSelectionModel().getSelectedItem();
         String modTitle = titleText.getText();
         String modDescription = descText.getText();
-        String modLocation = locationText.getText();
+        String modLocation = locationCombo.getSelectionModel().getSelectedItem();
         int modCustID = customerCombo.getSelectionModel().getSelectedItem().getCustomerId();
         int modUserID = userCombo.getSelectionModel().getSelectedItem().getUserID();
 
@@ -353,7 +446,7 @@ public class ModifyAppointment implements Initializable {
      * @param actionEvent The cancel button is clicked.
      * @throws IOException The exception thrown if there is an I/O error for the alert.
      */
-    public void toMainMenu(ActionEvent actionEvent) throws IOException {
+    public void toAppointments(ActionEvent actionEvent) throws IOException {
         Alert noChange = new Alert(Alert.AlertType.INFORMATION, "There were no changes made to this " +
                 "appointment.", ButtonType.OK);
         noChange.showAndWait();
