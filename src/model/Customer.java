@@ -8,7 +8,7 @@ public class Customer {
     // override format for combo box selection display
     @Override
     public String toString(){
-        return (getCustomerId() + " " + getCustomerName());
+        return (getCustomerName());
     }
 
     private int customerId;

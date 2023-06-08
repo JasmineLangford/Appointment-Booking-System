@@ -14,7 +14,7 @@ public class ContactDAO extends Appointment {
     // override data type for combo box selection display
     @Override
     public String toString(){
-        return (getContactID() + " " + getContactName());
+        return (getContactName());
     }
 
     /**
