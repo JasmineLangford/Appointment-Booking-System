@@ -51,13 +51,9 @@ public class AddAppointment implements Initializable {
     @FXML
     private ComboBox<ContactDAO> contactCombo;
     @FXML
-    private TextField typeTextfield;
-    @FXML
     private TextField titleTextfield;
     @FXML
-    private TextField descTextfield;
-    @FXML
-    private TextField locationTextfield;
+    private TextArea descTextField;
     @FXML
     private ComboBox<Customer> custIDCombo;
     @FXML
@@ -71,8 +67,8 @@ public class AddAppointment implements Initializable {
         System.out.println("Add appointment is initialized!");
 
         // combo box for time selection
-        LocalTime start = LocalTime.of(4, 0);
-        LocalTime end = LocalTime.of(23, 0);
+        LocalTime start = LocalTime.of(8, 0);
+        LocalTime end = LocalTime.of(17, 0);
 
         while (start.isBefore(end.plusSeconds(1))) {
             startCombo.getItems().add(start);
@@ -82,6 +78,11 @@ public class AddAppointment implements Initializable {
 
         startCombo.setPromptText("Select Start Time");
         endCombo.setPromptText("Select End Time");
+
+        startDatePicker.setOnAction(event -> {
+            LocalDate selectedDate = startDatePicker.getValue();
+            endDatePicker.setValue(selectedDate);
+        });
 
         // contact combo box
         contactCombo.setItems(contactList);
@@ -98,17 +99,14 @@ public class AddAppointment implements Initializable {
 
         // appointment type combo box
         ObservableList<String> types = FXCollections.observableArrayList(
-                "Custom Cake Design",
-                "Wedding Cake Consultation",
-                "Corporate Event Consultation",
-                "Cake Tasting"
+                "In-Person","Virtual"
         );
         typeCombo.setItems(types);
         typeCombo.setPromptText("Select Type");
 
         // location combo box
         ObservableList<String> locations = FXCollections.observableArrayList(
-                "New York City", "San Francisco"
+                "Manhattan", "Newark"
         );
         locationCombo.setItems(locations);
         locationCombo.setPromptText("Selection Location");
@@ -124,9 +122,9 @@ public class AddAppointment implements Initializable {
 
         // input validation messages: start and end date pickers
         try {
-            if (startDatePicker == null || endDatePicker.getValue() == null) {
+            if (startDatePicker == null) {
 
-                Alert noSelection = new Alert(Alert.AlertType.ERROR, "Please select start and end dates.");
+                Alert noSelection = new Alert(Alert.AlertType.ERROR, "Please select appointment date.");
                 noSelection.setTitle("Appointment Booking System");
                 noSelection.setHeaderText("Add Appointment");
                 Optional<ButtonType> results = noSelection.showAndWait();
@@ -139,22 +137,8 @@ public class AddAppointment implements Initializable {
         }
 
         try {
-            if (endDatePicker.getValue().isBefore(startDatePicker.getValue())) {
-                Alert invalidDate = new Alert(Alert.AlertType.ERROR, "End date cannot be before start date.");
-                invalidDate.setTitle("Appointment Booking System");
-                invalidDate.setHeaderText("Add Appointment");
-                Optional<ButtonType> results = invalidDate.showAndWait();
-                if (results.isPresent() && results.get() == ButtonType.OK)
-                    invalidDate.setOnCloseRequest(Event::consume);
-                return;
-            }
-        } catch (Exception DateException) {
-            System.out.println("Caught DateException");
-        }
-
-        try {
             if (startDatePicker.getValue().isBefore(LocalDate.now())) {
-                Alert invalidDate = new Alert(Alert.AlertType.ERROR, "Start date has already passed. Please " +
+                Alert invalidDate = new Alert(Alert.AlertType.ERROR, "Selected date has already passed. Please " +
                         "select another date.");
                 invalidDate.setTitle("Appointment Booking System");
                 invalidDate.setHeaderText("Add Appointment");
@@ -169,10 +153,8 @@ public class AddAppointment implements Initializable {
 
         try {
             if (startDatePicker.getValue().getDayOfWeek().equals(DayOfWeek.SATURDAY) ||
-                    startDatePicker.getValue().getDayOfWeek().equals(DayOfWeek.SUNDAY) ||
-                    endDatePicker.getValue().getDayOfWeek().equals(DayOfWeek.SATURDAY) ||
-                    endDatePicker.getValue().getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
-                Alert invalidDate = new Alert(Alert.AlertType.ERROR, "Start/End dates must be a weekday " +
+                    startDatePicker.getValue().getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+                Alert invalidDate = new Alert(Alert.AlertType.ERROR, "Appointment date must be a weekday " +
                         "(Monday-Friday).");
                 invalidDate.setTitle("Appointment Booking System");
                 invalidDate.setHeaderText("Add Appointment");
@@ -253,7 +235,7 @@ public class AddAppointment implements Initializable {
         // input validation: empty text fields
         try {
             if (contactCombo.getValue() == null || typeCombo.getValue() == null|| titleTextfield.getText().isEmpty() ||
-                    descTextfield.getText().isEmpty() || locationCombo.getValue() == null) {
+                    descTextField.getText().isEmpty() || locationCombo.getValue() == null) {
                 Alert emptyField = new Alert(Alert.AlertType.ERROR, "One or more fields are empty. Please enter a" +
                         " value in each field.");
                 emptyField.setTitle("Appointment Booking System");
@@ -308,33 +290,13 @@ public class AddAppointment implements Initializable {
         int addContact = contactCombo.getSelectionModel().getSelectedItem().getContactID();
         String addType = typeCombo.getValue();
         String addTitle = titleTextfield.getText();
-        String addDescription = descTextfield.getText();
+        String addDescription = descTextField.getText();
         String addLocation = locationCombo.getValue();
         int addCustID = custIDCombo.getSelectionModel().getSelectedItem().getCustomerId();
         int addUserID = userCombo.getSelectionModel().getSelectedItem().getUserID();
 
         LocalDateTime dateTimeStart = LocalDateTime.of(addStartDate, addStartTime);
         LocalDateTime dateTimeEnd = LocalDateTime.of(addEndDate, addEndTime);
-
-        ZonedDateTime userStart = ZonedDateTime.of(dateTimeStart, ZoneId.systemDefault());
-        ZonedDateTime userEnd = ZonedDateTime.of(dateTimeEnd, ZoneId.systemDefault());
-        ZonedDateTime businessStart = ZonedDateTime.of(addStartDate, LocalTime.of(8, 0),
-                ZoneId.of("US/Eastern"));
-        ZonedDateTime businessEnd = ZonedDateTime.of(addEndDate, LocalTime.of(22, 0),
-                ZoneId.of("US/Eastern"));
-
-        // checking for selected appointment dates/times are out of business hours
-        if (userStart.isBefore(businessStart) || userStart.isAfter(businessEnd) || userEnd.isBefore(businessStart)
-                || userEnd.isAfter(businessEnd)) {
-            Alert businessHourConflict = new Alert(Alert.AlertType.ERROR, "Time is outside of normal business " +
-                    "hours (8am-10pm EST).");
-            businessHourConflict.setTitle("Appointment Booking System");
-            businessHourConflict.setHeaderText("Add Appointment");
-            Optional<ButtonType> results = businessHourConflict.showAndWait();
-            if (results.isPresent() && results.get() == ButtonType.OK)
-                businessHourConflict.setOnCloseRequest(Event::consume);
-            return;
-        }
 
         // input validation messages for conflicting appointments
         ObservableList<Appointment> getAllAppointments = AppointmentDAO.allAppointments();
@@ -410,13 +372,6 @@ public class AddAppointment implements Initializable {
             newAppointment.setLocation(addLocation);
             newAppointment.setCustomerID(addCustID);
             newAppointment.setUserID(addUserID);
-
-//            Alert addAppointmentConfirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to add " +
-//                    "this appointment?", ButtonType.YES, ButtonType.NO);
-//            addAppointmentConfirm.setTitle("Appointment Booking System");
-//            addAppointmentConfirm.setHeaderText("Add Appointment");
-//            Optional<ButtonType> result = addAppointmentConfirm.showAndWait();
-//            if (result.isPresent() && result.get() == ButtonType.YES) {
 
                 AppointmentDAO.addAppointment(startDateTime, endDateTime, String.valueOf(addContact),
                         addType, addTitle, addDescription, addLocation, addCustID, addUserID);
