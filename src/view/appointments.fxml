@@ -19,8 +19,6 @@
                 <Image url="@../resources/appointments.png" />
             </ImageView>
         </Pane>
-        <Pane layoutX="34.0" layoutY="307.0" onMouseClicked="#toCustomers" />
-        <Pane layoutX="34.0" layoutY="368.0" onMouseClicked="#toReports" />
        <Line endX="94.33341979980469" layoutX="76.0" layoutY="230.0" startX="1.33331298828125" stroke="#f50ca0" strokeWidth="5.0" />
         <Pane layoutX="34.0" layoutY="256.0" onMouseClicked="#toCustomers">
             <Label layoutX="42.0" layoutY="3.0" text="Customers" textFill="WHITE">
@@ -42,7 +40,7 @@
                 <Image url="@../resources/reports.png" />
             </ImageView>
         </Pane>
-        <Pane layoutX="27.0" layoutY="453.0" onMouseClicked="#toClose">
+        <Pane fx:id="toClose" layoutX="27.0" layoutY="453.0" onMouseClicked="#toClose">
             <Label layoutX="48.0" layoutY="10.0" text="Logout" textFill="WHITE">
                 <font>
                     <Font name="Gill Sans MT" size="16.0" />
