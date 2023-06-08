@@ -4,6 +4,7 @@ import DAO.AppointmentDAO;
 import DAO.UserDAO;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -202,10 +203,11 @@ public class Appointments implements Initializable {
      */
     public void changeToAllAppts() throws SQLException {
         ObservableList<Appointment> allAppointments = AppointmentDAO.allAppointments();
-        for (Appointment ignored : allAppointments) {
+        if (allAppointments.isEmpty()) {
             mainApptTable.setItems(allAppointments);
             mainApptTable.setPlaceholder(new Label("No appointments available"));
-
+        } else {
+            mainApptTable.setItems(allAppointments);
         }
     }
 
@@ -215,9 +217,11 @@ public class Appointments implements Initializable {
      * @throws SQLException The exception to throw if there is an issue with the sql query.
      */    public void changeToMonth() throws SQLException {
         ObservableList<Appointment> currentMonth = AppointmentDAO.currentMonth();
-        for (Appointment ignored : currentMonth) {
+        if (currentMonth.isEmpty()) {
             mainApptTable.setItems(currentMonth);
             mainApptTable.setPlaceholder(new Label("No appointments for this month"));
+        } else {
+            mainApptTable.setItems(currentMonth);
         }
     }
 
@@ -228,10 +232,11 @@ public class Appointments implements Initializable {
      */
     public void changeToWeek() throws SQLException {
         ObservableList<Appointment> currentWeek = AppointmentDAO.currentWeek();
-        for (Appointment ignored : currentWeek) {
+        if (currentWeek.isEmpty()) {
             mainApptTable.setItems(currentWeek);
-
             mainApptTable.setPlaceholder(new Label("No appointments for this week"));
+        } else {
+            mainApptTable.setItems(currentWeek);
         }
     }
 
