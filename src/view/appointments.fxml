@@ -64,10 +64,10 @@
                 <TableColumn fx:id="apptLocationCol" prefWidth="106.333251953125" text="Location" />
             </columns>
         </TableView>
-        <ImageView fitHeight="25.0" fitWidth="24.0" layoutX="643.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="25.0" fitWidth="24.0" layoutX="690.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true">
             <Image url="@../resources/today.png" />
         </ImageView>
-       <Label fx:id="currentDate" layoutX="676.0" layoutY="38.0" text="Today's Date" textFill="WHITE">
+       <Label fx:id="currentDate" layoutX="723.0" layoutY="39.0" text="Today's Date" textFill="WHITE">
            <font>
                <Font name="Century Gothic Bold" size="12.0" />
            </font>
@@ -93,17 +93,17 @@
          </font>
       </Label>
       <Line endX="1.33331298828125" endY="-4.3333282470703125" layoutX="202.0" layoutY="149.0" startX="1.33331298828125" startY="10.666671752929688" stroke="#f50ca0" strokeWidth="5.0" />
-       <Button layoutX="697.0" layoutY="137.0" mnemonicParsing="false" onAction="#addAppt" prefHeight="32.0" prefWidth="142.0" style="-fx-background-color: #f50ca0;" text="+ Add Appointment" textFill="#fcfefc">
+       <Button layoutX="656.0" layoutY="137.0" mnemonicParsing="false" onAction="#addAppt" prefHeight="32.0" prefWidth="142.0" style="-fx-background-color: #f50ca0;" text="+ Add Appointment" textFill="#fcfefc">
            <font>
                <Font name="Gill Sans MT Bold" size="13.0" />
            </font>
        </Button>
-       <Button layoutX="571.0" layoutY="453.0" mnemonicParsing="false" onAction="#viewApptDetails" prefHeight="32.0" prefWidth="98.0" style="-fx-background-color: #f50ca0;" text="View Details" textFill="#fcfefc">
+       <Button layoutX="533.0" layoutY="454.0" mnemonicParsing="false" onAction="#viewApptDetails" prefHeight="32.0" prefWidth="98.0" style="-fx-background-color: #f50ca0;" text="View Details" textFill="#fcfefc">
            <font>
                <Font name="Gill Sans MT Bold" size="13.0" />
            </font>
        </Button>
-       <Button layoutX="686.0" layoutY="452.0" mnemonicParsing="false" onAction="#cancelAppointment" prefHeight="32.0" prefWidth="153.0" style="-fx-background-color: #f50ca0;" text="Cancel Appointment" textFill="#fcfefc">
+       <Button layoutX="649.0" layoutY="454.0" mnemonicParsing="false" onAction="#cancelAppointment" prefHeight="32.0" prefWidth="153.0" style="-fx-background-color: #f50ca0;" text="Cancel Appointment" textFill="#fcfefc">
            <font>
                <Font name="Gill Sans MT Bold" size="13.0" />
            </font>
