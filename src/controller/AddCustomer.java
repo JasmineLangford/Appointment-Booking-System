@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import model.Customer;
 
 import java.io.IOException;
@@ -125,7 +126,7 @@ public class AddCustomer implements Initializable {
             Optional<ButtonType> result = addCustomer.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.YES){
                 CustomerDAO.addCustomer(addCustomerName,addAddress,addPhoneNumber,addPostalCode,addFirstLevel);
-                Appointments.toAppointments(actionEvent);
+                Appointments.backToAppointments(actionEvent);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -138,8 +139,8 @@ public class AddCustomer implements Initializable {
      * @param actionEvent The cancel button is clicked.
      * @throws IOException The exception to throw if I/O error occurs.
      */
-    public void toMainMenu(ActionEvent actionEvent) throws IOException {
-        Appointments.toAppointments(actionEvent);
+    public void toAppointments(MouseEvent actionEvent) throws IOException {
+        Customers backToAppointments = new Customers();
+        backToAppointments.backToAppointments(actionEvent);
     }
-
 }

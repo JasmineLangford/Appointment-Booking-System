@@ -429,7 +429,7 @@ public class ModifyAppointment implements Initializable {
                 AppointmentDAO.modifyAppointment(modApptID,modTitle, modDescription, modLocation, modType,
                         startDateTime,endDateTime,modCustID, modUserID, String.valueOf(modContact));
 
-                Appointments.toAppointments(actionEvent);
+                Appointments.backToAppointments(actionEvent);
             } else {
                 Alert noChange = new Alert(Alert.AlertType.INFORMATION, "There were no changes made to this " +
                         "appointment.", ButtonType.OK);
@@ -450,6 +450,6 @@ public class ModifyAppointment implements Initializable {
         Alert noChange = new Alert(Alert.AlertType.INFORMATION, "There were no changes made to this " +
                 "appointment.", ButtonType.OK);
         noChange.showAndWait();
-        Appointments.toAppointments(actionEvent);
+        Appointments.backToAppointments(actionEvent);
     }
 }

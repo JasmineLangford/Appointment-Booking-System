@@ -108,7 +108,7 @@ public class Login implements Initializable {
                 fifteenAlertFalse.setHeaderText("Appointment Alert");
                 fifteenAlertFalse.showAndWait();
 
-                Appointments.toAppointments(actionEvent);
+                Appointments.backToAppointments(actionEvent);
             }
         } else if (usernameLogin.getText().isBlank()) {
             validationIcon.setVisible(true);

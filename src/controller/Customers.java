@@ -1,7 +1,6 @@
 package controller;
 
 import DAO.CustomerDAO;
-import com.mysql.cj.jdbc.MysqlSQLXML;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -198,11 +197,10 @@ public class Customers implements Initializable {
     /**
      * This method will take the end-user to the Add Customer screen where a new customer can be added.
      *
-     * @param actionEvent Add button is clicked under the customers tableview.
+     * @param actionEvent Add button is clicked under the customers' tableview.
      * @throws IOException The exception to throw if I/O error occurs.
      */
     public void addCustomer(ActionEvent actionEvent) throws IOException {
-
         Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/add-customer.fxml"))));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, 500, 475);
@@ -210,10 +208,6 @@ public class Customers implements Initializable {
         stage.show();
         stage.centerOnScreen();
         stage.setResizable(false);
-    }
-
-    public void toClose() {
-        exitCustomers();
     }
 
     public void toReports(MouseEvent actionEvent) throws IOException {
@@ -228,7 +222,30 @@ public class Customers implements Initializable {
         stage.setResizable(false);
     }
 
-    public void toAppointments(MouseEvent actionEvent) throws IOException {
+//    /**
+//     * This method takes the user to the appointments screen.
+//     *
+//     * @param actionEvent Appointments label is clicked (located on the left panel).
+//     * @throws IOException The exception to throw if I/O error occurs.
+//     */
+//    public static void backToAppointments(MouseEvent actionEvent) throws IOException {
+//            Parent root = FXMLLoader.load((Objects.requireNonNull(Appointments.class.getResource("/view/appointments.fxml"))));
+//            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+//            Scene scene = new Scene(root, 1108, 538);
+//            scene.setFill(Color.TRANSPARENT);
+//            root.setStyle("-fx-background-radius: 30px 30px 30px 30px;");
+//            stage.setScene(scene);
+//            stage.show();
+//            stage.centerOnScreen();
+//            stage.setResizable(false);
+//        }
+
+    public void toClose (MouseEvent mouseEvent) {
+        Appointments exitApplication = new Appointments();
+        exitApplication.toClose(mouseEvent);
+    }
+
+    public void backToAppointments(MouseEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load((Objects.requireNonNull(Appointments.class.getResource("/view/appointments.fxml"))));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, 1108, 538);
@@ -238,12 +255,6 @@ public class Customers implements Initializable {
         stage.show();
         stage.centerOnScreen();
         stage.setResizable(false);
-    }
-
-
-    public void exitCustomers() {
-        Appointments exitApplication = new Appointments();
-        exitApplication.exitApp();
     }
 }
 

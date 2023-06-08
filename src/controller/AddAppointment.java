@@ -11,6 +11,7 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import model.Appointment;
 import model.Customer;
@@ -100,7 +101,7 @@ public class AddAppointment implements Initializable {
 
         // appointment type combo box
         ObservableList<String> types = FXCollections.observableArrayList(
-                "In-Person","Virtual"
+                "In-Person", "Virtual"
         );
         typeCombo.setItems(types);
         typeCombo.setPromptText("Select Type");
@@ -235,7 +236,7 @@ public class AddAppointment implements Initializable {
 
         // input validation: empty text fields
         try {
-            if (contactCombo.getValue() == null || typeCombo.getValue() == null|| titleTextfield.getText().isEmpty() ||
+            if (contactCombo.getValue() == null || typeCombo.getValue() == null || titleTextfield.getText().isEmpty() ||
                     descTextField.getText().isEmpty() || locationCombo.getValue() == null) {
                 Alert emptyField = new Alert(Alert.AlertType.ERROR, "One or more fields are empty. Please enter a" +
                         " value in each field.");
@@ -374,15 +375,15 @@ public class AddAppointment implements Initializable {
             newAppointment.setCustomerID(addCustID);
             newAppointment.setUserID(addUserID);
 
-                AppointmentDAO.addAppointment(startDateTime, endDateTime, String.valueOf(addContact),
-                        addType, addTitle, addDescription, addLocation, addCustID, addUserID);
+            AppointmentDAO.addAppointment(startDateTime, endDateTime, String.valueOf(addContact),
+                    addType, addTitle, addDescription, addLocation, addCustID, addUserID);
             Alert addedSuccessful = new Alert(Alert.AlertType.CONFIRMATION, "The appointment was successfully " +
                     "added.", ButtonType.OK);
             addedSuccessful.setTitle("Appointment Booking System");
             addedSuccessful.setHeaderText("Add Appointment");
             Optional<ButtonType> result = addedSuccessful.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
-            toMainMenu(actionEvent);
+                Appointments.backToAppointments(actionEvent);
             }
 
         } catch (IOException | SQLException e) {
@@ -396,7 +397,7 @@ public class AddAppointment implements Initializable {
      * @param actionEvent Cancel button is clicked.
      * @throws IOException The exception to throw if I/O error occurs.
      */
-    public void toMainMenu(ActionEvent actionEvent) throws IOException {
-        Appointments.toAppointments(actionEvent);
+    public void toAppointments(ActionEvent actionEvent) throws IOException {
+        Appointments.backToAppointments(actionEvent);
     }
 }

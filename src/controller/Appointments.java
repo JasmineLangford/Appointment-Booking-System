@@ -17,6 +17,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.Appointment;
@@ -40,6 +41,8 @@ import java.util.ResourceBundle;
  */
 public class Appointments implements Initializable {
 
+    @FXML
+    private Pane toClose;
     @FXML
     private Label currentDate;
     @FXML
@@ -69,6 +72,8 @@ public class Appointments implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Main Menu initialized!");
+
+        toClose.setOnMouseClicked(this::toClose);
 
         // Display user's first name in welcome tagline
         String firstName = UserDAO.getUserLogin().getUserFirstName();
@@ -129,14 +134,7 @@ public class Appointments implements Initializable {
             e.printStackTrace();
         }
     }
-
-    /**
-     * This method takes the user to the appointments screen.
-     *
-     * @param actionEvent Appointments label is clicked (located on the left panel).
-     * @throws IOException The exception to throw if I/O error occurs.
-     */
-    public static void toAppointments(ActionEvent actionEvent) throws IOException {
+    public static void backToAppointments(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load((Objects.requireNonNull(Appointments.class.getResource("/view/appointments.fxml"))));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, 1108, 538);
@@ -335,15 +333,16 @@ public class Appointments implements Initializable {
     /**
      * This method closes the application and an alert will ask the user to confirm close.
      */
-    public void toClose() {
+    public void toClose(MouseEvent mouseEvent) {
         Alert closeConfirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to exit the " +
                 "application?", ButtonType.YES, ButtonType.NO);
         closeConfirm.setTitle("Appointment Booking System");
         closeConfirm.setHeaderText("Exit Application");
-        Optional<ButtonType> result = closeConfirm.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.YES) {
-            Platform.exit();
-            System.out.println("Application Closed");
-        }
+        closeConfirm.showAndWait().ifPresent(result -> {
+            if (result == ButtonType.YES) {
+                Platform.exit();
+                System.out.println("Application Closed");
+            }
+        });
     }
 }
