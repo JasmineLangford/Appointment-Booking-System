@@ -8,11 +8,6 @@ public class User {
     public User() {
 
     }
-    // override format for combo box selection display
-    @Override
-    public String toString(){
-        return (getUserID() + " " + getUsername());
-    }
 
     private String username;
     private String password;
@@ -34,7 +29,10 @@ public class User {
         this.userFirstName = userFirstName;
         this.userLastName = userLastName;
     }
-
+    public User(String userFirstName, String userLastName) {
+        this.userFirstName = userFirstName;
+        this.userLastName = userLastName;
+    }
     /**
      * Gets the username.
      *

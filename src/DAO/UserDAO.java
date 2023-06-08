@@ -15,7 +15,10 @@ import java.time.format.DateTimeFormatter;
  * This class contains queries for users.
  */
 public class UserDAO extends User {
-
+    @Override
+    public String toString(){
+        return (getUserFirstName() + " " + getUserLastName());
+    }
     private static User userLogin;
 
     /**
@@ -37,7 +40,8 @@ public class UserDAO extends User {
      */
     public static ObservableList<UserDAO> allUsers() throws SQLException {
         ObservableList<UserDAO> users = FXCollections.observableArrayList();
-        String userQuery = "SELECT User_ID, User_Name, Password, First_Name, Last_Name FROM users ORDER BY User_ID ASC";
+        String userQuery = "SELECT User_ID, User_Name, Password, First_Name, Last_Name FROM users ORDER BY " +
+                "User_ID ASC";
         PreparedStatement ps = JDBC.connection.prepareStatement(userQuery);
         ResultSet rs = ps.executeQuery();
 
