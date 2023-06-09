@@ -7,9 +7,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import model.Customer;
 
 import java.io.IOException;
@@ -26,7 +31,11 @@ import java.util.stream.Collectors;
  * screen or cancel if the end-user no longer wants to add a customer.
  */
 public class AddCustomer implements Initializable {
-    // form fields
+
+    @FXML
+    private TextField loyaltyPoints;
+    @FXML
+    private TextField customerType;
     @FXML
     private TextField custNameTextfield;
     @FXML
@@ -39,12 +48,9 @@ public class AddCustomer implements Initializable {
     private ComboBox<CountryDAO> countryCombo;
     @FXML
     private ComboBox<FirstLevelDAO> firstLevelCombo;
-
-    // lists for combo boxes
     ObservableList<CountryDAO> countries = CountryDAO.allCountries();
     ObservableList<FirstLevelDAO> divisions = FirstLevelDAO.allFirstLevelDivision();
-
-    Customer newCustomer = new Customer();
+    Customer.RegularCustomer newCustomer = new Customer.RegularCustomer();
 
     public AddCustomer() throws SQLException {
     }
@@ -59,7 +65,7 @@ public class AddCustomer implements Initializable {
 
         // setting combo box selection of states/provinces
         firstLevelCombo.setItems(divisions);
-        firstLevelCombo.setPromptText("Select State/Province");
+        firstLevelCombo.setPromptText("Select State");
         firstLevelCombo.setVisibleRowCount(5);
     }
 
@@ -99,9 +105,12 @@ public class AddCustomer implements Initializable {
         String addPhoneNumber = phoneNumberTextfield.getText();
         String addPostalCode =  postalCodeTextfield.getText();
         String addCountry = countryCombo.getValue().toString();
+        String addType = customerType.getText();
+        int addLoyaltyPoints = Integer.parseInt(loyaltyPoints.getText());
 
         // input validation: empty field(s) found
-        if (addCustomerName.isEmpty() || addAddress.isEmpty() ||addPhoneNumber.isEmpty() || addPostalCode.isEmpty()) {
+        if (addCustomerName.isEmpty() || addAddress.isEmpty() ||addPhoneNumber.isEmpty() || addPostalCode.isEmpty() ||
+        addLoyaltyPoints == 0) {
             Alert emptyField = new Alert(Alert.AlertType.ERROR, "One or more fields are empty. Please enter a" +
                     " value in each field.");
             Optional<ButtonType> result = emptyField.showAndWait();
@@ -120,27 +129,40 @@ public class AddCustomer implements Initializable {
             newCustomer.setCustomerPostal(addPostalCode);
             newCustomer.setCustomerCountry(addCountry);
             newCustomer.setDivisionId(addFirstLevel);
+            newCustomer.setType(addType);
+            newCustomer.setLoyaltyPoints(addLoyaltyPoints);
 
             Alert addCustomer = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to add this new " +
                     "customer?", ButtonType.YES, ButtonType.NO);
             Optional<ButtonType> result = addCustomer.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.YES){
-                CustomerDAO.addCustomer(addCustomerName,addAddress,addPhoneNumber,addPostalCode,addFirstLevel);
-                Appointments.backToAppointments(actionEvent);
+                CustomerDAO.addCustomer(addCustomerName,addAddress,addPhoneNumber,addPostalCode,addFirstLevel, addType,
+                        addLoyaltyPoints);
+                toCustomers(actionEvent);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    public void toCustomers(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/customers.fxml"))));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, 1108, 538);
+        scene.setFill(Color.TRANSPARENT);
+        root.setStyle("-fx-background-radius: 30px 30px 30px 30px;");
+        stage.setScene(scene);
+        stage.show();
+        stage.centerOnScreen();
+        stage.setResizable(false);
+    }
     /**
      * This method navigates the end-user back to the Main Menu.
      *
      * @param actionEvent The cancel button is clicked.
      * @throws IOException The exception to throw if I/O error occurs.
      */
-    public void toAppointments(MouseEvent actionEvent) throws IOException {
-        Customers backToAppointments = new Customers();
-        backToAppointments.backToAppointments(actionEvent);
+    public void toAppointments(ActionEvent actionEvent) throws IOException {
+        toCustomers(actionEvent);
     }
 }

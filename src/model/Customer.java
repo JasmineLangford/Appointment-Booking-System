@@ -5,12 +5,6 @@ package model;
  */
 public class Customer {
 
-    // override format for combo box selection display
-    @Override
-    public String toString(){
-        return (getCustomerName());
-    }
-
     private int customerId;
     private String customerName;
     private String customerAddress;
@@ -25,24 +19,24 @@ public class Customer {
     /**
      * This constructor represents all customer data fields.
      *
-     * @param customerId Auto-incremented ID from the database.
-     * @param customerName The customer's first and last name.
+     * @param customerId      Auto-incremented ID from the database.
+     * @param customerName    The customer's first and last name.
      * @param customerAddress The customer's address.
-     * @param customerPhone The customer's phone number.
+     * @param customerPhone   The customer's phone number.
      * @param customerCountry The customer's country name.
-     * @param countryId The int related to the customer country.
-     * @param divisionId The int related to the customer state or province.
-     * @param division The customer's state or province name.
-     * @param customerPostal The customer's postal code.
+     * @param countryId       The int related to the customer country.
+     * @param divisionId      The int related to the customer state or province.
+     * @param division        The customer's state or province name.
+     * @param customerPostal  The customer's postal code.
      */
     public Customer(int customerId, String customerName, String customerAddress, String customerPhone, String
-            customerCountry, int countryId, int divisionId, String division, String customerPostal){
+            customerCountry, int countryId, int divisionId, String division, String customerPostal) {
         this.customerId = customerId;
         this.customerName = customerName;
         this.customerAddress = customerAddress;
         this.customerPhone = customerPhone;
         this.customerCountry = customerCountry;
-        this.countryId= countryId;
+        this.countryId = countryId;
         this.divisionId = divisionId;
         this.division = division;
         this.customerPostal = customerPostal;
@@ -52,9 +46,9 @@ public class Customer {
      * This is the constructor representing customer's state or province and the total customers calculated.
      * This is used for reporting.
      *
-     * @param divisionId The int related to the customer's state or province.
-     * @param division The customer's state or province name.
-     * @param countryId The int related to the customer country.
+     * @param divisionId     The int related to the customer's state or province.
+     * @param division       The customer's state or province name.
+     * @param countryId      The int related to the customer country.
      * @param totalCustomers The sum of customers in the same state or province.
      */
     public Customer(int divisionId, String division, int countryId, int totalCustomers) {
@@ -68,7 +62,7 @@ public class Customer {
      * This is the constructor representing the customer's country.
      * Used for country combo box selection.
      *
-     * @param countryId The int related to the customer country.
+     * @param countryId       The int related to the customer country.
      * @param customerCountry The customer's country name.
      */
     public Customer(int countryId, String customerCountry) {
@@ -76,13 +70,13 @@ public class Customer {
         this.customerCountry = customerCountry;
     }
 
-     /**
+    /**
      * This is the constructor representing customer's state or province.
      * This is used for the state/province combo box selection.
      *
      * @param divisionId The int related to the customer's state or province.
-     * @param division The customer's state or province name.
-     * @param countryId The int related to the customer country.
+     * @param division   The customer's state or province name.
+     * @param countryId  The int related to the customer country.
      */
     public Customer(int divisionId, String division, int countryId) {
         this.divisionId = divisionId;
@@ -96,6 +90,62 @@ public class Customer {
     public Customer() {
     }
 
+    // override format for combo box selection display
+    @Override
+    public String toString() {
+        return (getCustomerName());
+    }
+
+    public static class RegularCustomer extends Customer {
+        private int loyaltyPoints;
+        private String type;
+
+        public RegularCustomer(int customerId, String customerName, String customerAddress, String customerPhone, String
+            customerCountry, int countryId, int divisionId, String division, String customerPostal,
+            int loyaltyPoints, String type) {
+                super(customerId, customerName, customerAddress, customerPhone, customerCountry, countryId, divisionId,
+                        division, customerPostal);
+                this.loyaltyPoints = loyaltyPoints;
+                this.type = type;
+        }
+
+        public RegularCustomer() {
+
+        }
+
+        public int getLoyaltyPoints() {
+            return loyaltyPoints;
+        }
+
+        public void setLoyaltyPoints(int loyaltyPoints) {
+            this.loyaltyPoints = loyaltyPoints;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+    }
+
+    public static class CorporateAccount extends Customer {
+        private String company;
+        public CorporateAccount(int customerId, String customerName, String customerAddress, String customerPhone, String
+                customerCountry, int countryId, int divisionId, String division, String customerPostal) {
+            super(customerId, customerName, customerAddress, customerPhone, customerCountry, countryId, divisionId,
+                    division, customerPostal);
+        }
+
+        public String getCompany() {
+            return company;
+        }
+
+        public void setCompany(String company) {
+            this.company = company;
+        }
+    }
     /**
      * Gets the customer ID.
      *
@@ -198,7 +248,7 @@ public class Customer {
     /**
      * Sets the country ID.
      *
-     * @param countryId  An integer containing the customer country.
+     * @param countryId An integer containing the customer country.
      */
     public void setCountryId(int countryId) {
         this.countryId = countryId;
@@ -274,5 +324,6 @@ public class Customer {
      */
     public void setTotalCustomers(int totalCustomers) {
         this.totalCustomers = totalCustomers;
+
     }
 }
