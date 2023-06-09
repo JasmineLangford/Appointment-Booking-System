@@ -24,14 +24,15 @@ import model.Customer;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class Customers implements Initializable {
-    public Label currentDate;
+
+    public RadioButton viewRegularCustomer;
+    public ToggleGroup customerTypeToggle;
+    public RadioButton viewCorpAcct;
     @FXML
     private TextField searchCustomer;
     @FXML
@@ -49,15 +50,12 @@ public class Customers implements Initializable {
     @FXML
     private TableColumn<Customer, String> customerPostalCol;
 
+    private FilteredList<Customer> filteredCustomers;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Display current date
-        LocalDate current = LocalDate.now();
-        DateTimeFormatter formatCurrentDate = DateTimeFormatter.ofPattern("MMMM d, yyyy");
-        String formattedDate = current.format(formatCurrentDate);
-        currentDate.setText("Today," + " " + formattedDate);
+        customerNameCol.setText("Customer Name");
+        searchCustomer.setPromptText("Search by Customer Name");
 
-        // Set customer table columns
         customerNameCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         customerAddressCol.setCellValueFactory(new PropertyValueFactory<>("customerAddress"));
         customerPhoneCol.setCellValueFactory(new PropertyValueFactory<>("customerPhone"));
@@ -73,16 +71,34 @@ public class Customers implements Initializable {
         }
 
         // Search customers
-        FilteredList<Customer> filteredCustomers;
         try {
             filteredCustomers = new FilteredList<>(CustomerDAO.allCustomers());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+        customerTypeToggle.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == viewRegularCustomer) {
+                try {
+                    changeToCustomer();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            } else if (newValue == viewCorpAcct) {
+                try {
+                    changeToCorp();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+
+    public void applySearch(){
         searchCustomer.textProperty().addListener((observable, oldValue, newValue) ->
                 filteredCustomers.setPredicate(customer -> {
-
-                    if(newValue == null || newValue.isEmpty()){
+                    if (newValue == null || newValue.isEmpty()) {
                         return true;
                     }
 
@@ -91,15 +107,16 @@ public class Customers implements Initializable {
                     if (customer.getCustomerName().toLowerCase().contains(searchKeyword)) {
                         return true;
                     } else return Integer.toString(customer.getCustomerId()).contains(searchKeyword);
-
-                }));
+                })
+        );
 
         SortedList<Customer> sortedParts = new SortedList<>(filteredCustomers);
         sortedParts.comparatorProperty().bind(mainCustomerTable.comparatorProperty());
         mainCustomerTable.setItems(sortedParts);
 
         // Message displayed on customer tableview if there are no matching items.
-        mainCustomerTable.setPlaceholder(new Label("No matching customers."));
+        mainCustomerTable.setPlaceholder(new Label("No matches"));
+
     }
     // load customer tableview
     public void loadCustomerTable() throws SQLException {
@@ -107,6 +124,7 @@ public class Customers implements Initializable {
         mainCustomerTable.setItems(allCustomers);
         mainCustomerTable.getSelectionModel().clearSelection();
     }
+
     /**
      * This method will take the end-user to Modify Customer screen where they can modify existing customers. The
      * data from the selected row will auto-populate to the modify form.
@@ -194,14 +212,31 @@ public class Customers implements Initializable {
             e.printStackTrace();
         }
     }
+
     /**
-     * This method will take the end-user to the Add Customer screen where a new customer can be added.
+     * This method will take the user to the Add Customer screen where a new customer can be added.
      *
      * @param actionEvent Add button is clicked under the customers' tableview.
      * @throws IOException The exception to throw if I/O error occurs.
      */
     public void addCustomer(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/add-customer.fxml"))));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, 500, 475);
+        stage.setScene(scene);
+        stage.show();
+        stage.centerOnScreen();
+        stage.setResizable(false);
+    }
+
+    /**
+     * This method will take the end-user to the Add Customer screen where a new customer can be added.
+     *
+     * @param actionEvent Add button is clicked under the customers' tableview.
+     * @throws IOException The exception to throw if I/O error occurs.
+     */
+    public void addCorpAcct(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/add-corp-account.fxml"))));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, 500, 475);
         stage.setScene(scene);
@@ -222,29 +257,6 @@ public class Customers implements Initializable {
         stage.setResizable(false);
     }
 
-//    /**
-//     * This method takes the user to the appointments screen.
-//     *
-//     * @param actionEvent Appointments label is clicked (located on the left panel).
-//     * @throws IOException The exception to throw if I/O error occurs.
-//     */
-//    public static void backToAppointments(MouseEvent actionEvent) throws IOException {
-//            Parent root = FXMLLoader.load((Objects.requireNonNull(Appointments.class.getResource("/view/appointments.fxml"))));
-//            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-//            Scene scene = new Scene(root, 1108, 538);
-//            scene.setFill(Color.TRANSPARENT);
-//            root.setStyle("-fx-background-radius: 30px 30px 30px 30px;");
-//            stage.setScene(scene);
-//            stage.show();
-//            stage.centerOnScreen();
-//            stage.setResizable(false);
-//        }
-
-    public void toClose (MouseEvent mouseEvent) {
-        Appointments exitApplication = new Appointments();
-        exitApplication.toClose(mouseEvent);
-    }
-
     public void backToAppointments(MouseEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load((Objects.requireNonNull(Appointments.class.getResource("/view/appointments.fxml"))));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -256,5 +268,42 @@ public class Customers implements Initializable {
         stage.centerOnScreen();
         stage.setResizable(false);
     }
-}
 
+    public void toClose(MouseEvent mouseEvent) {
+        Appointments exitApplication = new Appointments();
+        exitApplication.toClose(mouseEvent);
+    }
+
+    /**
+     * This method filters the appointments to display all appointments.
+     *
+     * @throws SQLException The exception to throw if there is an issue with the sql query.
+     */
+    public void changeToCustomer() throws SQLException {
+        ObservableList<Customer> regularCustomers = CustomerDAO.allCustomers();
+        if (regularCustomers.isEmpty()) {
+            mainCustomerTable.setItems(regularCustomers);
+            mainCustomerTable.setPlaceholder(new Label("No customers available"));
+        } else {
+            searchCustomer.setPromptText("Search by Customer Name ");
+            customerNameCol.setText("Customer Name");
+            //mainCustomerTable.setItems(regularCustomers);
+            filteredCustomers = new FilteredList<>(regularCustomers);
+            applySearch();
+        }
+    }
+
+    public void changeToCorp() throws SQLException {
+        ObservableList<Customer> corporateAccounts = CustomerDAO.corporateAccounts();
+        if (corporateAccounts.isEmpty()) {
+            mainCustomerTable.setItems(corporateAccounts);
+            mainCustomerTable.setPlaceholder(new Label("No corporate accounts available"));
+        } else {
+            searchCustomer.setPromptText("Search by Company Name");
+            customerNameCol.setText("Company Name");
+            //mainCustomerTable.setItems(corporateAccounts);
+            filteredCustomers = new FilteredList<>(corporateAccounts);
+            applySearch();
+        }
+    }
+}
