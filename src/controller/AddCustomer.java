@@ -129,7 +129,7 @@ public class AddCustomer implements Initializable {
             newCustomer.setCustomerPostal(addPostalCode);
             newCustomer.setCustomerCountry(addCountry);
             newCustomer.setDivisionId(addFirstLevel);
-            newCustomer.setType(addType);
+            newCustomer.setCustomerType(addType);
             newCustomer.setLoyaltyPoints(addLoyaltyPoints);
 
             Alert addCustomer = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to add this new " +
