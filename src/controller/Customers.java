@@ -33,6 +33,7 @@ public class Customers implements Initializable {
     public RadioButton viewRegularCustomer;
     public ToggleGroup customerTypeToggle;
     public RadioButton viewCorpAcct;
+    public TableColumn<Customer,String> customerType;
     @FXML
     private TextField searchCustomer;
     @FXML
@@ -62,6 +63,7 @@ public class Customers implements Initializable {
         customerCountryCol.setCellValueFactory(new PropertyValueFactory<>("customerCountry"));
         customerStateCol.setCellValueFactory(new PropertyValueFactory<>("division"));
         customerPostalCol.setCellValueFactory(new PropertyValueFactory<>("customerPostal"));
+        customerType.setCellValueFactory(new PropertyValueFactory<>("customerType"));
 
         try {
             loadCustomerTable();

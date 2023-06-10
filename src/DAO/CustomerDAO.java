@@ -33,10 +33,9 @@ public class CustomerDAO extends Customer {
     public static ObservableList<Customer> allCustomers() throws SQLException {
         ObservableList<Customer> listOfCustomers = FXCollections.observableArrayList();
         String customerQuery = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, countries.Country, " +
-                "first_level_divisions.Country_ID, customers.Division_ID, " +
-                "Division FROM customers INNER JOIN first_level_divisions ON customers.Division_ID=" +
-                "first_level_divisions.Division_ID INNER JOIN countries ON first_level_divisions.Country_ID=" +
-                "countries.Country_ID ORDER BY Customer_ID ASC;";
+                "first_level_divisions.Country_ID, customers.Division_ID, Division, Type FROM customers INNER JOIN " +
+                "first_level_divisions ON customers.Division_ID= first_level_divisions.Division_ID INNER JOIN " +
+                "countries ON first_level_divisions.Country_ID= countries.Country_ID ORDER BY Customer_ID ASC;";
 
         PreparedStatement ps = JDBC.connection.prepareStatement(customerQuery);
         ResultSet rs = ps.executeQuery();
@@ -51,8 +50,9 @@ public class CustomerDAO extends Customer {
             int divisionId = rs.getInt("Division_ID");
             String division = rs.getString("Division");
             String customerPostal = rs.getString("Postal_Code");
+            String customerType = rs.getString("Type");
             Customer customer = new Customer(customerId,customerName,customerAddress,customerPhone, customerCountry,
-                    countryId, divisionId,division,customerPostal);
+                    countryId, divisionId,division,customerPostal,customerType);
             listOfCustomers.add(customer);
         }
         return listOfCustomers;

@@ -17,6 +17,22 @@ public class Customer {
     private int totalCustomers;
     private String customerType;
 
+    public Customer(int customerId, String customerName, String customerAddress, String customerPhone,
+                    String customerCountry, int countryId, int divisionId, String division, String customerPostal,
+                    String customerType) {
+
+        this.customerId = customerId;
+        this.customerName = customerName;
+        this.customerAddress = customerAddress;
+        this.customerPhone = customerPhone;
+        this.customerCountry = customerCountry;
+        this.countryId = countryId;
+        this.divisionId = divisionId;
+        this.division = division;
+        this.customerPostal = customerPostal;
+        this.customerType = customerType;
+    }
+
 
     // override format for combo box selection display
     @Override

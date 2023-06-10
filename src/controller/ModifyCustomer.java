@@ -7,13 +7,20 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import model.Customer;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -157,7 +164,7 @@ public class ModifyCustomer implements Initializable {
             Optional<ButtonType> result = modCustomer.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.YES){
                 CustomerDAO.modifyCustomer(modCustomerID,modCustomerName,modAddress,modPostal,modPhone,modDivision);
-                toMainMenu(actionEvent);
+                toCustomers(actionEvent);
             }
         }catch (IOException e){
             e.printStackTrace();
@@ -172,5 +179,17 @@ public class ModifyCustomer implements Initializable {
      */
     public void toMainMenu(ActionEvent actionEvent) throws IOException {
         Appointments.backToAppointments(actionEvent);
+    }
+
+    public void toCustomers(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/customers.fxml"))));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, 1108, 538);
+        scene.setFill(Color.TRANSPARENT);
+        root.setStyle("-fx-background-radius: 30px 30px 30px 30px;");
+        stage.setScene(scene);
+        stage.show();
+        stage.centerOnScreen();
+        stage.setResizable(false);
     }
 }
