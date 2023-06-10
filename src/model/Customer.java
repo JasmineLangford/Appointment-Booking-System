@@ -129,6 +129,9 @@ public class Customer {
                     division, customerPostal);
         }
 
+        public CorporateAccount() {
+        }
+
         public String getCompany() {
             return company;
         }

@@ -36,7 +36,7 @@
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Label>
-    <Button layoutX="278.0" layoutY="400.0" mnemonicParsing="false" onAction="#onSaveCustomer" prefHeight="23.0" prefWidth="59.0" style="-fx-background-color: #f50ca0;" text="Save" textFill="#fcfefc">
+    <Button layoutX="278.0" layoutY="400.0" mnemonicParsing="false" onAction="#onSaveCorpAccount" prefHeight="23.0" prefWidth="59.0" style="-fx-background-color: #f50ca0;" text="Save" textFill="#fcfefc">
         <font>
             <Font name="Gill Sans MT Bold" size="13.0" />
         </font>

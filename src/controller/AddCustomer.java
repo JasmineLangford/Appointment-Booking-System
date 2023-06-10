@@ -59,31 +59,24 @@ public class AddCustomer implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Add customer is initialized!");
 
-        // setting combo box selection of countries
+        // Set combo box selection of countries
         countryCombo.setItems(countries);
         countryCombo.setPromptText("Select Country");
 
-        // setting combo box selection of states/provinces
+        // Set combo box selection of states/provinces
         firstLevelCombo.setItems(divisions);
         firstLevelCombo.setPromptText("Select State");
         firstLevelCombo.setVisibleRowCount(5);
     }
 
     /**
-     * <b>LAMBDA REQUIREMENT #2</b> This method uses a lambda expression to filter the state/province selections based
-     * on the country selected. The filter takes the predicate of <i>first level</i> and returns
-     * true if the country ID from the database matches the country ID from the country selected. The state/province(s)
-     * matching the country ID are then collected into an FXCollections instance that will display in the combo box as
-     * an observable array list, along with custom prompts for the end-user to select a state/province. The benefit of
-     * this lambda expression is that it takes an existing observable list and filtering it.
+     * This method filters the combo box containing the state/provinces depending on the country chosen.
      *
      * @throws SQLException The exception to throw if there are errors querying the divisions for the combo box.
      */
     public void countrySelected() throws SQLException {
-        // filter based on this selection
         Customer selection = countryCombo.getSelectionModel().getSelectedItem();
 
-        // Lambda: filter state/province and collect only those matching the country ID to be shown
         firstLevelCombo.setItems(FirstLevelDAO.allFirstLevelDivision().stream()
                 .filter(firstLevel -> firstLevel.getCountryId() == selection.getCountryId())
                 .collect(Collectors.toCollection(FXCollections::observableArrayList)));
@@ -132,12 +125,12 @@ public class AddCustomer implements Initializable {
             newCustomer.setCustomerType(addType);
             newCustomer.setLoyaltyPoints(addLoyaltyPoints);
 
-            Alert addCustomer = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to add this new " +
-                    "customer?", ButtonType.YES, ButtonType.NO);
+            CustomerDAO.addCustomer(addCustomerName,addAddress,addPhoneNumber,addPostalCode,addFirstLevel, addType,
+                    addLoyaltyPoints);
+            Alert addCustomer = new Alert(Alert.AlertType.CONFIRMATION, "The customer was successfully added.",
+                    ButtonType.OK);
             Optional<ButtonType> result = addCustomer.showAndWait();
-            if (result.isPresent() && result.get() == ButtonType.YES){
-                CustomerDAO.addCustomer(addCustomerName,addAddress,addPhoneNumber,addPostalCode,addFirstLevel, addType,
-                        addLoyaltyPoints);
+            if (result.isPresent() && result.get() == ButtonType.OK){
                 toCustomers(actionEvent);
             }
         } catch (IOException e) {
