@@ -129,6 +129,41 @@ public class CustomerDAO extends Customer {
     }
 
     /**
+     * This method inserts a new customer in customers table in the database.
+     *
+     * @param addAddress The address to add.
+     * @param addFirstLevel The state/province to add.
+     * @param addPhoneNumber The phone number to add.
+     * @param addPostalCode The postal code to add.
+     */
+    public static void addCorporateAccount(String addCompanyName, String addAddress, String addPhoneNumber,
+                                   String addPostalCode, int addFirstLevel, String addType){
+
+        String phoneNumber = addPhoneNumber.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "$1-$2-$3");
+
+        try {
+            String addCustomerQuery = "INSERT INTO customers (Customer_Name,Address,Postal_Code,Phone," +
+                    "Create_Date,Created_By,Last_Update,Last_Updated_By,Division_ID,Type) " +
+                    "VALUES (?,?,?,?,?,?,?,?,?,?)";
+            PreparedStatement ps = JDBC.connection.prepareStatement(addCustomerQuery);
+            ps.setString(1, addCompanyName);
+            ps.setString(2, addAddress);
+            ps.setString(3, addPostalCode);
+            ps.setString(4, phoneNumber);
+            ps.setString(5, null);
+            ps.setString(6, null);
+            ps.setString(7, null);
+            ps.setString(8, null);
+            ps.setInt(9, addFirstLevel);
+            ps.setString(10,addType);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
      * This method modifies data that is part of an existing customer.
      *
      * @param modCustomerID The customer ID to reference.

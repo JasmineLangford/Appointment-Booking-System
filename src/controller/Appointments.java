@@ -42,19 +42,19 @@ import java.util.ResourceBundle;
 public class Appointments implements Initializable {
 
     @FXML
-    private Pane toClose;
-    @FXML
-    private Label currentDate;
-    @FXML
     public Label currentUser;
     public ToggleGroup apptViewToggle;
     public RadioButton viewByMonth;
     public RadioButton viewByWeek;
     public RadioButton viewAllAppts;
     @FXML
+    private Pane toClose;
+    @FXML
+    private Label currentDate;
+    @FXML
     private TableView<Appointment> mainApptTable;
     @FXML
-    private TableColumn<Appointment,String> apptTimes;
+    private TableColumn<Appointment, String> apptTimes;
     @FXML
     private TableColumn<Appointment, String> apptTitleCol;
     @FXML
@@ -65,6 +65,18 @@ public class Appointments implements Initializable {
     private TableColumn<Appointment, String> apptCustCol;
     @FXML
     private TableColumn<Appointment, String> apptUserCol;
+
+    public static void backToAppointments(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load((Objects.requireNonNull(Appointments.class.getResource("/view/appointments.fxml"))));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, 1108, 538);
+        scene.setFill(Color.TRANSPARENT);
+        root.setStyle("-fx-background-radius: 30px 30px 30px 30px;");
+        stage.setScene(scene);
+        stage.show();
+        stage.centerOnScreen();
+        stage.setResizable(false);
+    }
 
     /**
      * This method launches the home screen.
@@ -88,18 +100,26 @@ public class Appointments implements Initializable {
         // Set appointment table columns
         apptTitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         apptLocationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
+
         apptCustCol.setCellValueFactory(cellData -> {
-            Appointment appointment = cellData.getValue();
-            int customerId = appointment.getCustomerID();
-            Customer customer;
+            int customerID = cellData.getValue().getCustomerID();
+
             try {
-                customer = CustomerDAO.allCustomers().get(customerId - 1);
+                ObservableList<Customer> customers = CustomerDAO.allCustomers();
+                String customerName = null;
+                for (Customer customer : customers) {
+                    if (customer.getCustomerId() == customerID) {
+                        customerName = customer.getCustomerName();
+                        break;
+                    }
+                }
+                return new SimpleStringProperty(customerName);
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
+                return null;
             }
-            String customerName = (customer != null) ? customer.getCustomerName() : "";
-            return new SimpleStringProperty(customerName);
         });
+
         apptUserCol.setCellValueFactory(cellData -> {
             Appointment appointment = cellData.getValue();
             int userId = appointment.getUserID();
@@ -109,7 +129,7 @@ public class Appointments implements Initializable {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-            String userFirstLastName = (user != null) ? user.getUserFirstName() + " " + user.getUserLastName(): "";
+            String userFirstLastName = (user != null) ? user.getUserFirstName() + " " + user.getUserLastName() : "";
             return new SimpleStringProperty(userFirstLastName);
         });
 
@@ -133,17 +153,6 @@ public class Appointments implements Initializable {
                 SQLException e) {
             e.printStackTrace();
         }
-    }
-    public static void backToAppointments(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load((Objects.requireNonNull(Appointments.class.getResource("/view/appointments.fxml"))));
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 1108, 538);
-        scene.setFill(Color.TRANSPARENT);
-        root.setStyle("-fx-background-radius: 30px 30px 30px 30px;");
-        stage.setScene(scene);
-        stage.show();
-        stage.centerOnScreen();
-        stage.setResizable(false);
     }
 
     /**
@@ -212,7 +221,8 @@ public class Appointments implements Initializable {
      * This method filters the appointments to display only appointments for the current month.
      *
      * @throws SQLException The exception to throw if there is an issue with the sql query.
-     */    public void changeToMonth() throws SQLException {
+     */
+    public void changeToMonth() throws SQLException {
         ObservableList<Appointment> currentMonth = AppointmentDAO.currentMonth();
         if (currentMonth.isEmpty()) {
             mainApptTable.setItems(currentMonth);
@@ -260,7 +270,7 @@ public class Appointments implements Initializable {
      * @param actionEvent View Details button is clicked under the appointments' tableview.
      * @throws IOException The exception to throw if I/O error occurs.
      */
-    public void viewApptDetails (ActionEvent actionEvent) throws IOException {
+    public void viewApptDetails(ActionEvent actionEvent) throws IOException {
 
         // error message if user does not make a selection
         if (mainApptTable.getSelectionModel().isEmpty()) {

@@ -56,9 +56,9 @@
             <columns>
                 <TableColumn fx:id="apptDate" prefWidth="122.66665649414062" text="Date" />
                 <TableColumn fx:id="apptTimes" prefWidth="122.66665649414062" text="Start/End Time" />
-                <TableColumn fx:id="apptCustCol" prefWidth="139.33331298828125" text="Customer Name" />
-                <TableColumn fx:id="apptTitleCol" minWidth="3.33331298828125" prefWidth="172.33331298828125" text="Appointment Title" />
-                <TableColumn fx:id="apptUserCol" minWidth="5.3333740234375" prefWidth="125.66668701171875" text="Assigned Baker" />
+                <TableColumn fx:id="apptCustCol" prefWidth="159.33331298828125" text="Customer/Company Name" />
+                <TableColumn fx:id="apptTitleCol" minWidth="3.33331298828125" prefWidth="164.66668701171875" text="Appointment Title" />
+                <TableColumn fx:id="apptUserCol" minWidth="5.3333740234375" prefWidth="115.0" text="Assigned Baker" />
                 <TableColumn fx:id="apptLocationCol" prefWidth="106.333251953125" text="Location" />
             </columns>
         </TableView>

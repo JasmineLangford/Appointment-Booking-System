@@ -116,7 +116,6 @@ public class Customers implements Initializable {
 
         // Message displayed on customer tableview if there are no matching items.
         mainCustomerTable.setPlaceholder(new Label("No matches"));
-
     }
     // load customer tableview
     public void loadCustomerTable() throws SQLException {
