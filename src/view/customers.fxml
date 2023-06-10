@@ -62,7 +62,7 @@
                 <TableColumn fx:id="customerCountryCol" prefWidth="58.66668701171875" text="Country" />
                 <TableColumn fx:id="customerPostalCol" minWidth="0.0" prefWidth="119.6666259765625" text="Postal Code" />
                 <TableColumn fx:id="customerPhoneCol" minWidth="0.0" prefWidth="90.33331298828125" text="Phone Number" />
-            <TableColumn fx:id="customerType" prefWidth="94.99993896484375" text="Type" />
+            <TableColumn fx:id="customerType" prefWidth="94.99993896484375" text="Type" visible="false" />
             </columns>
         </TableView>
 

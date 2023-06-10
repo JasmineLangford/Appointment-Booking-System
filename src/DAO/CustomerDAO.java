@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * This class contains the database queries for customers.
@@ -59,6 +60,41 @@ public class CustomerDAO extends Customer {
     }
 
     /**
+     * This method queries regular customer accounts.
+     *
+     * @return The list of all customers.
+     * @throws SQLException The exception to throw if there is an error with database connection or with the query.
+     */
+    public static ObservableList<Customer> regularCustomers() throws SQLException {
+        ObservableList<Customer> listOfCustomers = FXCollections.observableArrayList();
+        String customerQuery = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, countries.Country, " +
+                "first_level_divisions.Country_ID, customers.Division_ID, " +
+                "Division, Type FROM customers INNER JOIN first_level_divisions ON customers.Division_ID=" +
+                "first_level_divisions.Division_ID INNER JOIN countries ON first_level_divisions.Country_ID=" +
+                "countries.Country_ID WHERE Type = 'Regular Customer' ORDER BY Customer_ID ASC;";
+
+        PreparedStatement ps = JDBC.connection.prepareStatement(customerQuery);
+        ResultSet rs = ps.executeQuery();
+
+        while(rs.next()){
+            int customerId = rs.getInt("Customer_ID");
+            String customerName = rs.getString("Customer_Name");
+            String customerAddress = rs.getString("Address");
+            String customerPhone = rs.getString("Phone");
+            String customerCountry = rs.getString("Country");
+            int countryId = rs.getInt("Country_ID");
+            int divisionId = rs.getInt("Division_ID");
+            String division = rs.getString("Division");
+            String customerPostal = rs.getString("Postal_Code");
+            String customerType = rs.getString("Type");
+            Customer.CorporateAccount customer = new Customer.CorporateAccount(customerId,customerName,customerAddress,customerPhone, customerCountry,
+                    countryId, divisionId,division,customerPostal, customerType);
+            listOfCustomers.add(customer);
+        }
+        return listOfCustomers;
+    }
+
+    /**
      * This method queries corporate accounts.
      *
      * @return The list of all customers.
@@ -68,7 +104,7 @@ public class CustomerDAO extends Customer {
         ObservableList<Customer> listOfAccounts = FXCollections.observableArrayList();
         String accountQuery = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, countries.Country, " +
                 "first_level_divisions.Country_ID, customers.Division_ID, " +
-                "Division FROM customers INNER JOIN first_level_divisions ON customers.Division_ID=" +
+                "Division, Type FROM customers INNER JOIN first_level_divisions ON customers.Division_ID=" +
                 "first_level_divisions.Division_ID INNER JOIN countries ON first_level_divisions.Country_ID=" +
                 "countries.Country_ID WHERE Type = 'Corporate Account' ORDER BY Customer_ID ASC;";
 
@@ -85,8 +121,9 @@ public class CustomerDAO extends Customer {
             int divisionId = rs.getInt("Division_ID");
             String division = rs.getString("Division");
             String customerPostal = rs.getString("Postal_Code");
+            String customerType = rs.getString("Type");
             Customer.CorporateAccount customer = new Customer.CorporateAccount(customerId,customerName,customerAddress,customerPhone, customerCountry,
-                    countryId, divisionId,division,customerPostal);
+                    countryId, divisionId,division,customerPostal,customerType);
             listOfAccounts.add(customer);
         }
         return listOfAccounts;
@@ -136,17 +173,18 @@ public class CustomerDAO extends Customer {
      * @param addPhoneNumber The phone number to add.
      * @param addPostalCode The postal code to add.
      */
-    public static void addCorporateAccount(String addCompanyName, String addAddress, String addPhoneNumber,
+    public static void addCorporateAccount(String addCustomerName,String addCompanyName, String addAddress, String addPhoneNumber,
                                    String addPostalCode, int addFirstLevel, String addType){
 
         String phoneNumber = addPhoneNumber.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "$1-$2-$3");
 
         try {
-            String addCustomerQuery = "INSERT INTO customers (Customer_Name,Address,Postal_Code,Phone," +
+            String addCustomerQuery = "INSERT INTO customers (Customer_Name,Company_Name,Address,Postal_Code,Phone," +
                     "Create_Date,Created_By,Last_Update,Last_Updated_By,Division_ID,Type) " +
                     "VALUES (?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement ps = JDBC.connection.prepareStatement(addCustomerQuery);
-            ps.setString(1, addCompanyName);
+            ps.setString(1, addCustomerName);
+            ps.setString(2, String.valueOf(Objects.equals(addCompanyName, addCustomerName)));
             ps.setString(2, addAddress);
             ps.setString(3, addPostalCode);
             ps.setString(4, phoneNumber);

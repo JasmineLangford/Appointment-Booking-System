@@ -118,9 +118,10 @@ public class Customer {
     public static class RegularCustomer extends Customer {
         private int loyaltyPoints;
         public RegularCustomer(int customerId, String customerName, String customerAddress, String customerPhone, String
-            customerCountry, int countryId, int divisionId, String division, String customerPostal, int loyaltyPoints) {
+            customerCountry, int countryId, int divisionId, String division, String customerPostal, String customerType,
+                               int loyaltyPoints) {
                 super(customerId, customerName, customerAddress, customerPhone, customerCountry, countryId, divisionId,
-                        division, customerPostal);
+                        division, customerPostal, customerType);
                 this.loyaltyPoints = loyaltyPoints;
         }
 
@@ -140,9 +141,10 @@ public class Customer {
     public static class CorporateAccount extends Customer {
         private String company;
         public CorporateAccount(int customerId, String customerName, String customerAddress, String customerPhone, String
-                customerCountry, int countryId, int divisionId, String division, String customerPostal) {
+                customerCountry, int countryId, int divisionId, String division, String customerPostal,
+                                String customerType) {
             super(customerId, customerName, customerAddress, customerPhone, customerCountry, countryId, divisionId,
-                    division, customerPostal);
+                    division, customerPostal, customerType);
         }
 
         public CorporateAccount() {

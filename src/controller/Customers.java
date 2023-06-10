@@ -121,8 +121,8 @@ public class Customers implements Initializable {
     }
     // load customer tableview
     public void loadCustomerTable() throws SQLException {
-        ObservableList<Customer> allCustomers = CustomerDAO.allCustomers();
-        mainCustomerTable.setItems(allCustomers);
+        ObservableList<Customer> regularCustomers = CustomerDAO.regularCustomers();
+        mainCustomerTable.setItems(regularCustomers);
         mainCustomerTable.getSelectionModel().clearSelection();
     }
 
@@ -281,14 +281,13 @@ public class Customers implements Initializable {
      * @throws SQLException The exception to throw if there is an issue with the sql query.
      */
     public void changeToCustomer() throws SQLException {
-        ObservableList<Customer> regularCustomers = CustomerDAO.allCustomers();
+        ObservableList<Customer> regularCustomers = CustomerDAO.regularCustomers();
         if (regularCustomers.isEmpty()) {
             mainCustomerTable.setItems(regularCustomers);
             mainCustomerTable.setPlaceholder(new Label("No customers available"));
         } else {
             searchCustomer.setPromptText("Search by Customer Name ");
             customerNameCol.setText("Customer Name");
-            //mainCustomerTable.setItems(regularCustomers);
             filteredCustomers = new FilteredList<>(regularCustomers);
             applySearch();
         }
@@ -302,7 +301,6 @@ public class Customers implements Initializable {
         } else {
             searchCustomer.setPromptText("Search by Company Name");
             customerNameCol.setText("Company Name");
-            //mainCustomerTable.setItems(corporateAccounts);
             filteredCustomers = new FilteredList<>(corporateAccounts);
             applySearch();
         }

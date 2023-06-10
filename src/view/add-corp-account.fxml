@@ -53,7 +53,7 @@
             </font>
         </Label>
     </Pane>
-    <TextField fx:id="custNameTextfield" layoutX="198.0" layoutY="141.0" prefHeight="25.0" prefWidth="206.0" />
+    <TextField fx:id="companyNameTextfield" layoutX="198.0" layoutY="141.0" prefHeight="25.0" prefWidth="206.0" />
     <TextField fx:id="addressTextfield" layoutX="198.0" layoutY="179.0" prefHeight="25.0" prefWidth="206.0" />
     <TextField fx:id="phoneNumberTextfield" layoutX="198.0" layoutY="217.0" prefHeight="25.0" prefWidth="206.0" />
     <TextField fx:id="postalCodeTextfield" layoutX="199.0" layoutY="333.0" prefHeight="25.0" prefWidth="206.0" />

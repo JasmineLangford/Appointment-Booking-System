@@ -33,7 +33,7 @@ public class AddCorpAccount implements Initializable {
     ObservableList<FirstLevelDAO> divisions = FirstLevelDAO.allFirstLevelDivision();
     Customer.CorporateAccount newCorpAccount = new Customer.CorporateAccount();
     @FXML
-    private TextField custNameTextfield;
+    private TextField companyNameTextfield;
     @FXML
     private TextField addressTextfield;
     @FXML
@@ -87,7 +87,7 @@ public class AddCorpAccount implements Initializable {
      */
     public void onSaveCorpAccount(ActionEvent actionEvent) {
 
-        String addCompanyName = custNameTextfield.getText();
+        String addCompanyName = companyNameTextfield.getText();
         String addAddress = addressTextfield.getText();
         String addPhoneNumber = phoneNumberTextfield.getText();
         String addPostalCode = postalCodeTextfield.getText();
@@ -108,6 +108,7 @@ public class AddCorpAccount implements Initializable {
             int addFirstLevel = firstLevelCombo.getSelectionModel().getSelectedItem().getDivisionId();
 
             // setting new customer
+            newCorpAccount.setCompany(addCompanyName);
             newCorpAccount.setCustomerName(addCompanyName);
             newCorpAccount.setCustomerAddress(addAddress);
             newCorpAccount.setCustomerPhone(addPhoneNumber);
@@ -116,7 +117,8 @@ public class AddCorpAccount implements Initializable {
             newCorpAccount.setDivisionId(addFirstLevel);
             newCorpAccount.setCustomerType(addType);
 
-            CustomerDAO.addCorporateAccount(addCompanyName, addAddress, addPhoneNumber, addPostalCode, addFirstLevel, addType);
+            CustomerDAO.addCorporateAccount(addCompanyName,addCompanyName, addAddress, addPhoneNumber, addPostalCode,
+                    addFirstLevel, addType);
             Alert addCorpAccount = new Alert(Alert.AlertType.CONFIRMATION, "The customer was successfully added.",
                     ButtonType.OK);
             Optional<ButtonType> result = addCorpAccount.showAndWait();
