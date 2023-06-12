@@ -195,27 +195,37 @@ public class Customers implements Initializable {
      */
     public void deleteCustomerRow() throws SQLException {
         if (mainCustomerTable.getSelectionModel().isEmpty()) {
+
+            if(viewRegularCustomer.isSelected()){
             Alert deleteCust = new Alert(Alert.AlertType.WARNING, "Please select a customer to be deleted.");
             Optional<ButtonType> result = deleteCust.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK)
                 deleteCust.setOnCloseRequest(Event::consume);
             return;
+            }else{
+                Alert deleteCust = new Alert(Alert.AlertType.WARNING, "Please select an account to be deleted.");
+                Optional<ButtonType> result = deleteCust.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK)
+                    deleteCust.setOnCloseRequest(Event::consume);
+                return;
+            }
         }
 
         Customer deleteAssociatedAppts = mainCustomerTable.getSelectionModel().getSelectedItem();
-        ObservableList<Appointment> associatedAppts = CustomerDAO.deleteAssociated(deleteAssociatedAppts.getCustomerId());
+        ObservableList<Appointment> associatedAppts =
+                CustomerDAO.deleteAssociated(deleteAssociatedAppts.getCustomerId());
 
         try {
             if (associatedAppts.size() > 0) {
                 Alert associatedAppt = new Alert(Alert.AlertType.WARNING, "All associated appointments will be " +
-                        "deleted along with this customer. Are you sure you want to delete this customer?", ButtonType.YES, ButtonType.NO);
+                        "deleted along with this customer. Are you sure you want to delete this customer?",
+                        ButtonType.YES, ButtonType.NO);
                 associatedAppt.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
                 associatedAppt.setTitle(" ");
                 associatedAppt.setHeaderText("Associated Appointment Found!");
                 Optional<ButtonType> results = associatedAppt.showAndWait();
                 if (results.isPresent() && results.get() == ButtonType.YES) {
                     CustomerDAO.deleteCustomer(deleteAssociatedAppts);
-                    //loadApptTable();
                     loadCustomerTable();
                     mainCustomerTable.getSelectionModel().clearSelection();
                 }
@@ -225,6 +235,8 @@ public class Customers implements Initializable {
                 }
 
             } else {
+
+                if(viewRegularCustomer.isSelected()){
                 Alert deleteCustConfirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete "
                         + "this customer?", ButtonType.YES, ButtonType.NO);
                 Optional<ButtonType> result = deleteCustConfirm.showAndWait();
@@ -238,6 +250,19 @@ public class Customers implements Initializable {
                             "customer: " + selectedCustomer.getCustomerName(), ButtonType.OK);
                     apptInfo.showAndWait();
                 }
+                }else{Alert deleteCustConfirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to " +
+                        "delete this account?", ButtonType.YES, ButtonType.NO);
+                    Optional<ButtonType> result = deleteCustConfirm.showAndWait();
+                    if (result.isPresent() && result.get() == ButtonType.YES) {
+                        Customer selectedCustomer = mainCustomerTable.getSelectionModel().getSelectedItem();
+                        CustomerDAO.deleteCustomer(selectedCustomer);
+                        loadCustomerTable();
+                        mainCustomerTable.getSelectionModel().clearSelection();
+
+                        Alert apptInfo = new Alert(Alert.AlertType.INFORMATION, "You have deleted the following " +
+                                "account: " + selectedCustomer.getCustomerName(), ButtonType.OK);
+                        apptInfo.showAndWait();
+                    }}
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -91,7 +91,7 @@ public class ModifyCorpAcct implements Initializable {
                 break;
             }
         }
-        companyName.setText(modCorpAccount.getCompany());
+        companyName.setText(modCorpAccount.getCustomerName());
         customerType.setText(modCorpAccount.getCustomerType());
         customerIdField.setText(String.valueOf(modCorpAccount.getCustomerId()));
         customerNameText.setText(modCorpAccount.getCustomerName());
@@ -155,9 +155,6 @@ public class ModifyCorpAcct implements Initializable {
         stage.setResizable(false);
     }
 
-    public void toMainMenu(ActionEvent actionEvent) {
-    }
-
     public void onModCountry() throws SQLException {
         Customer modSelection = countryModCombo.getSelectionModel().getSelectedItem();
 
@@ -169,4 +166,7 @@ public class ModifyCorpAcct implements Initializable {
         firstLevelModCombo.setVisibleRowCount(5);
     }
 
+    public void toMainMenu(ActionEvent actionEvent) throws IOException {
+        toCustomers(actionEvent);
+    }
 }
