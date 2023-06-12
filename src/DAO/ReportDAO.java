@@ -51,7 +51,8 @@ public class ReportDAO {
     public static ObservableList<Appointment> appointmentsByCustomer() throws SQLException{
 
         ObservableList<Appointment> apptByCust = FXCollections.observableArrayList();
-        String byCustomerQuery = "SELECT Appointment_ID, Title, Type, Description,Start,End,Customer_ID FROM appointments";
+        String byCustomerQuery = "SELECT Appointment_ID, Title, Type, Location, Description,Start,End,Customer_ID " +
+                "FROM appointments";
         PreparedStatement ps = JDBC.connection.prepareStatement(byCustomerQuery);
         ResultSet rs = ps.executeQuery();
 
@@ -59,12 +60,13 @@ public class ReportDAO {
             int appointmentID = rs.getInt("Appointment_ID");
             String title = rs.getString("Title");
             String description = rs.getString("Description");
+            String location = rs.getString("Location");
             String type = rs.getString("Type");
             LocalDateTime start = DateTimeUtil.toLocalDT(rs.getTimestamp("Start"));
             LocalDateTime end = DateTimeUtil.toLocalDT(rs.getTimestamp("End"));
             int customerID = rs.getInt("Customer_ID");
 
-            Appointment appointment = new Appointment (appointmentID,title,description,type,start,end,customerID);
+            Appointment appointment = new Appointment (appointmentID,title,description,location,type,start,end,customerID);
             apptByCust.add(appointment);
         }
         return apptByCust;

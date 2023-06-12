@@ -2,22 +2,24 @@ package controller;
 
 import DAO.AppointmentDAO;
 import DAO.ContactDAO;
+import DAO.CustomerDAO;
 import DAO.ReportDAO;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import model.Appointment;
 import model.Customer;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -25,32 +27,17 @@ import java.util.stream.Collectors;
 
 /***
  * This class is the controller for reports.fxml.
- *
- * <b>Required Report #1</b> The table displayed on the second row and to the right contains three columns for month,
- * type and total type. This report is being queried from the database and shows the month of the customer appointment,
- * where the months are in ascending order. Then, the type of the customer appointment with the sum of the type of
- * appointments for that particular month.
- *
- * <b>Required Report #2</b> The table displayed on the first row contains seven columns for appointment ID, title,
- * description, type, start date/time, end date/time, and customer ID. This report is being queried from the database
- * with the purpose of filtering appointments by their associated contact. Contacts can be selected from a combo box
- * above the report table.
- *
- * <b>Required Report #3</b> - Report of choice<b/> The table displayed on the second row and to the left contains two
- * columns for state/province and total customers. This report is being queried from the database with the purpose of
- * showing the total customers in each state/province. This report would be beneficial to see if the company needed to
- * understand staffing needs for each office.
- *
  * The end-user is able to navigate back to the main menu or logout with the use of buttons in the lower right-hand
  * corner of the screen.
  */
 
 public class Reports implements Initializable {
+
     // appointments by contact table
     @FXML
     private TableView<Appointment> byContactView;
     @FXML
-    private TableColumn<Appointment, Integer> apptIdCol;
+    private TableColumn<Appointment, String> apptLocationCol;
     @FXML
     private TableColumn<Appointment, String> apptTitleCol;
     @FXML
@@ -58,11 +45,11 @@ public class Reports implements Initializable {
     @FXML
     private TableColumn<Appointment, String> apptTypeCol;
     @FXML
-    private TableColumn<Appointment, String> apptStartCol;
+    private TableColumn<Appointment, String> apptDateCol;
     @FXML
-    private TableColumn<Appointment, String> apptEndCol;
+    private TableColumn<Appointment, String> apptTimeCol;
     @FXML
-    private TableColumn<Appointment, Integer> custIdCol;
+    private TableColumn<Appointment, String> custIdCol;
 
     // combo box of contacts to be filtered
     @FXML
@@ -97,15 +84,45 @@ public class Reports implements Initializable {
         System.out.println("Reports initialized.");
 
         // report by contact
-        apptIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
+        apptLocationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
         apptTitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         apptDescCol.setCellValueFactory(new PropertyValueFactory<>("description"));
         apptTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-        apptStartCol.setCellValueFactory(cellData ->
+        apptDateCol.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getStart().format(formatter)));
-        apptEndCol.setCellValueFactory(cellData ->
+        apptTimeCol.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getEnd().format(formatter)));
-        custIdCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        custIdCol.setCellValueFactory(cellData -> {
+            int customerID = cellData.getValue().getCustomerID();
+
+            try {
+                ObservableList<Customer> customers = CustomerDAO.allCustomers();
+                String customerName = null;
+                for (Customer customer : customers) {
+                    if (customer.getCustomerId() == customerID) {
+                        customerName = customer.getCustomerName();
+                        break;
+                    }
+                }
+                return new SimpleStringProperty(customerName);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return null;
+            }
+        });
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MMMM d, yyyy");
+        apptDateCol.setCellValueFactory(cellData -> {
+            String dateTimeValue = cellData.getValue().getStart().format(dateFormatter);
+            return new SimpleStringProperty(dateTimeValue);
+        });
+
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:mm a");
+        apptTimeCol.setCellValueFactory(cellData -> {
+            LocalTime startTime = cellData.getValue().getStart().toLocalTime();
+            LocalTime endTime = cellData.getValue().getEnd().toLocalTime();
+            String timeRange = startTime.format(timeFormatter) + " - " + endTime.format(timeFormatter);
+            return new SimpleStringProperty(timeRange);
+        });
 
         try {
             ObservableList<Appointment> reportByContact = ReportDAO.appointmentsByCustomer();
@@ -162,25 +179,28 @@ public class Reports implements Initializable {
     }
 
     /**
-     * This method navigates the user back to the Main Menu.
-     *
-     * @param actionEvent Back to Main button is clicked.
-     * @throws IOException The exception to throw if I/O error occurs.
-     */
-    public void toMainMenu(ActionEvent actionEvent) throws IOException {
-        Appointments.backToAppointments(actionEvent);
-    }
-
-    /**
      * This method closes the application and an alert will ask the end-user to confirm close.
      */
-    public void toCloseApplication () {
+    public void toCloseApplication (MouseEvent mouseEvent) throws IOException {
         Alert closeConfirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to close the program?",
                 ButtonType.YES, ButtonType.NO);
         Optional<ButtonType> result = closeConfirm.showAndWait();
         if(result.isPresent() && result.get() == ButtonType.YES) {
             Platform.exit();
             System.out.println("Program Closed");
+        } else {
+            Appointments toReportScreen = new Appointments();
+            toReportScreen.toReports(mouseEvent);
         }
+    }
+
+    public void toCustomers(MouseEvent mouseEvent) throws IOException {
+        Appointments toCustomerScreen = new Appointments();
+        toCustomerScreen.toCustomers(mouseEvent);
+    }
+
+    public void toAppointments(MouseEvent mouseEvent) throws IOException {
+        Customers toAppointmentScreen = new Customers();
+        toAppointmentScreen.backToAppointments(mouseEvent);
     }
 }
