@@ -45,6 +45,8 @@ public class Login implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Login initialized!");
 
+        usernameLogin.isFocused();
+
         ResourceBundle rb = ResourceBundle.getBundle("Nat", Locale.getDefault());
         usernameLabel.setText(rb.getString("usernameLabel"));
         passwordLabel.setText(rb.getString("passwordLabel"));
