@@ -33,7 +33,7 @@ public class Customers implements Initializable {
     public RadioButton viewRegularCustomer;
     public ToggleGroup customerTypeToggle;
     public RadioButton viewCorpAcct;
-    public TableColumn<Customer,String> customerType;
+    public TableColumn<Customer, String> customerType;
     @FXML
     private TextField searchCustomer;
     @FXML
@@ -52,6 +52,7 @@ public class Customers implements Initializable {
     private TableColumn<Customer, String> customerPostalCol;
 
     private FilteredList<Customer> filteredCustomers;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         customerNameCol.setText("Customer Name");
@@ -97,7 +98,7 @@ public class Customers implements Initializable {
     }
 
 
-    public void applySearch(){
+    public void applySearch() {
         searchCustomer.textProperty().addListener((observable, oldValue, newValue) ->
                 filteredCustomers.setPredicate(customer -> {
                     if (newValue == null || newValue.isEmpty()) {
@@ -119,6 +120,7 @@ public class Customers implements Initializable {
         // Message displayed on customer tableview if there are no matching items.
         mainCustomerTable.setPlaceholder(new Label("No matches"));
     }
+
     // load customer tableview
     public void loadCustomerTable() throws SQLException {
         ObservableList<Customer> regularCustomers = CustomerDAO.regularCustomers();
@@ -136,26 +138,54 @@ public class Customers implements Initializable {
     public void updateCustomer(ActionEvent actionEvent) throws IOException, SQLException {
 
         if (mainCustomerTable.getSelectionModel().isEmpty()) {
+
+            if(viewRegularCustomer.isSelected()){
             Alert modCustomerSelect = new Alert(Alert.AlertType.WARNING, "Please select a customer to be modified.");
             Optional<ButtonType> results = modCustomerSelect.showAndWait();
             if (results.isPresent() && results.get() == ButtonType.OK)
                 modCustomerSelect.setOnCloseRequest(Event::consume);
             return;
+            } else{
+                Alert modCorpAcctSelect = new Alert(Alert.AlertType.WARNING, "Please select an account to be " +
+                        "modified.");
+                Optional<ButtonType> results = modCorpAcctSelect.showAndWait();
+                if (results.isPresent() && results.get() == ButtonType.OK)
+                    modCorpAcctSelect.setOnCloseRequest(Event::consume);
+                return;
+            }
         }
 
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/modify-customer.fxml"));
-        loader.load();
+        // TODO: figure out modifying a regular customer and corporate account
 
-        ModifyCustomer MainMenu = loader.getController();
-        MainMenu.sendCustomer(mainCustomerTable.getSelectionModel().getSelectedItem());
+        if(viewRegularCustomer.isSelected()) {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/view/modify-customer.fxml"));
+            loader.load();
 
-        Parent scene = loader.getRoot();
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(scene));
-        stage.show();
-        stage.centerOnScreen();
-        stage.setResizable(false);
+            ModifyCustomer MainMenu = loader.getController();
+            MainMenu.sendCustomer(mainCustomerTable.getSelectionModel().getSelectedItem());
+
+            Parent scene = loader.getRoot();
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(scene));
+            stage.show();
+            stage.centerOnScreen();
+            stage.setResizable(false);
+        }else {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/view/modify-corp-acct.fxml"));
+            loader.load();
+
+            ModifyCorpAcct MainMenu = loader.getController();
+            MainMenu.sendCustomer(mainCustomerTable.getSelectionModel().getSelectedItem());
+
+            Parent scene = loader.getRoot();
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(scene));
+            stage.show();
+            stage.centerOnScreen();
+            stage.setResizable(false);
+        }
     }
 
     /**

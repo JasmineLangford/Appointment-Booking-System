@@ -54,15 +54,15 @@
         </Pane>
     </Pane>
     <Pane layoutX="217.0" prefHeight="539.0" prefWidth="891.0" style="-fx-background-color: #323232;">
-        <TableView fx:id="mainCustomerTable" layoutX="50.0" layoutY="194.0" prefHeight="254.0" prefWidth="788.0">
+        <TableView fx:id="mainCustomerTable" layoutX="50.0" layoutY="194.0" prefHeight="254.0" prefWidth="784.0">
             <columns>
                 <TableColumn fx:id="customerNameCol" prefWidth="144.99996948242188" />
                 <TableColumn fx:id="customerAddressCol" prefWidth="155.33331298828125" text="Address" />
                 <TableColumn fx:id="customerStateCol" prefWidth="121.33331298828125" text="State" />
-                <TableColumn fx:id="customerCountryCol" prefWidth="58.66668701171875" text="Country" />
-                <TableColumn fx:id="customerPostalCol" minWidth="0.0" prefWidth="119.6666259765625" text="Postal Code" />
-                <TableColumn fx:id="customerPhoneCol" minWidth="0.0" prefWidth="90.33331298828125" text="Phone Number" />
-            <TableColumn fx:id="customerType" prefWidth="94.99993896484375" text="Type" visible="false" />
+                <TableColumn fx:id="customerCountryCol" prefWidth="111.333251953125" text="Country" />
+                <TableColumn fx:id="customerPostalCol" minWidth="0.0" prefWidth="110.66668701171875" text="Postal Code" />
+                <TableColumn fx:id="customerPhoneCol" minWidth="0.0" prefWidth="139.33331298828125" text="Phone Number" />
+            <TableColumn fx:id="customerType" minWidth="6.33331298828125" prefWidth="6.33331298828125" text="Type" visible="false" />
             </columns>
         </TableView>
 
