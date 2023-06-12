@@ -61,4 +61,5 @@
    <ComboBox fx:id="countryCombo" layoutX="198.0" layoutY="255.0" onAction="#countrySelected" prefHeight="25.0" prefWidth="206.0" />
    <Line endX="393.7" layoutX="102.0" layoutY="89.0" startX="-100.0" stroke="#f50ca0" strokeWidth="7.0" />
    <TextField fx:id="customerType" layoutX="1.0" layoutY="93.0" prefHeight="25.0" prefWidth="110.0" text="Corporate Account" visible="false" />
+   <TextField fx:id="customerName" layoutX="1.0" layoutY="118.0" prefHeight="25.0" prefWidth="110.0" visible="false" />
 </AnchorPane>

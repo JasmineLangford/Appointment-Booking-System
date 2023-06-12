@@ -181,19 +181,19 @@ public class CustomerDAO extends Customer {
         try {
             String addCustomerQuery = "INSERT INTO customers (Customer_Name,Company_Name,Address,Postal_Code,Phone," +
                     "Create_Date,Created_By,Last_Update,Last_Updated_By,Division_ID,Type) " +
-                    "VALUES (?,?,?,?,?,?,?,?,?,?)";
+                    "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement ps = JDBC.connection.prepareStatement(addCustomerQuery);
             ps.setString(1, addCustomerName);
             ps.setString(2, String.valueOf(Objects.equals(addCompanyName, addCustomerName)));
-            ps.setString(2, addAddress);
-            ps.setString(3, addPostalCode);
-            ps.setString(4, phoneNumber);
-            ps.setString(5, null);
+            ps.setString(3, addAddress);
+            ps.setString(4, addPostalCode);
+            ps.setString(5, phoneNumber);
             ps.setString(6, null);
             ps.setString(7, null);
             ps.setString(8, null);
-            ps.setInt(9, addFirstLevel);
-            ps.setString(10,addType);
+            ps.setString(9, null);
+            ps.setInt(10, addFirstLevel);
+            ps.setString(11,addType);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -211,6 +211,8 @@ public class CustomerDAO extends Customer {
      * @param modPhone The phone number to modify.
      * @param modPostal The postal code to modify.
      */
+
+    // TODO: Modify for regular customers
     public static void modifyCustomer(int modCustomerID, String modCustomerName, String modAddress, String modPhone,
                                       String modPostal, int modFirstLevel) {
 
@@ -232,6 +234,37 @@ public class CustomerDAO extends Customer {
             ps.setString(9, null);
             ps.setInt(10, modFirstLevel);
             ps.setInt(11,modCustomerID);
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void modifyCorpAcct(int modCustomerID,  String modCompanyName, String modCustomerName,
+                                      String modAddress, String modPhone, String modPostal, int modFirstLevel,
+                                      String modType) {
+
+        String phoneNumber = modPhone.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "$1-$2-$3");
+
+        try{
+            String modCustomerQuery = "UPDATE customers SET Customer_ID = ?, Customer_Name = ?, Address = ?, " +
+                    "Postal_Code = ?, Phone = ?, Create_Date = ?,Created_By = ?,Last_Update = ?,Last_Updated_By = ?, " +
+                    "Type = ?, Company_Name = ?, Division_ID = ? WHERE Customer_ID = ?";
+            PreparedStatement ps = JDBC.connection.prepareStatement(modCustomerQuery);
+            ps.setInt(1, modCustomerID);
+            ps.setString(2, modCustomerName);
+            ps.setString(3, modAddress);
+            ps.setString(4, modPostal);
+            ps.setString(5, phoneNumber);
+            ps.setString(6, null);
+            ps.setString(7, null);
+            ps.setString(8, null);
+            ps.setString(9, null);
+            ps.setString(10,modType);
+            ps.setString(11,modCompanyName);
+            ps.setInt(12, modFirstLevel);
+            ps.setInt(13,modCustomerID);
 
             ps.executeUpdate();
         } catch (SQLException e) {

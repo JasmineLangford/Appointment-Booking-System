@@ -29,6 +29,8 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class AddCorpAccount implements Initializable {
+    @FXML
+    private TextField customerName;
     ObservableList<CountryDAO> countries = CountryDAO.allCountries();
     ObservableList<FirstLevelDAO> divisions = FirstLevelDAO.allFirstLevelDivision();
     Customer.CorporateAccount newCorpAccount = new Customer.CorporateAccount();
@@ -117,7 +119,7 @@ public class AddCorpAccount implements Initializable {
             newCorpAccount.setDivisionId(addFirstLevel);
             newCorpAccount.setCustomerType(addType);
 
-            CustomerDAO.addCorporateAccount(addCompanyName,addCompanyName, addAddress, addPhoneNumber, addPostalCode,
+            CustomerDAO.addCorporateAccount(addCompanyName, addCompanyName, addAddress, addPhoneNumber, addPostalCode,
                     addFirstLevel, addType);
             Alert addCorpAccount = new Alert(Alert.AlertType.CONFIRMATION, "The customer was successfully added.",
                     ButtonType.OK);

@@ -2,66 +2,65 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="475.0" prefWidth="500.0" style="-fx-background-color: #fffbfa;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ModifyCorpAcct">
-    <Label layoutX="112.0" layoutY="122.0" text="Customer ID" textAlignment="RIGHT" textFill="#373436">
+<AnchorPane prefHeight="475.0" prefWidth="500.0" style="-fx-background-color: #fffbfa;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ModifyCorpAcct">
+    <Label layoutX="134.0" layoutY="185.0" text="Address" textAlignment="RIGHT" textFill="#373436">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Label>
-    <Label layoutX="135.0" layoutY="202.0" text="Address" textAlignment="RIGHT" textFill="#373436">
+    <Label layoutX="96.0" layoutY="226.0" text="Phone Number" textAlignment="RIGHT" textFill="#373436">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Label>
-    <Label layoutX="97.0" layoutY="243.0" text="Phone Number" textAlignment="RIGHT" textFill="#373436">
+    <Label layoutX="131.0" layoutY="266.0" text="Country" textAlignment="RIGHT" textFill="#373436">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Label>
-    <Label layoutX="132.0" layoutY="283.0" text="Country" textAlignment="RIGHT" textFill="#373436">
+    <Label layoutX="89.0" layoutY="141.0" text="Company Name" textAlignment="RIGHT" textFill="#373436">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Label>
-    <Label layoutX="147.0" layoutY="162.0" text="Name" textAlignment="RIGHT" textFill="#373436">
+    <Label layoutX="111.0" layoutY="348.0" text="Postal Code" textAlignment="RIGHT" textFill="#373436">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Label>
-    <Label layoutX="112.0" layoutY="365.0" text="Postal Code" textAlignment="RIGHT" textFill="#373436">
+    <Label layoutX="102.0" layoutY="307.0" text="State/Province" textAlignment="RIGHT" textFill="#373436">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Label>
-    <Label layoutX="103.0" layoutY="324.0" text="State/Province" textAlignment="RIGHT" textFill="#373436">
-        <font>
-            <Font name="Gill Sans MT" size="13.0" />
-        </font>
-    </Label>
-    <Button layoutX="282.0" layoutY="406.0" mnemonicParsing="false" onAction="#onSaveModCustomer" prefHeight="23.0" prefWidth="54.0" style="-fx-background-color: #50add7;" text="Save" textFill="#fcfefc">
+    <Button layoutX="282.0" layoutY="397.0" mnemonicParsing="false" onAction="#onSaveModCustomer" prefHeight="23.0" prefWidth="54.0" style="-fx-background-color: #f50ca0;" text="Save" textFill="#fcfefc">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Button>
-    <Button layoutX="350.0" layoutY="406.0" mnemonicParsing="false" onAction="#toMainMenu" text="Cancel" textFill="#373436">
+    <Button layoutX="350.0" layoutY="397.0" mnemonicParsing="false" onAction="#toMainMenu" text="Cancel" textFill="#373436">
         <font>
             <Font name="Gill Sans MT" size="13.0" />
         </font>
     </Button>
-    <Pane layoutY="-2.0" prefHeight="87.0" prefWidth="500.0" style="-fx-background-color: #373436;">
-        <Label layoutX="164.0" layoutY="31.0" text="Modify Customer" textFill="#fffbfa">
+    <Pane layoutY="-2.0" prefHeight="87.0" prefWidth="500.0" style="-fx-background-color: #000000;">
+        <Label layoutX="118.0" layoutY="31.0" text="Modify Corporate Account" textFill="#fffbfa">
             <font>
                 <Font name="Gill Sans MT Bold" size="21.0" />
             </font>
         </Label>
     </Pane>
-    <TextField fx:id="customerIdField" disable="true" layoutX="198.0" layoutY="117.0" prefHeight="25.0" prefWidth="46.0" />
-    <TextField fx:id="customerNameText" layoutX="198.0" layoutY="157.0" prefHeight="25.0" prefWidth="206.0" />
-    <TextField fx:id="customerAddressText" layoutX="198.0" layoutY="197.0" prefHeight="25.0" prefWidth="206.0" />
-    <TextField fx:id="customerPhoneText" layoutX="198.0" layoutY="238.0" prefHeight="25.0" prefWidth="206.0" />
-    <TextField fx:id="customerPostalText" layoutX="198.0" layoutY="360.0" prefHeight="25.0" prefWidth="206.0" />
-   <ComboBox fx:id="countryModCombo" layoutX="198.0" layoutY="279.0" onAction="#onModCountry" prefHeight="25.0" prefWidth="206.0" />
-   <ComboBox fx:id="firstLevelModCombo" layoutX="198.0" layoutY="319.0" prefHeight="25.0" prefWidth="206.0" />
+    <TextField fx:id="customerIdField" disable="true" layoutX="20.0" layoutY="111.0" prefHeight="25.0" prefWidth="46.0" visible="false" />
+    <TextField fx:id="customerNameText" layoutX="197.0" layoutY="138.0" prefHeight="25.0" prefWidth="206.0" />
+    <TextField fx:id="customerAddressText" layoutX="197.0" layoutY="180.0" prefHeight="25.0" prefWidth="206.0" />
+    <TextField fx:id="customerPhoneText" layoutX="197.0" layoutY="221.0" prefHeight="25.0" prefWidth="206.0" />
+    <TextField fx:id="customerPostalText" layoutX="197.0" layoutY="343.0" prefHeight="25.0" prefWidth="206.0" />
+   <ComboBox fx:id="countryModCombo" layoutX="197.0" layoutY="262.0" onAction="#onModCountry" prefHeight="25.0" prefWidth="206.0" />
+   <ComboBox fx:id="firstLevelModCombo" layoutX="197.0" layoutY="302.0" prefHeight="25.0" prefWidth="206.0" />
+   <Line endX="397.0" layoutX="99.0" layoutY="89.0" startX="-100.0" stroke="#f50ca0" strokeWidth="7.0" />
+   <TextField fx:id="companyName" layoutX="14.0" layoutY="123.0" prefHeight="25.0" prefWidth="65.0" />
+   <TextField fx:id="customerType" layoutX="14.0" layoutY="150.0" prefHeight="25.0" prefWidth="65.0" />
 </AnchorPane>

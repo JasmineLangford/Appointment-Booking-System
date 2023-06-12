@@ -98,6 +98,7 @@ public class ModifyCustomer implements Initializable {
             }
         }
         customerIdField.setText(String.valueOf(modCustomer.getCustomerId()));
+
         customerNameText.setText(modCustomer.getCustomerName());
         customerAddressText.setText(modCustomer.getCustomerAddress());
         customerPhoneText.setText(modCustomer.getCustomerPhone().replaceAll("\\D", ""));
@@ -178,7 +179,7 @@ public class ModifyCustomer implements Initializable {
      * @throws IOException The exception to throw if end-user cannot return to the Main Menu.
      */
     public void toMainMenu(ActionEvent actionEvent) throws IOException {
-        Appointments.backToAppointments(actionEvent);
+        toCustomers(actionEvent);
     }
 
     public void toCustomers(ActionEvent actionEvent) throws IOException {
