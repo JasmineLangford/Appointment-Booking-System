@@ -83,7 +83,7 @@
         </Button>
         <Label layoutX="50.0" layoutY="40.0" text="Customers" textFill="WHITE">
             <font>
-                <Font name="Century Gothic Bold" size="20.0" />
+                <Font name="Gill Sans MT Bold" size="20.0" />
             </font>
         </Label>
         <Line endX="1.33331298828125" endY="-4.3333282470703125" layoutX="174.0" layoutY="51.0" startX="1.33331298828125" startY="10.666671752929688" stroke="#f50ca0" strokeWidth="5.0" />
