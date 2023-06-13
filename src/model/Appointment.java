@@ -61,6 +61,7 @@ public class Appointment {
      * @param end The end date/time
      * @param description The description.
      * @param customerID The customer ID.
+     * @param location The location.
      * @param appointmentID The appointment ID.
      */
     public Appointment(int appointmentID, String title, String description, String location, String type,
