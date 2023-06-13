@@ -30,10 +30,16 @@ import java.util.ResourceBundle;
 
 public class Customers implements Initializable {
 
-    public RadioButton viewRegularCustomer;
-    public ToggleGroup customerTypeToggle;
-    public RadioButton viewCorpAcct;
-    public TableColumn<Customer, String> customerType;
+    @FXML
+    private RadioButton viewRegularCustomer;
+    @FXML
+    private ToggleGroup customerTypeToggle;
+    @FXML
+    private RadioButton viewCorpAcct;
+    @FXML
+    private TableColumn<Customer, String> customerType;
+    @FXML
+    private Button deleteCustomer;
     @FXML
     private TextField searchCustomer;
     @FXML
@@ -57,6 +63,7 @@ public class Customers implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         customerNameCol.setText("Customer Name");
         searchCustomer.setPromptText("Search by Customer Name");
+        deleteCustomer.setText("Delete Customer");
 
         customerNameCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         customerAddressCol.setCellValueFactory(new PropertyValueFactory<>("customerAddress"));
@@ -154,8 +161,6 @@ public class Customers implements Initializable {
                 return;
             }
         }
-
-        // TODO: figure out modifying a regular customer and corporate account
 
         if(viewRegularCustomer.isSelected()) {
             FXMLLoader loader = new FXMLLoader();
@@ -341,6 +346,7 @@ public class Customers implements Initializable {
             mainCustomerTable.setItems(regularCustomers);
             mainCustomerTable.setPlaceholder(new Label("No customers available"));
         } else {
+            deleteCustomer.setText("Delete Customer");
             searchCustomer.setPromptText("Search by Customer Name ");
             customerNameCol.setText("Customer Name");
             filteredCustomers = new FilteredList<>(regularCustomers);
@@ -354,6 +360,7 @@ public class Customers implements Initializable {
             mainCustomerTable.setItems(corporateAccounts);
             mainCustomerTable.setPlaceholder(new Label("No corporate accounts available"));
         } else {
+            deleteCustomer.setText("Delete Account");
             searchCustomer.setPromptText("Search by Company Name");
             customerNameCol.setText("Company Name");
             filteredCustomers = new FilteredList<>(corporateAccounts);

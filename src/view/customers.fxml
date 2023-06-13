@@ -76,7 +76,7 @@
                 <Font name="Gill Sans MT Bold" size="13.0" />
             </font>
         </Button>
-        <Button layoutX="699.0" layoutY="472.0" mnemonicParsing="false" onAction="#deleteCustomerRow" prefHeight="32.0" prefWidth="102.0" style="-fx-background-color: #f50ca0;" text="Delete " textFill="#fcfefc">
+        <Button fx:id="deleteCustomer" layoutX="699.0" layoutY="472.0" mnemonicParsing="false" onAction="#deleteCustomerRow" prefHeight="32.0" prefWidth="135.0" style="-fx-background-color: #f50ca0;" text="Delete" textFill="#fcfefc">
             <font>
                 <Font name="Gill Sans MT Bold" size="13.0" />
             </font>
@@ -93,7 +93,7 @@
             <Font name="Gill Sans MT Bold" size="13.0" />
          </font>
       </Button>
-      <RadioButton fx:id="viewRegularCustomer" layoutX="53.0" layoutY="109.0" mnemonicParsing="false" onAction="#changeToCustomer" selected="true" text="Customer" textFill="WHITE">
+      <RadioButton fx:id="viewRegularCustomer" layoutX="53.0" layoutY="109.0" mnemonicParsing="false" onAction="#changeToCustomer" selected="true" text="Regular Customer" textFill="WHITE">
          <font>
             <Font name="Gill Sans MT" size="13.0" />
          </font>
@@ -101,7 +101,7 @@
             <ToggleGroup fx:id="customerTypeToggle" />
          </toggleGroup>
       </RadioButton>
-      <RadioButton fx:id="viewCorpAcct" layoutX="149.0" layoutY="109.0" mnemonicParsing="false" onAction="#changeToCorp" text="Corporate Account" textFill="WHITE" toggleGroup="$customerTypeToggle">
+      <RadioButton fx:id="viewCorpAcct" layoutX="194.0" layoutY="109.0" mnemonicParsing="false" onAction="#changeToCorp" text="Corporate Account" textFill="WHITE" toggleGroup="$customerTypeToggle">
          <font>
             <Font name="Gill Sans MT" size="13.0" />
          </font>
