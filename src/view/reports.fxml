@@ -10,22 +10,22 @@
     <Pane layoutX="208.0" layoutY="-1.0" prefHeight="539.0" prefWidth="900.0" style="-fx-background-color: #323232;">
         <TableView fx:id="byContactView" layoutX="52.0" layoutY="121.0" prefHeight="167.0" prefWidth="799.0">
             <columns>
-                <TableColumn fx:id="apptLocationCol" prefWidth="62.0" text="Location" />
-                <TableColumn fx:id="apptTitleCol" prefWidth="89.0" text="Title" />
-                <TableColumn fx:id="apptDescCol" prefWidth="148.66665649414062" text="Description" />
-                <TableColumn fx:id="apptTypeCol" prefWidth="133.99996948242188" text="Type" />
-                <TableColumn fx:id="apptDateCol" prefWidth="118.0" text="Date" />
-                <TableColumn fx:id="apptTimeCol" prefWidth="126.3333740234375" text="Time" />
-                <TableColumn fx:id="custIdCol" prefWidth="119.0" text="Customer Name" />
+                <TableColumn fx:id="apptLocationCol" prefWidth="78.0" text="Location" />
+                <TableColumn fx:id="apptTitleCol" prefWidth="139.99996948242188" text="Title" />
+                <TableColumn fx:id="apptDescCol" prefWidth="150.66668701171875" text="Description" />
+                <TableColumn fx:id="apptTypeCol" prefWidth="72.6666259765625" text="Type" />
+                <TableColumn fx:id="apptStartCol" prefWidth="127.0" text="Start Date/Time" />
+                <TableColumn fx:id="apptEndCol" prefWidth="123.0" text="End Date/Time" />
+                <TableColumn fx:id="custIdCol" prefWidth="111.33343505859375" text="Customer" />
             </columns>
         </TableView>
-        <Label layoutX="53.0" layoutY="43.0" text="Reports" textFill="WHITE">
+        <Label layoutX="53.0" layoutY="37.0" text="Reports" textFill="WHITE">
             <font>
                 <Font name="Gill Sans MT Bold" size="20.0" />
             </font>
         </Label>
         <Line endX="696.0" layoutX="152.0" layoutY="307.0" startX="-100.0" stroke="#f50ca0" strokeWidth="3.0" />
-        <Label layoutX="53.0" layoutY="88.0" text="Appointments by Contact" textFill="WHITE">
+        <Label layoutX="53.0" layoutY="83.0" text="Appointments by Contact" textFill="WHITE">
             <font>
                 <Font name="Gill Sans MT" size="16.0" />
             </font>
@@ -35,12 +35,7 @@
                 <Font name="Gill Sans MT" size="16.0" />
             </font>
         </Label>
-        <ComboBox fx:id="contactCombo" layoutX="656.0" layoutY="72.0" onAction="#selectedContact" prefWidth="150.0" />
-        <Label layoutX="570.0" layoutY="76.0" text="Select Contact" textAlignment="RIGHT" textFill="WHITE">
-            <font>
-                <Font name="Gill Sans MT" size="13.0" />
-            </font>
-        </Label>
+        <ComboBox fx:id="contactCombo" layoutX="656.0" layoutY="78.0" onAction="#selectedContact" prefWidth="150.0" promptText="Select Contact" />
         <TableView fx:id="byStateProvView" layoutX="51.0" layoutY="358.0" prefHeight="142.0" prefWidth="338.0">
             <columns>
                 <TableColumn fx:id="divisionCol" prefWidth="190.99999618530273" text="State/Province" />
@@ -60,7 +55,7 @@
             <TableColumn fx:id="totalTypeCol" prefWidth="90.666748046875" text="Total Type" />
         </columns>
       </TableView>
-      <Line endX="1.33331298828125" endY="-4.3333282470703125" layoutX="143.0" layoutY="51.0" startX="1.33331298828125" startY="10.666671752929688" stroke="#f50ca0" strokeWidth="5.0" />
+      <Line endX="1.33331298828125" endY="-4.3333282470703125" layoutX="143.0" layoutY="45.0" startX="1.33331298828125" startY="10.666671752929688" stroke="#f50ca0" strokeWidth="5.0" />
     </Pane>
     <Label layoutX="980.0" layoutY="64.0" textAlignment="CENTER" textFill="#fcfefc">
         <font>
