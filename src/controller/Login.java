@@ -93,9 +93,9 @@ public class Login implements Initializable {
                 if ((a.getStart().isAfter(currentDT) || a.getStart().isEqual(currentDT)) &&
                         ((a.getStart().isBefore(currentDTFifteen) || a.getStart().isEqual(currentDTFifteen)))) {
                     Alert fifteenAlertTrue = new Alert(Alert.AlertType.INFORMATION, "You have an upcoming " +
-                            "appointment: " + '\n' + '\n' + "Appointment ID: " + a.getAppointmentID()
+                            "appointment: " + '\n' + '\n' + "Appointment: " + a.getTitle()
                             + '\n' + "Date and Time: " +
-                            a.getStart().format(formatter) + '\n' + "User ID: " + a.getUserID(), ButtonType.OK);
+                            a.getStart().format(formatter) + '\n' + "Shop Location: " + a.getLocation(), ButtonType.OK);
                     fifteenAlertTrue.setTitle("Appointment Booking System");
                     fifteenAlertTrue.setHeaderText("Appointment Alert");
                     fifteenAlertTrue.showAndWait();
