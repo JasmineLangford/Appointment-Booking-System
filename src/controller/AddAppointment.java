@@ -92,11 +92,11 @@ public class AddAppointment implements Initializable {
 
         // user combo box
         userCombo.setItems(users);
-        userCombo.setPromptText("Select User ID");
+        userCombo.setPromptText("Select User");
 
         // customer combo box
         custIDCombo.setItems(customers);
-        custIDCombo.setPromptText("Select Customer ID");
+        custIDCombo.setPromptText("Select Customer");
 
         // appointment type combo box
         ObservableList<String> types = FXCollections.observableArrayList(
