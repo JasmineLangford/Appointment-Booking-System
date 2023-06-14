@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -45,9 +44,9 @@ public class Reports implements Initializable {
     @FXML
     private TableColumn<Appointment, String> apptTypeCol;
     @FXML
-    private TableColumn<Appointment, String> apptDateCol;
+    private TableColumn<Appointment, String> apptStartCol;
     @FXML
-    private TableColumn<Appointment, String> apptTimeCol;
+    private TableColumn<Appointment, String> apptEndCol;
     @FXML
     private TableColumn<Appointment, String> custIdCol;
 
@@ -88,9 +87,9 @@ public class Reports implements Initializable {
         apptTitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         apptDescCol.setCellValueFactory(new PropertyValueFactory<>("description"));
         apptTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-        apptDateCol.setCellValueFactory(cellData ->
+        apptStartCol.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getStart().format(formatter)));
-        apptTimeCol.setCellValueFactory(cellData ->
+        apptEndCol.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getEnd().format(formatter)));
         custIdCol.setCellValueFactory(cellData -> {
             int customerID = cellData.getValue().getCustomerID();
@@ -110,19 +109,10 @@ public class Reports implements Initializable {
                 return null;
             }
         });
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MMMM d, yyyy");
-        apptDateCol.setCellValueFactory(cellData -> {
-            String dateTimeValue = cellData.getValue().getStart().format(dateFormatter);
-            return new SimpleStringProperty(dateTimeValue);
-        });
-
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:mm a");
-        apptTimeCol.setCellValueFactory(cellData -> {
-            LocalTime startTime = cellData.getValue().getStart().toLocalTime();
-            LocalTime endTime = cellData.getValue().getEnd().toLocalTime();
-            String timeRange = startTime.format(timeFormatter) + " - " + endTime.format(timeFormatter);
-            return new SimpleStringProperty(timeRange);
-        });
+        apptStartCol.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getStart().format(formatter)));
+        apptEndCol.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getEnd().format(formatter)));
 
         try {
             ObservableList<Appointment> reportByContact = ReportDAO.appointmentsByCustomer();
@@ -135,7 +125,6 @@ public class Reports implements Initializable {
 
         // populate existing contacts in combo box
         contactCombo.setItems(contacts);
-        contactCombo.setPromptText("Select Contact");
 
         // report by customer state or province
         divisionCol.setCellValueFactory(new PropertyValueFactory<>("division"));
