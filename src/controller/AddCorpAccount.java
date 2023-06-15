@@ -125,10 +125,13 @@ public class AddCorpAccount implements Initializable {
                     ButtonType.OK);
             Optional<ButtonType> result = addCorpAccount.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                toCustomers(actionEvent);
+              Customers corpAccountView = new Customers();
+              corpAccountView.loadCorpAccountsView(actionEvent);
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 

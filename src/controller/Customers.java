@@ -21,6 +21,7 @@ import javafx.stage.Stage;
 import model.Appointment;
 import model.Customer;
 
+import javax.imageio.IIOParam;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -56,7 +57,6 @@ public class Customers implements Initializable {
     private TableColumn<Customer, String> customerStateCol;
     @FXML
     private TableColumn<Customer, String> customerPostalCol;
-
     private FilteredList<Customer> filteredCustomers;
 
     @Override
@@ -72,7 +72,6 @@ public class Customers implements Initializable {
         customerStateCol.setCellValueFactory(new PropertyValueFactory<>("division"));
         customerPostalCol.setCellValueFactory(new PropertyValueFactory<>("customerPostal"));
         customerType.setCellValueFactory(new PropertyValueFactory<>("customerType"));
-
         try {
             loadCustomerTable();
         } catch (
@@ -84,7 +83,7 @@ public class Customers implements Initializable {
         try {
             filteredCustomers = new FilteredList<>(CustomerDAO.allCustomers());
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
         customerTypeToggle.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
@@ -103,7 +102,6 @@ public class Customers implements Initializable {
             }
         });
     }
-
 
     public void applySearch() {
         searchCustomer.textProperty().addListener((observable, oldValue, newValue) ->
@@ -133,6 +131,27 @@ public class Customers implements Initializable {
         ObservableList<Customer> regularCustomers = CustomerDAO.regularCustomers();
         mainCustomerTable.setItems(regularCustomers);
         mainCustomerTable.getSelectionModel().clearSelection();
+    }
+
+    public void loadAccountsTable() throws SQLException {
+        ObservableList<Customer> corporateAccounts = CustomerDAO.corporateAccounts();
+        mainCustomerTable.setItems(corporateAccounts);
+        mainCustomerTable.getSelectionModel().clearSelection();
+    }
+
+    public void loadCorpAccountsView (ActionEvent actionEvent) throws IOException, SQLException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/customers.fxml"));
+        Parent root = loader.load();
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();Scene scene = new Scene(root, 1108, 538);
+        scene.setFill(Color.TRANSPARENT);
+        root.setStyle("-fx-background-radius: 30px 30px 30px 30px;");
+        stage.setScene(scene);
+        stage.show();
+        stage.centerOnScreen();
+        stage.setResizable(false);
+
+        Customers controller = loader.getController();
+        controller.viewCorpAcct.setSelected(true);
     }
 
     /**
@@ -167,8 +186,8 @@ public class Customers implements Initializable {
             loader.setLocation(getClass().getResource("/view/modify-customer.fxml"));
             loader.load();
 
-            ModifyCustomer MainMenu = loader.getController();
-            MainMenu.sendCustomer(mainCustomerTable.getSelectionModel().getSelectedItem());
+            ModifyCustomer modifyCustomer = loader.getController();
+            modifyCustomer.sendCustomer((Customer.RegularCustomer) mainCustomerTable.getSelectionModel().getSelectedItem());
 
             Parent scene = loader.getRoot();
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -181,8 +200,8 @@ public class Customers implements Initializable {
             loader.setLocation(getClass().getResource("/view/modify-corp-acct.fxml"));
             loader.load();
 
-            ModifyCorpAcct MainMenu = loader.getController();
-            MainMenu.sendCustomer(mainCustomerTable.getSelectionModel().getSelectedItem());
+            ModifyCorpAcct modifyCorpAcct = loader.getController();
+            modifyCorpAcct.sendCorpAcct((Customer.CorporateAccount) mainCustomerTable.getSelectionModel().getSelectedItem());
 
             Parent scene = loader.getRoot();
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -261,7 +280,7 @@ public class Customers implements Initializable {
                     if (result.isPresent() && result.get() == ButtonType.YES) {
                         Customer selectedCustomer = mainCustomerTable.getSelectionModel().getSelectedItem();
                         CustomerDAO.deleteCustomer(selectedCustomer);
-                        loadCustomerTable();
+                        loadAccountsTable();
                         mainCustomerTable.getSelectionModel().clearSelection();
 
                         Alert apptInfo = new Alert(Alert.AlertType.INFORMATION, "You have deleted the following " +

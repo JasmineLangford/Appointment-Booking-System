@@ -47,7 +47,7 @@
         </font>
     </Button>
     <Pane layoutY="-2.0" prefHeight="87.0" prefWidth="500.0" style="-fx-background-color: #000000;">
-        <Label layoutX="177.0" layoutY="31.0" text="Add Customer" textFill="#fffbfa">
+        <Label layoutX="36.0" layoutY="31.0" text="Add Customer" textFill="#fffbfa">
             <font>
                 <Font name="Gill Sans MT Bold" size="21.0" />
             </font>

@@ -213,28 +213,28 @@ public class CustomerDAO extends Customer {
      */
 
     // TODO: Modify for regular customers
-    public static void modifyCustomer(int modCustomerID, String modCustomerName, String modAddress, String modPhone,
-                                      String modPostal, int modFirstLevel) {
+    public static void modifyCustomer(int modCustomerID,String modCustomerName, String modAddress, String modPhone,
+                                      String modPostal, int modFirstLevel, String modType, int modLoyaltyPoints) {
 
         String phoneNumber = modPhone.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "$1-$2-$3");
 
         try{
             String modCustomerQuery = "UPDATE customers SET Customer_ID = ?, Customer_Name = ?, Address = ?, " +
                     "Postal_Code = ?, Phone = ?, Create_Date = ?,Created_By = ?,Last_Update = ?,Last_Updated_By = ?," +
-                    "Division_ID = ? WHERE Customer_ID = ?";
+                    "Division_ID = ?, Type = ?, Loyalty_Points = ? WHERE Customer_ID = ?";
             PreparedStatement ps = JDBC.connection.prepareStatement(modCustomerQuery);
-            ps.setInt(1, modCustomerID);
-            ps.setString(2, modCustomerName);
-            ps.setString(3, modAddress);
-            ps.setString(4, modPostal);
-            ps.setString(5, phoneNumber);
+            ps.setString(1, modCustomerName);
+            ps.setString(2, modAddress);
+            ps.setString(3, modPostal);
+            ps.setString(4, phoneNumber);
+            ps.setString(5, null);
             ps.setString(6, null);
             ps.setString(7, null);
             ps.setString(8, null);
-            ps.setString(9, null);
-            ps.setInt(10, modFirstLevel);
-            ps.setInt(11,modCustomerID);
-
+            ps.setInt(9, modFirstLevel);
+            ps.setString(10,modType);
+            ps.setInt(11,modLoyaltyPoints);
+            ps.setInt(12, modCustomerID);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -252,20 +252,18 @@ public class CustomerDAO extends Customer {
                     "Postal_Code = ?, Phone = ?, Create_Date = ?,Created_By = ?,Last_Update = ?,Last_Updated_By = ?, " +
                     "Type = ?, Company_Name = ?, Division_ID = ? WHERE Customer_ID = ?";
             PreparedStatement ps = JDBC.connection.prepareStatement(modCustomerQuery);
-            ps.setInt(1, modCustomerID);
-            ps.setString(2, modCustomerName);
-            ps.setString(3, modAddress);
-            ps.setString(4, modPostal);
-            ps.setString(5, phoneNumber);
+            ps.setString(1, modCustomerName);
+            ps.setString(2, modAddress);
+            ps.setString(3, modPostal);
+            ps.setString(4, phoneNumber);
+            ps.setString(5, null);
             ps.setString(6, null);
             ps.setString(7, null);
             ps.setString(8, null);
-            ps.setString(9, null);
-            ps.setString(10,modType);
-            ps.setString(11,modCompanyName);
-            ps.setInt(12, modFirstLevel);
-            ps.setInt(13,modCustomerID);
-
+            ps.setString(9,modType);
+            ps.setString(10,modCompanyName);
+            ps.setInt(11, modFirstLevel);
+            ps.setInt(12,modCustomerID);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
