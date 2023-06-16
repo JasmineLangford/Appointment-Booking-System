@@ -12,31 +12,29 @@ import java.sql.Statement;
 import java.time.format.DateTimeFormatter;
 
 /**
- * This class contains queries for users.
+ * This class contains the database queries for users.
  */
 public class UserDAO extends User {
-    @Override
-    public String toString(){
-        return (getUserFirstName() + " " + getUserLastName());
-    }
     private static User userLogin;
 
     /**
      * This is the constructor representing the user.
      *
-     * @param userID The user ID.
-     * @param userName The username.
-     * @param password The password.
+     * @param userID        The user ID.
+     * @param userName      The username.
+     * @param password      The password.
+     * @param userFirstName The user's first name.
+     * @param userLastName  The user's last name.
      */
-    public UserDAO(int userID, String userName, String password, String userFirstName, String userLastName){
-        super(userID, userName, password,userFirstName,userLastName);
+    public UserDAO(int userID, String userName, String password, String userFirstName, String userLastName) {
+        super(userID, userName, password, userFirstName, userLastName);
     }
 
     /**
      * This method queries user selections for the combo box.
      *
-     * @throws SQLException The exception to throw if there is an error regarding the query for combo box selections.
      * @return The list of all users.
+     * @throws SQLException The exception to throw if there is an error regarding the query for combo box selections.
      */
     public static ObservableList<UserDAO> allUsers() throws SQLException {
         ObservableList<UserDAO> users = FXCollections.observableArrayList();
@@ -70,17 +68,17 @@ public class UserDAO extends User {
             Statement statement = JDBC.connection.createStatement();
             ResultSet rs = statement.executeQuery(loginQuery);
 
-            if(rs.next()) {
+            if (rs.next()) {
                 userLogin = new User();
                 userLogin.setUsername(rs.getString("User_Name"));
                 userLogin.setUserFirstName(rs.getString("First_Name"));
 
                 // logs end-user login attempt as successful
-                Logger.trackerLog(username,DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"),true);
+                Logger.trackerLog(username, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"), true);
                 return true;
             } else {
                 // logs end-user login attempt as failed
-                Logger.trackerLog(username, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"),false);
+                Logger.trackerLog(username, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"), false);
                 return false;
             }
         } catch (SQLException e) {
@@ -105,5 +103,12 @@ public class UserDAO extends User {
      */
     public static void setUserLogin(User userLogin) {
         UserDAO.userLogin = userLogin;
+    }
+
+    @Override
+
+    // Display combo box options
+    public String toString() {
+        return (getUserFirstName() + " " + getUserLastName());
     }
 }
