@@ -26,6 +26,10 @@ import java.util.ResourceBundle;
  * of the screen or cancel changes if the user no longer wants to modify the appointment.
  */
 public class ModifyAppointment implements Initializable {
+    ObservableList<ContactDAO> contacts = ContactDAO.allContacts();
+    ObservableList<UserDAO> users = UserDAO.allUsers();
+    ObservableList<Customer> customers = CustomerDAO.allCustomers();
+    Appointment modAppointment = new Appointment();
     @FXML
     private TextField apptId;
     @FXML
@@ -50,10 +54,7 @@ public class ModifyAppointment implements Initializable {
     private ComboBox<Customer> customerCombo;
     @FXML
     private ComboBox<UserDAO> userCombo;
-    ObservableList<ContactDAO> contacts = ContactDAO.allContacts();
-    ObservableList <UserDAO> users = UserDAO.allUsers();
-    ObservableList <Customer> customers = CustomerDAO.allCustomers();
-    Appointment modAppointment = new Appointment();
+
     public ModifyAppointment() throws SQLException {
     }
 
@@ -62,10 +63,10 @@ public class ModifyAppointment implements Initializable {
         System.out.println("Modify Appointment initialized.");
 
         // Combo box for time selection
-        LocalTime start = LocalTime.of(8,0);
-        LocalTime end = LocalTime.of(17,0);
+        LocalTime start = LocalTime.of(8, 0);
+        LocalTime end = LocalTime.of(17, 0);
 
-        while(start.isBefore(end.plusSeconds(1))){
+        while (start.isBefore(end.plusSeconds(1))) {
             startCombo.getItems().add(start);
             endCombo.getItems().add(start);
             start = start.plusMinutes(15);
@@ -76,7 +77,7 @@ public class ModifyAppointment implements Initializable {
         userCombo.setItems(users);
         customerCombo.setItems(customers);
 
-        ObservableList<String> types = FXCollections.observableArrayList("In-Person","Virtual");
+        ObservableList<String> types = FXCollections.observableArrayList("In-Person", "Virtual");
         typeCombo.setItems(types);
 
         ObservableList<String> locations = FXCollections.observableArrayList("Manhattan", "Newark");
@@ -96,24 +97,24 @@ public class ModifyAppointment implements Initializable {
      */
     public void sendAppointment(Appointment appointment) {
 
-        try{
+        try {
             modAppointment = appointment;
-            for (ContactDAO a:contactModCombo.getItems()) {
-                if(a.getContactID() == appointment.getContactID()){
+            for (ContactDAO a : contactModCombo.getItems()) {
+                if (a.getContactID() == appointment.getContactID()) {
                     contactModCombo.getSelectionModel().select(a);
                     break;
                 }
             }
 
             for (Customer c : customerCombo.getItems()) {
-                if(c.getCustomerId() == modAppointment.getCustomerID()) {
+                if (c.getCustomerId() == modAppointment.getCustomerID()) {
                     customerCombo.getSelectionModel().select(c);
                     break;
                 }
             }
 
             for (UserDAO u : userCombo.getItems()) {
-                if(u.getUserID() == modAppointment.getUserID()) {
+                if (u.getUserID() == modAppointment.getUserID()) {
                     userCombo.getSelectionModel().select(u);
                     break;
                 }
@@ -129,7 +130,7 @@ public class ModifyAppointment implements Initializable {
             titleText.setText(modAppointment.getTitle());
             descText.setText(modAppointment.getDescription());
 
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
@@ -156,8 +157,7 @@ public class ModifyAppointment implements Initializable {
         }
         try {
             if (startDatePicker.getValue().isBefore(LocalDate.now())) {
-                Alert invalidDate = new Alert(Alert.AlertType.ERROR, "Selected date has already passed. Please " +
-                        "select another date.");
+                Alert invalidDate = new Alert(Alert.AlertType.ERROR, "Selected date has already passed. Please " + "select another date.");
                 invalidDate.setTitle("Appointment Booking System");
                 invalidDate.setHeaderText("Add Appointment");
                 Optional<ButtonType> results = invalidDate.showAndWait();
@@ -170,10 +170,8 @@ public class ModifyAppointment implements Initializable {
         }
 
         try {
-            if (startDatePicker.getValue().getDayOfWeek().equals(DayOfWeek.SATURDAY) ||
-                    startDatePicker.getValue().getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
-                Alert invalidDate = new Alert(Alert.AlertType.ERROR, "Appointment date must be a weekday " +
-                        "(Monday-Friday).");
+            if (startDatePicker.getValue().getDayOfWeek().equals(DayOfWeek.SATURDAY) || startDatePicker.getValue().getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+                Alert invalidDate = new Alert(Alert.AlertType.ERROR, "Appointment date must be a weekday " + "(Monday-Friday).");
                 invalidDate.setTitle("Appointment Booking System");
                 invalidDate.setHeaderText("Add Appointment");
                 Optional<ButtonType> results = invalidDate.showAndWait();
@@ -202,8 +200,7 @@ public class ModifyAppointment implements Initializable {
 
         try {
             if (startCombo.getValue().equals(endCombo.getValue())) {
-                Alert invalidTime = new Alert(Alert.AlertType.ERROR, "End time cannot be the same as start " +
-                        "time. Please select another end time.");
+                Alert invalidTime = new Alert(Alert.AlertType.ERROR, "End time cannot be the same as start " + "time. Please select another end time.");
                 invalidTime.setTitle("Appointment Booking System");
                 invalidTime.setHeaderText("Add Appointment");
                 invalidTime.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
@@ -232,15 +229,12 @@ public class ModifyAppointment implements Initializable {
         }
 
         try {
-            if (contactModCombo.getValue() == null || typeCombo.getValue() == null|| titleText.getText().isEmpty() ||
-                    descText.getText().isEmpty() || locationCombo.getValue() == null) {
-                Alert emptyField = new Alert(Alert.AlertType.ERROR, "One or more fields are empty. Please enter a" +
-                        " value in each field.");
+            if (contactModCombo.getValue() == null || typeCombo.getValue() == null || titleText.getText().isEmpty() || descText.getText().isEmpty() || locationCombo.getValue() == null) {
+                Alert emptyField = new Alert(Alert.AlertType.ERROR, "One or more fields are empty. Please enter a" + " value in each field.");
                 emptyField.setTitle("Appointment Booking System");
                 emptyField.setHeaderText("Add Appointment");
                 Optional<ButtonType> results = emptyField.showAndWait();
-                if (results.isPresent() && results.get() == ButtonType.OK)
-                    emptyField.setOnCloseRequest(Event::consume);
+                if (results.isPresent() && results.get() == ButtonType.OK) emptyField.setOnCloseRequest(Event::consume);
                 return;
             }
         } catch (NullPointerException e) {
@@ -282,8 +276,8 @@ public class ModifyAppointment implements Initializable {
         LocalTime modStartTime = startCombo.getValue();
         LocalDate modEndDate = endDatePicker.getValue();
         LocalTime modEndTime = endCombo.getValue();
-        LocalDateTime startDateTime = LocalDateTime.of(startDatePicker.getValue(),startCombo.getValue());
-        LocalDateTime endDateTime = LocalDateTime.of(endDatePicker.getValue(),endCombo.getValue());
+        LocalDateTime startDateTime = LocalDateTime.of(startDatePicker.getValue(), startCombo.getValue());
+        LocalDateTime endDateTime = LocalDateTime.of(endDatePicker.getValue(), endCombo.getValue());
         int modContact = contactModCombo.getSelectionModel().getSelectedItem().getContactID();
         String modType = typeCombo.getSelectionModel().getSelectedItem();
         String modTitle = titleText.getText();
@@ -292,14 +286,13 @@ public class ModifyAppointment implements Initializable {
         int modCustID = customerCombo.getSelectionModel().getSelectedItem().getCustomerId();
         int modUserID = userCombo.getSelectionModel().getSelectedItem().getUserID();
 
-        LocalDateTime dateTimeStart = LocalDateTime.of(modStartDate,modStartTime);
-        LocalDateTime dateTimeEnd = LocalDateTime.of(modEndDate,modEndTime);
+        LocalDateTime dateTimeStart = LocalDateTime.of(modStartDate, modStartTime);
+        LocalDateTime dateTimeEnd = LocalDateTime.of(modEndDate, modEndTime);
 
         try {
             if (startDateTime.isBefore(LocalDateTime.now())) {
 
-                Alert noSelection = new Alert(Alert.AlertType.ERROR, "Selected date has already passed. Please " +
-                        "select another date.");
+                Alert noSelection = new Alert(Alert.AlertType.ERROR, "Selected date has already passed. Please " + "select another date.");
                 noSelection.setTitle("Appointment Booking System");
                 noSelection.setHeaderText("Add Appointment");
                 Optional<ButtonType> results = noSelection.showAndWait();
@@ -311,62 +304,45 @@ public class ModifyAppointment implements Initializable {
             e.printStackTrace();
         }
 
-        if(modStartDate != modAppointment.getStart().toLocalDate() ||
-                modEndDate != modAppointment.getEnd().toLocalDate() ||
-                modStartTime != modAppointment.getStart().toLocalTime() ||
-                modEndTime != modAppointment.getEnd().toLocalTime())  {
+        if (modStartDate != modAppointment.getStart().toLocalDate() || modEndDate != modAppointment.getEnd().toLocalDate() || modStartTime != modAppointment.getStart().toLocalTime() || modEndTime != modAppointment.getEnd().toLocalTime()) {
             ObservableList<Appointment> getAllAppointments = AppointmentDAO.allAppointments();
             try {
                 for (Appointment apptConflicts : getAllAppointments) {
 
-                    if (modCustID == apptConflicts.getCustomerID() && (dateTimeStart.isEqual(apptConflicts.getStart()) &&
-                            dateTimeEnd.isEqual(apptConflicts.getEnd()))) {
+                    if (modCustID == apptConflicts.getCustomerID() && (dateTimeStart.isEqual(apptConflicts.getStart()) && dateTimeEnd.isEqual(apptConflicts.getEnd()))) {
 
-                        Alert apptConflict = new Alert(Alert.AlertType.ERROR, "This customer already has an existing " +
-                                "appointment for this date and time.");
+                        Alert apptConflict = new Alert(Alert.AlertType.ERROR, "This customer already has an existing " + "appointment for this date and time.");
                         apptConflict.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
                         Optional<ButtonType> results = apptConflict.showAndWait();
-                        if (results.isPresent() && results.get() == ButtonType.OK)
-                            return;
+                        if (results.isPresent() && results.get() == ButtonType.OK) return;
                     }
 
-                    if (modCustID == apptConflicts.getCustomerID() && ((dateTimeStart.isBefore(apptConflicts.getStart()) ||
-                            dateTimeStart.isEqual(apptConflicts.getStart()))) && ((dateTimeEnd.isAfter(apptConflicts.getEnd()) ||
-                            dateTimeEnd.isEqual(apptConflicts.getEnd())))) {
+                    if (modCustID == apptConflicts.getCustomerID() && ((dateTimeStart.isBefore(apptConflicts.getStart()) || dateTimeStart.isEqual(apptConflicts.getStart()))) && ((dateTimeEnd.isAfter(apptConflicts.getEnd()) || dateTimeEnd.isEqual(apptConflicts.getEnd())))) {
 
-                        Alert apptConflict = new Alert(Alert.AlertType.ERROR, "This meeting overlaps with the " +
-                                "customer's existing appointment.");
+                        Alert apptConflict = new Alert(Alert.AlertType.ERROR, "This meeting overlaps with the " + "customer's existing appointment.");
                         apptConflict.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
                         Optional<ButtonType> results = apptConflict.showAndWait();
-                        if (results.isPresent() && results.get() == ButtonType.OK)
-                            return;
+                        if (results.isPresent() && results.get() == ButtonType.OK) return;
                     }
 
-                    if (modCustID == apptConflicts.getCustomerID() && ((dateTimeStart.isAfter(apptConflicts.getStart()) &&
-                            dateTimeStart.isBefore(apptConflicts.getEnd())))) {
+                    if (modCustID == apptConflicts.getCustomerID() && ((dateTimeStart.isAfter(apptConflicts.getStart()) && dateTimeStart.isBefore(apptConflicts.getEnd())))) {
 
-                        Alert apptConflict = new Alert(Alert.AlertType.ERROR, "Start time overlaps with existing " +
-                                "appointment.");
+                        Alert apptConflict = new Alert(Alert.AlertType.ERROR, "Start time overlaps with existing " + "appointment.");
                         Optional<ButtonType> results = apptConflict.showAndWait();
-                        if (results.isPresent() && results.get() == ButtonType.OK)
-                            return;
+                        if (results.isPresent() && results.get() == ButtonType.OK) return;
                     }
 
-                    if (modCustID == apptConflicts.getCustomerID() && ((dateTimeEnd.isAfter(apptConflicts.getStart()) &&
-                            ((dateTimeEnd.isBefore(apptConflicts.getEnd()) || dateTimeEnd.isEqual(apptConflicts.getEnd())))))) {
+                    if (modCustID == apptConflicts.getCustomerID() && ((dateTimeEnd.isAfter(apptConflicts.getStart()) && ((dateTimeEnd.isBefore(apptConflicts.getEnd()) || dateTimeEnd.isEqual(apptConflicts.getEnd())))))) {
 
-                        Alert apptConflict = new Alert(Alert.AlertType.ERROR, "End time overlaps with existing " +
-                                "appointment.");
+                        Alert apptConflict = new Alert(Alert.AlertType.ERROR, "End time overlaps with existing " + "appointment.");
                         Optional<ButtonType> results = apptConflict.showAndWait();
-                        if (results.isPresent() && results.get() == ButtonType.OK)
-                            return;
+                        if (results.isPresent() && results.get() == ButtonType.OK) return;
                     }
                 }
             } catch (Exception AppointmentConflicts) {
                 System.out.println("Caught AppointmentConflicts");
             }
-        }
-        else{
+        } else {
             System.out.println("No changes to dates and times.");
         }
         try {
@@ -381,18 +357,15 @@ public class ModifyAppointment implements Initializable {
             modAppointment.setUserID(modUserID);
             modAppointment.setContactID(modContact);
 
-            Alert modAppointment = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to modify this " +
-                    "appointment?", ButtonType.YES, ButtonType.NO);
+            Alert modAppointment = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to modify this " + "appointment?", ButtonType.YES, ButtonType.NO);
             Optional<ButtonType> result = modAppointment.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.YES) {
 
-                AppointmentDAO.modifyAppointment(modApptID,modTitle, modDescription, modLocation, modType,
-                        startDateTime,endDateTime,modCustID, modUserID, String.valueOf(modContact));
+                AppointmentDAO.modifyAppointment(modApptID, modTitle, modDescription, modLocation, modType, startDateTime, endDateTime, modCustID, modUserID, String.valueOf(modContact));
 
                 Appointments.backToAppointments(actionEvent);
             } else {
-                Alert noChange = new Alert(Alert.AlertType.INFORMATION, "There were no changes made to this " +
-                        "appointment.", ButtonType.OK);
+                Alert noChange = new Alert(Alert.AlertType.INFORMATION, "There were no changes made to this " + "appointment.", ButtonType.OK);
                 noChange.showAndWait();
             }
         } catch (IOException | SQLException e) {
@@ -407,8 +380,7 @@ public class ModifyAppointment implements Initializable {
      * @throws IOException The exception thrown if there is an I/O error for the alert.
      */
     public void toAppointments(ActionEvent actionEvent) throws IOException {
-        Alert noChange = new Alert(Alert.AlertType.INFORMATION, "There were no changes made to this " +
-                "appointment.", ButtonType.OK);
+        Alert noChange = new Alert(Alert.AlertType.INFORMATION, "There were no changes made to this " + "appointment.", ButtonType.OK);
         noChange.showAndWait();
         Appointments.backToAppointments(actionEvent);
     }
