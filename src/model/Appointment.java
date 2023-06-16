@@ -35,7 +35,8 @@ public class Appointment {
      * @param type The type.
      * @param userID The user ID.
      */
-    public Appointment(int appointmentID, String title, String description, String location, int contactID, String type, LocalDateTime start, LocalDateTime end, int customerID, int userID) {
+    public Appointment(int appointmentID, String title, String description, String location, int contactID, String type,
+                       LocalDateTime start, LocalDateTime end, int customerID, int userID) {
         this.appointmentID = appointmentID;
         this.title = title;
         this.description = description;

@@ -21,7 +21,6 @@ import javafx.stage.Stage;
 import model.Appointment;
 import model.Customer;
 
-import javax.imageio.IIOParam;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -61,10 +60,13 @@ public class Customers implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        // Set on screen launch for regular customer view
         customerNameCol.setText("Customer Name");
         searchCustomer.setPromptText("Search by Customer Name");
         deleteCustomer.setText("Delete Customer");
 
+        // Set customer table
         customerNameCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         customerAddressCol.setCellValueFactory(new PropertyValueFactory<>("customerAddress"));
         customerPhoneCol.setCellValueFactory(new PropertyValueFactory<>("customerPhone"));
@@ -103,6 +105,9 @@ public class Customers implements Initializable {
         });
     }
 
+    /**
+     * This method is the available search functionality after a radio button is selected.
+     */
     public void applySearch() {
         searchCustomer.textProperty().addListener((observable, oldValue, newValue) ->
                 filteredCustomers.setPredicate(customer -> {
@@ -121,24 +126,38 @@ public class Customers implements Initializable {
         SortedList<Customer> sortedParts = new SortedList<>(filteredCustomers);
         sortedParts.comparatorProperty().bind(mainCustomerTable.comparatorProperty());
         mainCustomerTable.setItems(sortedParts);
-
-        // Message displayed on customer tableview if there are no matching items.
         mainCustomerTable.setPlaceholder(new Label("No matches"));
     }
 
-    // load customer tableview
+    /**
+     * This method loads the view for when the Regular Customer radio button is selected.
+     *
+     * @throws SQLException The exception to throw if there is an issue with the SQL query.
+     */
     public void loadCustomerTable() throws SQLException {
         ObservableList<Customer> regularCustomers = CustomerDAO.regularCustomers();
         mainCustomerTable.setItems(regularCustomers);
         mainCustomerTable.getSelectionModel().clearSelection();
     }
 
+    /**
+     * This method loads the view for when the Corporate Account radio button is selected.
+     *
+     * @throws SQLException The exception to throw is there is an error with the database.
+     */
     public void loadAccountsTable() throws SQLException {
         ObservableList<Customer> corporateAccounts = CustomerDAO.corporateAccounts();
         mainCustomerTable.setItems(corporateAccounts);
         mainCustomerTable.getSelectionModel().clearSelection();
     }
 
+    /**
+     * This method loads the view for corporate accounts from another screen.
+     *
+     * @param actionEvent The button is clicked.
+     * @throws IOException The exception to throw if there is an issue with I/O.
+     * @throws SQLException The exception to throw if there is an issue with the SQL query.
+     */
     public void loadCorpAccountsView (ActionEvent actionEvent) throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/customers.fxml"));
         Parent root = loader.load();
@@ -155,7 +174,7 @@ public class Customers implements Initializable {
     }
 
     /**
-     * This method will take the end-user to Modify Customer screen where they can modify existing customers. The
+     * This method will take the user to the Modify Customer screen where they can modify regular customers. The
      * data from the selected row will auto-populate to the modify form.
      *
      * @param actionEvent Modify button is clicked under the customer tableview.
@@ -195,7 +214,7 @@ public class Customers implements Initializable {
             stage.show();
             stage.centerOnScreen();
             stage.setResizable(false);
-        }else {
+        }else if (viewCorpAcct.isSelected()) {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/view/modify-corp-acct.fxml"));
             loader.load();
@@ -214,8 +233,8 @@ public class Customers implements Initializable {
 
     /**
      * This method will delete a customer from the customers table in the database. If a customer has an associated
-     * appointment, the appointment will also be deleted along with the customer if the end-user proceeds with the
-     * deletion. A message will state the customer name that was deleted.
+     * appointment, the appointment will also be deleted along with the customer if the user proceeds with the
+     * deletion. A message will state the customer that was deleted.
      */
     public void deleteCustomerRow() throws SQLException {
         if (mainCustomerTable.getSelectionModel().isEmpty()) {
@@ -294,7 +313,7 @@ public class Customers implements Initializable {
     }
 
     /**
-     * This method will take the user to the Add Customer screen where a new customer can be added.
+     * This method will take the user to the Add Customer screen where a new regular customer can be added.
      *
      * @param actionEvent Add button is clicked under the customers' tableview.
      * @throws IOException The exception to throw if I/O error occurs.
@@ -310,7 +329,7 @@ public class Customers implements Initializable {
     }
 
     /**
-     * This method will take the end-user to the Add Customer screen where a new customer can be added.
+     * This method will take the user to the Add Corporate Account screen where a new corporate account can be added.
      *
      * @param actionEvent Add button is clicked under the customers' tableview.
      * @throws IOException The exception to throw if I/O error occurs.
@@ -325,6 +344,12 @@ public class Customers implements Initializable {
         stage.setResizable(false);
     }
 
+    /**
+     * This method takes the user to the reports screen.
+     *
+     * @param actionEvent Reports is clicked (located on the right panel).
+     * @throws IOException The exception to throw if I/O error occurs.
+     */
     public void toReports(MouseEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/reports.fxml"))));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -337,6 +362,12 @@ public class Customers implements Initializable {
         stage.setResizable(false);
     }
 
+    /**
+     * This method takes the user to the appointments screen.
+     *
+     * @param actionEvent Appointments is clicked (located on the right panel).
+     * @throws IOException The exception to throw if I/O error occurs.
+     */
     public void backToAppointments(MouseEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load((Objects.requireNonNull(Appointments.class.getResource("/view/appointments.fxml"))));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -349,15 +380,20 @@ public class Customers implements Initializable {
         stage.setResizable(false);
     }
 
+    /**
+     * This method closes the application and an alert will ask the user to confirm close.
+     *
+     * @param mouseEvent When the logout label is clicked on the left panel navigation bar.
+     */
     public void toClose(MouseEvent mouseEvent) {
         Appointments exitApplication = new Appointments();
         exitApplication.toClose(mouseEvent);
     }
 
     /**
-     * This method filters the appointments to display all appointments.
+     * This method filters the appointments to display regular customers.
      *
-     * @throws SQLException The exception to throw if there is an issue with the sql query.
+     * @throws SQLException The exception to throw if there is an issue with the SQL query.
      */
     public void changeToCustomer() throws SQLException {
         ObservableList<Customer> regularCustomers = CustomerDAO.regularCustomers();
@@ -373,6 +409,11 @@ public class Customers implements Initializable {
         }
     }
 
+    /**
+     * This method filters the appointments to display corporate accounts.
+     *
+     * @throws SQLException The exception to throw if there is an issue with the SQL query.
+     */
     public void changeToCorp() throws SQLException {
         ObservableList<Customer> corporateAccounts = CustomerDAO.corporateAccounts();
         if (corporateAccounts.isEmpty()) {
