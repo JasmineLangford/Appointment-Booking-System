@@ -31,9 +31,7 @@ public class Customer {
      * @param division        The customer state/province that is associated with the ID.
      * @param divisionId      The customer state/province ID.
      */
-    public Customer(int customerId, String customerName, String customerAddress, String customerPhone,
-                    String customerCountry, int countryId, int divisionId, String division, String customerPostal,
-                    String customerType) {
+    public Customer(int customerId, String customerName, String customerAddress, String customerPhone, String customerCountry, int countryId, int divisionId, String division, String customerPostal, String customerType) {
 
         this.customerId = customerId;
         this.customerName = customerName;
@@ -60,8 +58,7 @@ public class Customer {
      * @param division        The customer's state or province name.
      * @param customerPostal  The customer's postal code.
      */
-    public Customer(int customerId, String customerName, String customerAddress, String customerPhone, String
-            customerCountry, int countryId, int divisionId, String division, String customerPostal) {
+    public Customer(int customerId, String customerName, String customerAddress, String customerPhone, String customerCountry, int countryId, int divisionId, String division, String customerPostal) {
         this.customerId = customerId;
         this.customerName = customerName;
         this.customerAddress = customerAddress;
@@ -348,11 +345,8 @@ public class Customer {
          * @param customerPostal  The postal code of the customer.
          * @param customerType    The type of the customer.
          */
-        public RegularCustomer(int customerId, String customerName, String customerAddress, String customerPhone, String
-                customerCountry, int countryId, int divisionId, String division, String customerPostal, String customerType,
-                               int loyaltyPoints) {
-            super(customerId, customerName, customerAddress, customerPhone, customerCountry, countryId, divisionId,
-                    division, customerPostal, customerType);
+        public RegularCustomer(int customerId, String customerName, String customerAddress, String customerPhone, String customerCountry, int countryId, int divisionId, String division, String customerPostal, String customerType, int loyaltyPoints) {
+            super(customerId, customerName, customerAddress, customerPhone, customerCountry, countryId, divisionId, division, customerPostal, customerType);
             this.loyaltyPoints = loyaltyPoints;
         }
 
@@ -401,11 +395,8 @@ public class Customer {
          * @param customerPostal  The postal code of the customer.
          * @param customerType    The type of the customer.
          */
-        public CorporateAccount(int customerId, String company, String customerName, String customerAddress, String customerPhone, String
-                customerCountry, int countryId, int divisionId, String division, String customerPostal,
-                                String customerType) {
-            super(customerId, customerName, customerAddress, customerPhone, customerCountry, countryId, divisionId,
-                    division, customerPostal, customerType);
+        public CorporateAccount(int customerId, String company, String customerName, String customerAddress, String customerPhone, String customerCountry, int countryId, int divisionId, String division, String customerPostal, String customerType) {
+            super(customerId, customerName, customerAddress, customerPhone, customerCountry, countryId, divisionId, division, customerPostal, customerType);
             this.company = company;
         }
 
