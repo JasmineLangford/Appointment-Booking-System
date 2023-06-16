@@ -23,14 +23,13 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
- * This class is the controller for add-appointment.fxml. The end-user can add a new appointment by inputting data into
+ * This class is the controller for add-appointment.fxml. The user can add a new appointment by inputting data into
  * text fields, combo boxes, and date pickers. The appointment ID is auto-incremented from the database and disabled.
- * The end-user will be able to save the data for a new appointment by clicking the save button at the bottom of the
- * screen or cancel if the end-user no longer wants to add an appointment.
+ * The user will be able to save the data for a new appointment by clicking the save button at the bottom of the
+ * screen or cancel if the user no longer wants to add an appointment.
  */
 public class AddAppointment implements Initializable {
 
-    // observable lists for combo boxes
     ObservableList<ContactDAO> contactList = ContactDAO.allContacts();
     ObservableList<UserDAO> users = UserDAO.allUsers();
     ObservableList<Customer> customers = CustomerDAO.allCustomers();
@@ -39,7 +38,6 @@ public class AddAppointment implements Initializable {
     private ComboBox<String> locationCombo;
     @FXML
     private ComboBox<String> typeCombo;
-    // Form fields
     @FXML
     private DatePicker startDatePicker;
     @FXML
@@ -79,38 +77,28 @@ public class AddAppointment implements Initializable {
         startCombo.setPromptText("Select Start Time");
         endCombo.setPromptText("Select End Time");
 
+        // Combo boxes
+        contactCombo.setItems(contactList);
+        contactCombo.getSelectionModel().clearSelection();
+        contactCombo.setPromptText("Select Contact");
+        userCombo.setItems(users);
+        userCombo.setPromptText("Select User");
+        custIDCombo.setItems(customers);
+        custIDCombo.setPromptText("Select Customer");
+
+        ObservableList<String> types = FXCollections.observableArrayList("In-Person", "Virtual");
+        typeCombo.setItems(types);
+        typeCombo.setPromptText("Select Type");
+
+        ObservableList<String> locations = FXCollections.observableArrayList("Manhattan", "Newark");
+        locationCombo.setItems(locations);
+        locationCombo.setPromptText("Selection Location");
+
         // Set end date same as start date
         startDatePicker.setOnAction(event -> {
             LocalDate selectedDate = startDatePicker.getValue();
             endDatePicker.setValue(selectedDate);
         });
-
-        // contact combo box
-        contactCombo.setItems(contactList);
-        contactCombo.getSelectionModel().clearSelection();
-        contactCombo.setPromptText("Select Contact");
-
-        // user combo box
-        userCombo.setItems(users);
-        userCombo.setPromptText("Select User");
-
-        // customer combo box
-        custIDCombo.setItems(customers);
-        custIDCombo.setPromptText("Select Customer");
-
-        // appointment type combo box
-        ObservableList<String> types = FXCollections.observableArrayList(
-                "In-Person", "Virtual"
-        );
-        typeCombo.setItems(types);
-        typeCombo.setPromptText("Select Type");
-
-        // location combo box
-        ObservableList<String> locations = FXCollections.observableArrayList(
-                "Manhattan", "Newark"
-        );
-        locationCombo.setItems(locations);
-        locationCombo.setPromptText("Selection Location");
     }
 
     /**
@@ -121,13 +109,11 @@ public class AddAppointment implements Initializable {
      */
     public void onSaveAppt(ActionEvent actionEvent) throws SQLException {
 
-        // input validation messages: Dates
+        // Input validation messages
         try {
-            if (startDatePicker == null) {
+            if (startDatePicker.getValue() == null) {
 
-                Alert noSelection = new Alert(Alert.AlertType.ERROR, "Please select appointment date.");
-                noSelection.setTitle("Appointment Booking System");
-                noSelection.setHeaderText("Add Appointment");
+                Alert noSelection = new Alert(Alert.AlertType.ERROR, "Please select a date.");
                 Optional<ButtonType> results = noSelection.showAndWait();
                 if (results.isPresent() && results.get() == ButtonType.OK)
                     noSelection.setOnCloseRequest(Event::consume);
@@ -139,8 +125,7 @@ public class AddAppointment implements Initializable {
 
         try {
             if (startDatePicker.getValue().isBefore(LocalDate.now())) {
-                Alert invalidDate = new Alert(Alert.AlertType.ERROR, "Selected date has already passed. Please " +
-                        "select another date.");
+                Alert invalidDate = new Alert(Alert.AlertType.ERROR, "Selected date has already passed. Please " + "select another date.");
                 invalidDate.setTitle("Appointment Booking System");
                 invalidDate.setHeaderText("Add Appointment");
                 Optional<ButtonType> results = invalidDate.showAndWait();
@@ -153,10 +138,8 @@ public class AddAppointment implements Initializable {
         }
 
         try {
-            if (startDatePicker.getValue().getDayOfWeek().equals(DayOfWeek.SATURDAY) ||
-                    startDatePicker.getValue().getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
-                Alert invalidDate = new Alert(Alert.AlertType.ERROR, "Appointment date must be a weekday " +
-                        "(Monday-Friday).");
+            if (startDatePicker.getValue().getDayOfWeek().equals(DayOfWeek.SATURDAY) || startDatePicker.getValue().getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+                Alert invalidDate = new Alert(Alert.AlertType.ERROR, "Appointment date must be a weekday " + "(Monday-Friday).");
                 invalidDate.setTitle("Appointment Booking System");
                 invalidDate.setHeaderText("Add Appointment");
                 Optional<ButtonType> results = invalidDate.showAndWait();
@@ -168,7 +151,6 @@ public class AddAppointment implements Initializable {
             System.out.println("Caught DateException");
         }
 
-        // input validation messages: start and end time combo boxes
         try {
             if (startCombo.getSelectionModel().isEmpty() || endCombo.getSelectionModel().isEmpty()) {
 
@@ -184,27 +166,9 @@ public class AddAppointment implements Initializable {
             System.out.println("Caught NullPointerException");
         }
 
-        LocalDateTime localStart = LocalDateTime.of(startDatePicker.getValue(), startCombo.getValue());
-        LocalDateTime localEnd = LocalDateTime.of(endDatePicker.getValue(), endCombo.getValue());
-        try {
-            if (localEnd.isBefore(localStart)) {
-                Alert invalidTime = new Alert(Alert.AlertType.ERROR, "End date/time cannot be before start " +
-                        "date/time.");
-                invalidTime.setTitle("Appointment Booking System");
-                invalidTime.setHeaderText("Add Appointment");
-                Optional<ButtonType> results = invalidTime.showAndWait();
-                if (results.isPresent() && results.get() == ButtonType.OK)
-                    invalidTime.setOnCloseRequest(Event::consume);
-                return;
-            }
-        } catch (Exception TimeException) {
-            System.out.println("Caught TimeException");
-        }
-
         try {
             if (startCombo.getValue().equals(endCombo.getValue())) {
-                Alert invalidTime = new Alert(Alert.AlertType.ERROR, "End time cannot be the same as start " +
-                        "time. Please select another end time.");
+                Alert invalidTime = new Alert(Alert.AlertType.ERROR, "End time cannot be the same as start " + "time. Please select another end time.");
                 invalidTime.setTitle("Appointment Booking System");
                 invalidTime.setHeaderText("Add Appointment");
                 invalidTime.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
@@ -217,7 +181,6 @@ public class AddAppointment implements Initializable {
             System.out.println("Caught TimeException");
         }
 
-        // input validation: empty selection for contact combo
         try {
             if (contactCombo.getValue() == null) {
 
@@ -233,28 +196,23 @@ public class AddAppointment implements Initializable {
             e.printStackTrace();
         }
 
-        // input validation: empty text fields
         try {
-            if (contactCombo.getValue() == null || typeCombo.getValue() == null || titleTextfield.getText().isEmpty() ||
-                    descTextField.getText().isEmpty() || locationCombo.getValue() == null) {
-                Alert emptyField = new Alert(Alert.AlertType.ERROR, "One or more fields are empty. Please enter a" +
-                        " value in each field.");
+            if (contactCombo.getValue() == null || typeCombo.getValue() == null || titleTextfield.getText().isEmpty() || descTextField.getText().isEmpty() || locationCombo.getValue() == null) {
+                Alert emptyField = new Alert(Alert.AlertType.ERROR, "One or more fields are empty. Please enter a" + " value in each field.");
                 emptyField.setTitle("Appointment Booking System");
                 emptyField.setHeaderText("Add Appointment");
                 Optional<ButtonType> results = emptyField.showAndWait();
-                if (results.isPresent() && results.get() == ButtonType.OK)
-                    emptyField.setOnCloseRequest(Event::consume);
+                if (results.isPresent() && results.get() == ButtonType.OK) emptyField.setOnCloseRequest(Event::consume);
                 return;
             }
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
 
-        // input validation: empty customer ID combo
         try {
             if (custIDCombo.getValue() == null) {
 
-                Alert noSelection = new Alert(Alert.AlertType.ERROR, "Please select a customer ID.");
+                Alert noSelection = new Alert(Alert.AlertType.ERROR, "Please select a customer.");
                 noSelection.setTitle("Appointment Booking System");
                 noSelection.setHeaderText("Add Appointment");
                 Optional<ButtonType> results = noSelection.showAndWait();
@@ -266,11 +224,10 @@ public class AddAppointment implements Initializable {
             e.printStackTrace();
         }
 
-        // input validation: empty user ID combo
         try {
             if (userCombo.getValue() == null) {
 
-                Alert noSelection = new Alert(Alert.AlertType.ERROR, "Please select a user ID.");
+                Alert noSelection = new Alert(Alert.AlertType.ERROR, "Please assign a baker.");
                 noSelection.setTitle("Appointment Booking System");
                 noSelection.setHeaderText("Add Appointment");
                 Optional<ButtonType> results = noSelection.showAndWait();
@@ -299,16 +256,28 @@ public class AddAppointment implements Initializable {
         LocalDateTime dateTimeStart = LocalDateTime.of(addStartDate, addStartTime);
         LocalDateTime dateTimeEnd = LocalDateTime.of(addEndDate, addEndTime);
 
-        // input validation messages for conflicting appointments
+        try {
+            if (startDateTime.isBefore(LocalDateTime.now())) {
+
+                Alert noSelection = new Alert(Alert.AlertType.ERROR, "Selected date has already passed. Please " + "select another date.");
+                noSelection.setTitle("Appointment Booking System");
+                noSelection.setHeaderText("Add Appointment");
+                Optional<ButtonType> results = noSelection.showAndWait();
+                if (results.isPresent() && results.get() == ButtonType.OK)
+                    noSelection.setOnCloseRequest(Event::consume);
+                return;
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
         ObservableList<Appointment> getAllAppointments = AppointmentDAO.allAppointments();
         try {
             for (Appointment apptConflicts : getAllAppointments) {
 
-                if (addCustID == apptConflicts.getCustomerID() && (dateTimeStart.isEqual(apptConflicts.getStart()) &&
-                        dateTimeEnd.isEqual(apptConflicts.getEnd()))) {
+                if (addCustID == apptConflicts.getCustomerID() && (dateTimeStart.isEqual(apptConflicts.getStart()) && dateTimeEnd.isEqual(apptConflicts.getEnd()))) {
 
-                    Alert apptConflict = new Alert(Alert.AlertType.ERROR, "This customer already has an existing " +
-                            "appointment for this date and time.");
+                    Alert apptConflict = new Alert(Alert.AlertType.ERROR, "This customer already has an existing " + "appointment for this date and time.");
                     apptConflict.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
                     apptConflict.setTitle("Appointment Booking System");
                     apptConflict.setHeaderText("Add Appointment");
@@ -318,12 +287,9 @@ public class AddAppointment implements Initializable {
                     return;
                 }
 
-                if (addCustID == apptConflicts.getCustomerID() && ((dateTimeStart.isBefore(apptConflicts.getStart()) ||
-                        dateTimeStart.isEqual(apptConflicts.getStart()))) && ((dateTimeEnd.isAfter(apptConflicts.getEnd()) ||
-                        dateTimeEnd.isEqual(apptConflicts.getEnd())))) {
+                if (addCustID == apptConflicts.getCustomerID() && ((dateTimeStart.isBefore(apptConflicts.getStart()) || dateTimeStart.isEqual(apptConflicts.getStart()))) && ((dateTimeEnd.isAfter(apptConflicts.getEnd()) || dateTimeEnd.isEqual(apptConflicts.getEnd())))) {
 
-                    Alert apptConflict = new Alert(Alert.AlertType.ERROR, "This meeting overlaps with the " +
-                            "customer's existing appointment.");
+                    Alert apptConflict = new Alert(Alert.AlertType.ERROR, "This meeting overlaps with the " + "customer's existing appointment.");
                     apptConflict.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
                     apptConflict.setTitle("Appointment Booking System");
                     apptConflict.setHeaderText("Add Appointment");
@@ -333,11 +299,9 @@ public class AddAppointment implements Initializable {
                     return;
                 }
 
-                if (addCustID == apptConflicts.getCustomerID() && ((dateTimeStart.isAfter(apptConflicts.getStart()) &&
-                        dateTimeStart.isBefore(apptConflicts.getEnd())))) {
+                if (addCustID == apptConflicts.getCustomerID() && ((dateTimeStart.isAfter(apptConflicts.getStart()) && dateTimeStart.isBefore(apptConflicts.getEnd())))) {
 
-                    Alert apptConflict = new Alert(Alert.AlertType.ERROR, "Start time overlaps with existing " +
-                            "appointment.");
+                    Alert apptConflict = new Alert(Alert.AlertType.ERROR, "Start time overlaps with existing " + "appointment.");
                     apptConflict.setTitle("Appointment Booking System");
                     apptConflict.setHeaderText("Add Appointment");
                     Optional<ButtonType> results = apptConflict.showAndWait();
@@ -346,11 +310,9 @@ public class AddAppointment implements Initializable {
                     return;
                 }
 
-                if (addCustID == apptConflicts.getCustomerID() && ((dateTimeEnd.isAfter(apptConflicts.getStart()) &&
-                        ((dateTimeEnd.isBefore(apptConflicts.getEnd()) || dateTimeEnd.isEqual(apptConflicts.getEnd())))))) {
+                if (addCustID == apptConflicts.getCustomerID() && ((dateTimeEnd.isAfter(apptConflicts.getStart()) && ((dateTimeEnd.isBefore(apptConflicts.getEnd()) || dateTimeEnd.isEqual(apptConflicts.getEnd())))))) {
 
-                    Alert apptConflict = new Alert(Alert.AlertType.ERROR, "End time overlaps with existing " +
-                            "appointment.");
+                    Alert apptConflict = new Alert(Alert.AlertType.ERROR, "End time overlaps with existing " + "appointment.");
                     apptConflict.setTitle("Appointment Booking System");
                     apptConflict.setHeaderText("Add Appointment");
                     Optional<ButtonType> results = apptConflict.showAndWait();
@@ -374,17 +336,14 @@ public class AddAppointment implements Initializable {
             newAppointment.setCustomerID(addCustID);
             newAppointment.setUserID(addUserID);
 
-            AppointmentDAO.addAppointment(startDateTime, endDateTime, String.valueOf(addContact),
-                    addType, addTitle, addDescription, addLocation, addCustID, addUserID);
-            Alert addedSuccessful = new Alert(Alert.AlertType.CONFIRMATION, "The appointment was successfully " +
-                    "added.", ButtonType.OK);
+            AppointmentDAO.addAppointment(startDateTime, endDateTime, String.valueOf(addContact), addType, addTitle, addDescription, addLocation, addCustID, addUserID);
+            Alert addedSuccessful = new Alert(Alert.AlertType.CONFIRMATION, "The appointment was successfully " + "added.", ButtonType.OK);
             addedSuccessful.setTitle("Appointment Booking System");
             addedSuccessful.setHeaderText("Add Appointment");
             Optional<ButtonType> result = addedSuccessful.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 Appointments.backToAppointments(actionEvent);
             }
-
         } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
