@@ -37,8 +37,8 @@ import java.util.ResourceBundle;
 
 
 /**
- * This class is the controller for appointments.fxml. Users can navigate to the Customer and Report screens form the
- * navigation bar on the left panel. The table of appointments is displayed with all appointments shown by default.
+ * This class is the controller for appointments.fxml. Users can navigate to the Customer and Report screens from the
+ * left panel navigation bar. The table of appointments is displayed with all appointments shown by default.
  * Appointments can be filtered further by current week and month by using the radio buttons above the table. When the
  * button for add appointments is click on the top left, a new screen will load with a form to add a new appointment.
  * Users can view additional details about an appointment by selecting an appointment and clicking on the View Details
@@ -345,6 +345,8 @@ public class Appointments implements Initializable {
 
     /**
      * This method closes the application and an alert will ask the user to confirm close.
+     *
+     * @param mouseEvent When the logout label is clicked on the left panel navigation bar.
      */
     public void toClose(MouseEvent mouseEvent) {
         Alert closeConfirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to exit the " + "application?", ButtonType.YES, ButtonType.NO);
