@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Appointment;
 import model.Customer;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,30 +19,27 @@ public class CustomerDAO extends Customer {
     /**
      * This is constructor represents the customer.
      *
-     * @param customerID The customer ID.
+     * @param customerID    The customer ID.
      * @param customer_name The customer name.
      */
-    public CustomerDAO(int customerID,String customer_name) {
-        super(customerID,customer_name);
+    public CustomerDAO(int customerID, String customer_name) {
+        super(customerID, customer_name);
     }
 
     /**
      * This method queries all customers.
      *
-     * @throws SQLException The exception to throw if there is an error with database connection or with the query.
      * @return The list of all customers.
+     * @throws SQLException The exception to throw if there is an error with database connection or with the query.
      */
     public static ObservableList<Customer> allCustomers() throws SQLException {
         ObservableList<Customer> listOfCustomers = FXCollections.observableArrayList();
-        String customerQuery = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, countries.Country, " +
-                "first_level_divisions.Country_ID, customers.Division_ID, Division, Type FROM customers INNER JOIN " +
-                "first_level_divisions ON customers.Division_ID= first_level_divisions.Division_ID INNER JOIN " +
-                "countries ON first_level_divisions.Country_ID= countries.Country_ID ORDER BY Customer_ID ASC;";
+        String customerQuery = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, countries.Country, " + "first_level_divisions.Country_ID, customers.Division_ID, Division, Type FROM customers INNER JOIN " + "first_level_divisions ON customers.Division_ID= first_level_divisions.Division_ID INNER JOIN " + "countries ON first_level_divisions.Country_ID= countries.Country_ID ORDER BY Customer_ID ASC;";
 
         PreparedStatement ps = JDBC.connection.prepareStatement(customerQuery);
         ResultSet rs = ps.executeQuery();
 
-        while(rs.next()){
+        while (rs.next()) {
             int customerId = rs.getInt("Customer_ID");
             String customerName = rs.getString("Customer_Name");
             String customerAddress = rs.getString("Address");
@@ -52,8 +50,7 @@ public class CustomerDAO extends Customer {
             String division = rs.getString("Division");
             String customerPostal = rs.getString("Postal_Code");
             String customerType = rs.getString("Type");
-            Customer customer = new Customer(customerId,customerName,customerAddress,customerPhone, customerCountry,
-                    countryId, divisionId,division,customerPostal,customerType);
+            Customer customer = new Customer(customerId, customerName, customerAddress, customerPhone, customerCountry, countryId, divisionId, division, customerPostal, customerType);
             listOfCustomers.add(customer);
         }
         return listOfCustomers;
@@ -67,16 +64,12 @@ public class CustomerDAO extends Customer {
      */
     public static ObservableList<Customer> regularCustomers() throws SQLException {
         ObservableList<Customer> listOfCustomers = FXCollections.observableArrayList();
-        String customerQuery = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, countries.Country, " +
-                "first_level_divisions.Country_ID, customers.Division_ID, " +
-                "Division, Type FROM customers INNER JOIN first_level_divisions ON customers.Division_ID=" +
-                "first_level_divisions.Division_ID INNER JOIN countries ON first_level_divisions.Country_ID=" +
-                "countries.Country_ID WHERE Type = 'Regular Customer' ORDER BY Customer_ID ASC;";
+        String customerQuery = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, countries.Country, " + "first_level_divisions.Country_ID, customers.Division_ID, " + "Division, Type, Loyalty_Points FROM customers INNER JOIN first_level_divisions ON customers.Division_ID=" + "first_level_divisions.Division_ID INNER JOIN countries ON first_level_divisions.Country_ID=" + "countries.Country_ID WHERE Type = 'Regular Customer' ORDER BY Customer_ID ASC;";
 
         PreparedStatement ps = JDBC.connection.prepareStatement(customerQuery);
         ResultSet rs = ps.executeQuery();
 
-        while(rs.next()){
+        while (rs.next()) {
             int customerId = rs.getInt("Customer_ID");
             String customerName = rs.getString("Customer_Name");
             String customerAddress = rs.getString("Address");
@@ -87,8 +80,8 @@ public class CustomerDAO extends Customer {
             String division = rs.getString("Division");
             String customerPostal = rs.getString("Postal_Code");
             String customerType = rs.getString("Type");
-            Customer.CorporateAccount customer = new Customer.CorporateAccount(customerId,customerName,customerAddress,customerPhone, customerCountry,
-                    countryId, divisionId,division,customerPostal, customerType);
+            int loyaltyPoints = Integer.parseInt(rs.getString("Loyalty_Points"));
+            RegularCustomer customer = new RegularCustomer(customerId, customerName, customerAddress, customerPhone, customerCountry, countryId, divisionId, division, customerPostal, customerType, loyaltyPoints);
             listOfCustomers.add(customer);
         }
         return listOfCustomers;
@@ -102,16 +95,12 @@ public class CustomerDAO extends Customer {
      */
     public static ObservableList<Customer> corporateAccounts() throws SQLException {
         ObservableList<Customer> listOfAccounts = FXCollections.observableArrayList();
-        String accountQuery = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, countries.Country, " +
-                "first_level_divisions.Country_ID, customers.Division_ID, " +
-                "Division, Type FROM customers INNER JOIN first_level_divisions ON customers.Division_ID=" +
-                "first_level_divisions.Division_ID INNER JOIN countries ON first_level_divisions.Country_ID=" +
-                "countries.Country_ID WHERE Type = 'Corporate Account' ORDER BY Customer_ID ASC;";
+        String accountQuery = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, countries.Country, " + "first_level_divisions.Country_ID, customers.Division_ID, " + "Division, Type, Company_Name FROM customers INNER JOIN first_level_divisions ON customers.Division_ID=" + "first_level_divisions.Division_ID INNER JOIN countries ON first_level_divisions.Country_ID=" + "countries.Country_ID WHERE Type = 'Corporate Account' ORDER BY Customer_ID ASC;";
 
         PreparedStatement ps = JDBC.connection.prepareStatement(accountQuery);
         ResultSet rs = ps.executeQuery();
 
-        while(rs.next()){
+        while (rs.next()) {
             int customerId = rs.getInt("Customer_ID");
             String customerName = rs.getString("Customer_Name");
             String customerAddress = rs.getString("Address");
@@ -122,9 +111,9 @@ public class CustomerDAO extends Customer {
             String division = rs.getString("Division");
             String customerPostal = rs.getString("Postal_Code");
             String customerType = rs.getString("Type");
-            Customer.CorporateAccount customer = new Customer.CorporateAccount(customerId,customerName,customerAddress,customerPhone, customerCountry,
-                    countryId, divisionId,division,customerPostal,customerType);
-            listOfAccounts.add(customer);
+            String companyName = rs.getString("Company_Name");
+            CorporateAccount account = new CorporateAccount(customerId, companyName, customerName, customerAddress, customerPhone, customerCountry, countryId, divisionId, division, customerPostal, customerType);
+            listOfAccounts.add(account);
         }
         return listOfAccounts;
     }
@@ -132,21 +121,20 @@ public class CustomerDAO extends Customer {
     /**
      * This method inserts a new customer in customers table in the database.
      *
-     * @param addAddress The address to add.
-     * @param addCustomerName The customer name to add.
-     * @param addFirstLevel The state/province to add.
-     * @param addPhoneNumber The phone number to add.
-     * @param addPostalCode The postal code to add.
+     * @param addAddress       The address to add.
+     * @param addCustomerName  The customer name to add.
+     * @param addFirstLevel    The state/province to add.
+     * @param addPhoneNumber   The phone number to add.
+     * @param addPostalCode    The postal code to add.
+     * @param addLoyaltyPoints The loyalty points to add.
+     * @param addType          The customer type to add.
      */
-    public static void addCustomer(String addCustomerName, String addAddress, String addPhoneNumber,
-                                   String addPostalCode, int addFirstLevel, String addType, int addLoyaltyPoints){
+    public static void addCustomer(String addCustomerName, String addAddress, String addPhoneNumber, String addPostalCode, int addFirstLevel, String addType, int addLoyaltyPoints) {
 
         String phoneNumber = addPhoneNumber.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "$1-$2-$3");
 
         try {
-            String addCustomerQuery = "INSERT INTO customers (Customer_Name,Address,Postal_Code,Phone," +
-                    "Create_Date,Created_By,Last_Update,Last_Updated_By,Division_ID,Type,Loyalty_Points) " +
-                    "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+            String addCustomerQuery = "INSERT INTO customers (Customer_Name,Address,Postal_Code,Phone," + "Create_Date,Created_By,Last_Update,Last_Updated_By,Division_ID,Type,Loyalty_Points) " + "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement ps = JDBC.connection.prepareStatement(addCustomerQuery);
             ps.setString(1, addCustomerName);
             ps.setString(2, addAddress);
@@ -157,8 +145,8 @@ public class CustomerDAO extends Customer {
             ps.setString(7, null);
             ps.setString(8, null);
             ps.setInt(9, addFirstLevel);
-            ps.setString(10,addType);
-            ps.setInt(11,addLoyaltyPoints);
+            ps.setString(10, addType);
+            ps.setInt(11, addLoyaltyPoints);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -166,22 +154,22 @@ public class CustomerDAO extends Customer {
     }
 
     /**
-     * This method inserts a new customer in customers table in the database.
+     * This method inserts a new corporate account in customers table in the database.
      *
-     * @param addAddress The address to add.
-     * @param addFirstLevel The state/province to add.
-     * @param addPhoneNumber The phone number to add.
-     * @param addPostalCode The postal code to add.
+     * @param addAddress      The address to add.
+     * @param addFirstLevel   The state/province to add.
+     * @param addPhoneNumber  The phone number to add.
+     * @param addPostalCode   The postal code to add.
+     * @param addType         The customer type to add.
+     * @param addCompanyName  The company name to add.
+     * @param addCustomerName The customer name to add.
      */
-    public static void addCorporateAccount(String addCustomerName,String addCompanyName, String addAddress, String addPhoneNumber,
-                                   String addPostalCode, int addFirstLevel, String addType){
+    public static void addCorporateAccount(String addCustomerName, String addCompanyName, String addAddress, String addPhoneNumber, String addPostalCode, int addFirstLevel, String addType) {
 
         String phoneNumber = addPhoneNumber.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "$1-$2-$3");
 
         try {
-            String addCustomerQuery = "INSERT INTO customers (Customer_Name,Company_Name,Address,Postal_Code,Phone," +
-                    "Create_Date,Created_By,Last_Update,Last_Updated_By,Division_ID,Type) " +
-                    "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+            String addCustomerQuery = "INSERT INTO customers (Customer_Name,Company_Name,Address,Postal_Code,Phone," + "Create_Date,Created_By,Last_Update,Last_Updated_By,Division_ID,Type) " + "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement ps = JDBC.connection.prepareStatement(addCustomerQuery);
             ps.setString(1, addCustomerName);
             ps.setString(2, String.valueOf(Objects.equals(addCompanyName, addCustomerName)));
@@ -193,7 +181,7 @@ public class CustomerDAO extends Customer {
             ps.setString(8, null);
             ps.setString(9, null);
             ps.setInt(10, addFirstLevel);
-            ps.setString(11,addType);
+            ps.setString(11, addType);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -202,68 +190,76 @@ public class CustomerDAO extends Customer {
 
 
     /**
-     * This method modifies data that is part of an existing customer.
+     * This method modifies data that is part of an existing regular customer.
      *
-     * @param modCustomerID The customer ID to reference.
-     * @param modAddress The address to modify.
-     * @param modCustomerName The customer name to modify.
-     * @param modFirstLevel The customer state/province to modify.
-     * @param modPhone The phone number to modify.
-     * @param modPostal The postal code to modify.
+     * @param modCustomerID    The customer ID to reference.
+     * @param modAddress       The address to modify.
+     * @param modCustomerName  The customer name to modify.
+     * @param modFirstLevel    The customer state/province to modify.
+     * @param modPhone         The phone number to modify.
+     * @param modPostal        The postal code to modify.
+     * @param modLoyaltyPoints The loyalty points to modify.
+     * @param modType          The customer type.
      */
 
-    // TODO: Modify for regular customers
-    public static void modifyCustomer(int modCustomerID,String modCustomerName, String modAddress, String modPhone,
-                                      String modPostal, int modFirstLevel, String modType, int modLoyaltyPoints) {
+    public static void modifyCustomer(int modCustomerID, String modCustomerName, String modAddress, String modPhone, String modPostal, int modFirstLevel, String modType, int modLoyaltyPoints) {
 
         String phoneNumber = modPhone.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "$1-$2-$3");
 
-        try{
-            String modCustomerQuery = "UPDATE customers SET Customer_ID = ?, Customer_Name = ?, Address = ?, " +
-                    "Postal_Code = ?, Phone = ?, Create_Date = ?,Created_By = ?,Last_Update = ?,Last_Updated_By = ?," +
-                    "Division_ID = ?, Type = ?, Loyalty_Points = ? WHERE Customer_ID = ?";
+        try {
+            String modCustomerQuery = "UPDATE customers SET Customer_ID = ?, Customer_Name = ?, Address = ?, " + "Postal_Code = ?, Phone = ?, Create_Date = ?,Created_By = ?,Last_Update = ?,Last_Updated_By = ?," + "Division_ID = ?, Type = ?, Loyalty_Points = ? WHERE Customer_ID = ?";
             PreparedStatement ps = JDBC.connection.prepareStatement(modCustomerQuery);
-            ps.setString(1, modCustomerName);
-            ps.setString(2, modAddress);
-            ps.setString(3, modPostal);
-            ps.setString(4, phoneNumber);
-            ps.setString(5, null);
+            ps.setInt(1, modCustomerID);
+            ps.setString(2, modCustomerName);
+            ps.setString(3, modAddress);
+            ps.setString(4, modPostal);
+            ps.setString(5, phoneNumber);
             ps.setString(6, null);
             ps.setString(7, null);
             ps.setString(8, null);
-            ps.setInt(9, modFirstLevel);
-            ps.setString(10,modType);
-            ps.setInt(11,modLoyaltyPoints);
-            ps.setInt(12, modCustomerID);
+            ps.setString(9, null);
+            ps.setInt(10, modFirstLevel);
+            ps.setString(11, modType);
+            ps.setInt(12, modLoyaltyPoints);
+            ps.setInt(13, modCustomerID);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static void modifyCorpAcct(int modCustomerID,  String modCompanyName, String modCustomerName,
-                                      String modAddress, String modPhone, String modPostal, int modFirstLevel,
-                                      String modType) {
+    /**
+     * This method modifies data that is part of an existing corporate account.
+     *
+     * @param modCustomerID   The customer ID to reference.
+     * @param modAddress      The address to modify.
+     * @param modCustomerName The customer name to modify.
+     * @param modFirstLevel   The customer state/province to modify.
+     * @param modPhone        The phone number to modify.
+     * @param modPostal       The postal code to modify.
+     * @param modCompanyName  The company name to modify.
+     * @param modType         The customer type.
+     */
+    public static void modifyCorpAcct(int modCustomerID, String modCompanyName, String modCustomerName, String modAddress, String modPhone, String modPostal, int modFirstLevel, String modType) {
 
         String phoneNumber = modPhone.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "$1-$2-$3");
 
-        try{
-            String modCustomerQuery = "UPDATE customers SET Customer_ID = ?, Customer_Name = ?, Address = ?, " +
-                    "Postal_Code = ?, Phone = ?, Create_Date = ?,Created_By = ?,Last_Update = ?,Last_Updated_By = ?, " +
-                    "Type = ?, Company_Name = ?, Division_ID = ? WHERE Customer_ID = ?";
+        try {
+            String modCustomerQuery = "UPDATE customers SET Customer_ID = ?, Customer_Name = ?, Address = ?, " + "Postal_Code = ?, Phone = ?, Create_Date = ?,Created_By = ?,Last_Update = ?,Last_Updated_By = ?, " + "Type = ?, Company_Name = ?, Division_ID = ? WHERE Customer_ID = ?";
             PreparedStatement ps = JDBC.connection.prepareStatement(modCustomerQuery);
-            ps.setString(1, modCustomerName);
-            ps.setString(2, modAddress);
-            ps.setString(3, modPostal);
-            ps.setString(4, phoneNumber);
-            ps.setString(5, null);
+            ps.setInt(1, modCustomerID);
+            ps.setString(2, modCustomerName);
+            ps.setString(3, modAddress);
+            ps.setString(4, modPostal);
+            ps.setString(5, phoneNumber);
             ps.setString(6, null);
             ps.setString(7, null);
             ps.setString(8, null);
-            ps.setString(9,modType);
-            ps.setString(10,modCompanyName);
-            ps.setInt(11, modFirstLevel);
-            ps.setInt(12,modCustomerID);
+            ps.setString(9, null);
+            ps.setString(10, modType);
+            ps.setString(11, modCompanyName);
+            ps.setInt(12, modFirstLevel);
+            ps.setInt(13, modCustomerID);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -275,7 +271,7 @@ public class CustomerDAO extends Customer {
      *
      * @throws SQLException The exception to throw if there are errors with database connection or the query.
      */
-    public static void deleteCustomer (Customer customer) throws SQLException {
+    public static void deleteCustomer(Customer customer) throws SQLException {
 
         String deleteCustomerQuery = "DELETE FROM customers WHERE Customer_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(deleteCustomerQuery);
@@ -287,13 +283,12 @@ public class CustomerDAO extends Customer {
      * The method to query appointments if the there is a matching customer ID.
      *
      * @param customerId The customer ID to look up if there is an associated appointment.
-     * @throws SQLException The exception to throw if there are errors with database connection or the query.
      * @return The associated appointments with this customer.
+     * @throws SQLException The exception to throw if there are errors with database connection or the query.
      */
     public static ObservableList<Appointment> deleteAssociated(int customerId) throws SQLException {
         ObservableList<Appointment> associatedAppts = FXCollections.observableArrayList();
-        String associatedApptQuery = "SELECT * FROM appointments WHERE EXISTS (SELECT Customer_ID FROM customers " +
-                "WHERE appointments.Customer_ID = customers.Customer_ID AND Customer_ID = ?)";
+        String associatedApptQuery = "SELECT * FROM appointments WHERE EXISTS (SELECT Customer_ID FROM customers " + "WHERE appointments.Customer_ID = customers.Customer_ID AND Customer_ID = ?)";
         PreparedStatement ps = JDBC.connection.prepareStatement(associatedApptQuery);
         ps.setInt(1, customerId);
         ResultSet rs = ps.executeQuery();
@@ -310,8 +305,7 @@ public class CustomerDAO extends Customer {
             int customerID = rs.getInt("Customer_ID");
             int userID = rs.getInt("User_ID");
 
-            Appointment deleteAppt = new Appointment(appointmentID, title, description, location, contactID, type,
-                    start, end, customerID, userID);
+            Appointment deleteAppt = new Appointment(appointmentID, title, description, location, contactID, type, start, end, customerID, userID);
             associatedAppts.add(deleteAppt);
         }
         return associatedAppts;
