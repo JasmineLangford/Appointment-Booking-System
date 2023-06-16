@@ -37,10 +37,14 @@ import java.util.ResourceBundle;
 
 
 /**
- * This class is the controller for appointments.fxml.
+ * This class is the controller for appointments.fxml. Users can navigate to the Customer and Report screens form the
+ * navigation bar on the left panel. The table of appointments is displayed with all appointments shown by default.
+ * Appointments can be filtered further by current week and month by using the radio buttons above the table. When the
+ * button for add appointments is click on the top left, a new screen will load with a form to add a new appointment.
+ * Users can view additional details about an appointment by selecting an appointment and clicking on the View Details
+ * button below the table.
  */
 public class Appointments implements Initializable {
-
     @FXML
     public Label currentUser;
     public ToggleGroup apptViewToggle;
@@ -66,6 +70,12 @@ public class Appointments implements Initializable {
     @FXML
     private TableColumn<Appointment, String> apptUserCol;
 
+    /**
+     * This method directs the user back to the appointments screen.
+     *
+     * @param actionEvent The action when a button is clicked.
+     * @throws IOException The exception to throw if I/O errors occur.
+     */
     public static void backToAppointments(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load((Objects.requireNonNull(Appointments.class.getResource("/view/appointments.fxml"))));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -85,9 +95,10 @@ public class Appointments implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Main Menu initialized!");
 
+        // Log out of application from left panel navigation bar
         toClose.setOnMouseClicked(this::toClose);
 
-        // Display user's first name in welcome tagline
+        // Display user's first name in welcome message
         String firstName = UserDAO.getUserLogin().getUserFirstName();
         currentUser.setText(firstName + "!");
 
@@ -100,7 +111,6 @@ public class Appointments implements Initializable {
         // Set appointment table columns
         apptTitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         apptLocationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
-
         apptCustCol.setCellValueFactory(cellData -> {
             int customerID = cellData.getValue().getCustomerID();
 
@@ -119,7 +129,6 @@ public class Appointments implements Initializable {
                 return null;
             }
         });
-
         apptUserCol.setCellValueFactory(cellData -> {
             Appointment appointment = cellData.getValue();
             int userId = appointment.getUserID();
@@ -133,6 +142,7 @@ public class Appointments implements Initializable {
             return new SimpleStringProperty(userFirstLastName);
         });
 
+        // Formatting and display for date/time
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MMMM d, yyyy");
         apptDate.setCellValueFactory(cellData -> {
             String dateTimeValue = cellData.getValue().getStart().format(dateFormatter);
@@ -146,11 +156,9 @@ public class Appointments implements Initializable {
             String timeRange = startTime.format(timeFormatter) + " - " + endTime.format(timeFormatter);
             return new SimpleStringProperty(timeRange);
         });
-
         try {
             loadApptTable();
-        } catch (
-                SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -158,7 +166,7 @@ public class Appointments implements Initializable {
     /**
      * This method takes the user to the customers screen.
      *
-     * @param actionEvent Customers label is clicked (located on the left panel).
+     * @param actionEvent Customers is clicked (located on the left panel).
      * @throws IOException The exception to throw if I/O error occurs.
      */
     public void toCustomers(MouseEvent actionEvent) throws IOException {
@@ -176,7 +184,7 @@ public class Appointments implements Initializable {
     /**
      * This method takes the user to the reports screen.
      *
-     * @param actionEvent Reports button is clicked (located on the right panel).
+     * @param actionEvent Reports is clicked (located on the right panel).
      * @throws IOException The exception to throw if I/O error occurs.
      */
     public void toReports(MouseEvent actionEvent) throws IOException {
@@ -192,7 +200,7 @@ public class Appointments implements Initializable {
     }
 
     /**
-     * This method loads the data from the appointments table in the database to the appointments' tableview.
+     * This method loads the data from the appointments table.
      *
      * @throws SQLException The exception to throw if there is an issue with the sql query.
      */
@@ -248,7 +256,7 @@ public class Appointments implements Initializable {
     }
 
     /**
-     * This method will take the user to the Add Appointment screen where a new appointment can be added.
+     * This method will load the Add Appointment screen when the button is clicked.
      *
      * @param actionEvent Add button is clicked under the appointments' tableview.
      * @throws IOException The exception to throw if I/O error occurs.
@@ -264,8 +272,8 @@ public class Appointments implements Initializable {
     }
 
     /**
-     * This method will take the user to view details of the selected appointment. The data from the selected row will
-     * auto-populate in the input fields and the user can then make modifications.
+     * This method will populate the details of the selected appointment on the next screen once the button is clicked.
+     * Users can then make modifications to the appointment information.
      *
      * @param actionEvent View Details button is clicked under the appointments' tableview.
      * @throws IOException The exception to throw if I/O error occurs.
@@ -274,13 +282,11 @@ public class Appointments implements Initializable {
 
         // error message if user does not make a selection
         if (mainApptTable.getSelectionModel().isEmpty()) {
-            Alert modApptSelect = new Alert(Alert.AlertType.WARNING, "Please select an appointment to view " +
-                    "details.");
+            Alert modApptSelect = new Alert(Alert.AlertType.WARNING, "Please select an appointment to view " + "details.");
             modApptSelect.setTitle("Appointment Booking System");
             modApptSelect.setHeaderText("Appointment Details");
             Optional<ButtonType> results = modApptSelect.showAndWait();
-            if (results.isPresent() && results.get() == ButtonType.OK)
-                modApptSelect.setOnCloseRequest(Event::consume);
+            if (results.isPresent() && results.get() == ButtonType.OK) modApptSelect.setOnCloseRequest(Event::consume);
             return;
         }
 
@@ -288,14 +294,12 @@ public class Appointments implements Initializable {
         loader.setLocation(getClass().getResource("/view/modify-appointment.fxml"));
         loader.load();
 
-        // send selected data to modify appointment screen
         ModifyAppointment MainMenu = loader.getController();
         MainMenu.sendAppointment(mainApptTable.getSelectionModel().getSelectedItem());
 
         Parent scene = loader.getRoot();
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setScene(new Scene(scene));
-
         stage.show();
         stage.centerOnScreen();
         stage.setResizable(false);
@@ -303,20 +307,18 @@ public class Appointments implements Initializable {
 
     /**
      * This method will cancel the selected appointment by deleting the appointment from the database.
-     * The deleted row will no longer be displayed on the appointment tableview. A message will also appear for deleted
-     * appointment stating the cancelled appointment ID and type.
+     * The deleted row will no longer be displayed on the appointment tableview. A message will also appear for the
+     * deleted appointment stating the cancelled appointment title and start date/time.
      */
     public void cancelAppointment() {
         if (mainApptTable.getSelectionModel().isEmpty()) {
-            Alert deleteAppt = new Alert(Alert.AlertType.WARNING, "Please select an appointment to be cancelled.");
+            Alert deleteAppt = new Alert(Alert.AlertType.WARNING, "Please select an appointment to be canceled.");
             deleteAppt.setTitle("Appointment Booking System");
             deleteAppt.setHeaderText("Cancel Appointment");
             Optional<ButtonType> result = deleteAppt.showAndWait();
-            if (result.isPresent() && result.get() == ButtonType.OK)
-                mainApptTable.getSelectionModel().clearSelection();
+            if (result.isPresent() && result.get() == ButtonType.OK) mainApptTable.getSelectionModel().clearSelection();
         } else {
-            Alert deleteApptConfirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to cancel this " +
-                    "appointment?", ButtonType.YES, ButtonType.NO);
+            Alert deleteApptConfirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to cancel this " + "appointment?", ButtonType.YES, ButtonType.NO);
             deleteApptConfirm.setTitle("Appointment Booking System");
             deleteApptConfirm.setHeaderText("Confirm Cancellation");
             Optional<ButtonType> result = deleteApptConfirm.showAndWait();
@@ -326,9 +328,10 @@ public class Appointments implements Initializable {
                     AppointmentDAO.deleteAppt(selectedAppt);
                     loadApptTable();
 
-                    Alert apptInfo = new Alert(Alert.AlertType.INFORMATION, "You have cancelled the following " +
-                            "appointment:" + '\n' + "Appointment ID: " + selectedAppt.getAppointmentID() + '\n' +
-                            "Appointment Title: " + selectedAppt.getTitle(), ButtonType.OK);
+                    DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MMMM d, yyyy");
+                    DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:mm a");
+
+                    Alert apptInfo = new Alert(Alert.AlertType.INFORMATION, "You have canceled the following " + "appointment:" + '\n' + "Appointment Title: " + selectedAppt.getTitle() + '\n' + "Appointment Date/Time: " + selectedAppt.getStart().format(dateFormatter) + " " + selectedAppt.getStart().format(timeFormatter), ButtonType.OK);
                     apptInfo.setTitle("Appointment Booking System");
                     apptInfo.setHeaderText("Cancel Appointment");
                     apptInfo.showAndWait();
@@ -344,8 +347,7 @@ public class Appointments implements Initializable {
      * This method closes the application and an alert will ask the user to confirm close.
      */
     public void toClose(MouseEvent mouseEvent) {
-        Alert closeConfirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to exit the " +
-                "application?", ButtonType.YES, ButtonType.NO);
+        Alert closeConfirm = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to exit the " + "application?", ButtonType.YES, ButtonType.NO);
         closeConfirm.setTitle("Appointment Booking System");
         closeConfirm.setHeaderText("Exit Application");
         closeConfirm.showAndWait().ifPresent(result -> {
