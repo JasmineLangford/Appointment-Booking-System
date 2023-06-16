@@ -29,11 +29,11 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class AddCorpAccount implements Initializable {
-    @FXML
-    private TextField customerName;
     ObservableList<CountryDAO> countries = CountryDAO.allCountries();
     ObservableList<FirstLevelDAO> divisions = FirstLevelDAO.allFirstLevelDivision();
     Customer.CorporateAccount newCorpAccount = new Customer.CorporateAccount();
+    @FXML
+    private TextField customerName;
     @FXML
     private TextField companyNameTextfield;
     @FXML
@@ -56,11 +56,9 @@ public class AddCorpAccount implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Add corporate account is initialized!");
 
-        // Set combo box selection of countries
+        // Set combo boxes
         countryCombo.setItems(countries);
         countryCombo.setPromptText("Select Country");
-
-        // Set combo box selection of states/provinces
         firstLevelCombo.setItems(divisions);
         firstLevelCombo.setPromptText("Select State");
         firstLevelCombo.setVisibleRowCount(5);
@@ -74,9 +72,7 @@ public class AddCorpAccount implements Initializable {
     public void countrySelected() throws SQLException {
         Customer selection = countryCombo.getSelectionModel().getSelectedItem();
 
-        firstLevelCombo.setItems(FirstLevelDAO.allFirstLevelDivision().stream()
-                .filter(firstLevel -> firstLevel.getCountryId() == selection.getCountryId())
-                .collect(Collectors.toCollection(FXCollections::observableArrayList)));
+        firstLevelCombo.setItems(FirstLevelDAO.allFirstLevelDivision().stream().filter(firstLevel -> firstLevel.getCountryId() == selection.getCountryId()).collect(Collectors.toCollection(FXCollections::observableArrayList)));
 
         firstLevelCombo.getSelectionModel().selectFirst();
         firstLevelCombo.setVisibleRowCount(5);
@@ -98,8 +94,7 @@ public class AddCorpAccount implements Initializable {
 
         // Input Validation
         if (addCompanyName.isEmpty() || addAddress.isEmpty() || addPhoneNumber.isEmpty() || addPostalCode.isEmpty()) {
-            Alert emptyField = new Alert(Alert.AlertType.ERROR, "One or more fields are empty. Please enter a" +
-                    " value in each field.");
+            Alert emptyField = new Alert(Alert.AlertType.ERROR, "One or more fields are empty. Please enter a" + " value in each field.");
             Optional<ButtonType> result = emptyField.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 return;
@@ -109,7 +104,6 @@ public class AddCorpAccount implements Initializable {
         try {
             int addFirstLevel = firstLevelCombo.getSelectionModel().getSelectedItem().getDivisionId();
 
-            // setting new customer
             newCorpAccount.setCompany(addCompanyName);
             newCorpAccount.setCustomerName(addCompanyName);
             newCorpAccount.setCustomerAddress(addAddress);
@@ -119,14 +113,12 @@ public class AddCorpAccount implements Initializable {
             newCorpAccount.setDivisionId(addFirstLevel);
             newCorpAccount.setCustomerType(addType);
 
-            CustomerDAO.addCorporateAccount(addCompanyName, addCompanyName, addAddress, addPhoneNumber, addPostalCode,
-                    addFirstLevel, addType);
-            Alert addCorpAccount = new Alert(Alert.AlertType.CONFIRMATION, "The customer was successfully added.",
-                    ButtonType.OK);
+            CustomerDAO.addCorporateAccount(addCompanyName, addCompanyName, addAddress, addPhoneNumber, addPostalCode, addFirstLevel, addType);
+            Alert addCorpAccount = new Alert(Alert.AlertType.CONFIRMATION, "The customer was successfully added.", ButtonType.OK);
             Optional<ButtonType> result = addCorpAccount.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
-              Customers corpAccountView = new Customers();
-              corpAccountView.loadCorpAccountsView(actionEvent);
+                Customers corpAccountView = new Customers();
+                corpAccountView.loadCorpAccountsView(actionEvent);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -135,10 +127,22 @@ public class AddCorpAccount implements Initializable {
         }
     }
 
-    public void toAppointments(ActionEvent actionEvent) throws IOException {
+    /**
+     * This method takes the user back to the customers screen.
+     *
+     * @param actionEvent When save button is clicked.
+     * @throws IOException The exception to throw when there is an I/O issue.
+     */
+    public void toCustomersScreen(ActionEvent actionEvent) throws IOException {
         toCustomers(actionEvent);
     }
 
+    /**
+     * This method takes the user back to the customers screen.
+     *
+     * @param actionEvent When save button is clicked.
+     * @throws IOException The exception to throw when there is an I/O issue.
+     */
     public void toCustomers(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("/view/customers.fxml"))));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
