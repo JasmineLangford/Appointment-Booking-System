@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 /**
  * This class is the controller for modify-customer.fxml. The user is able to modify text fields and combo boxes.
  * The customer ID was auto-incremented from the database when the customer was added and is disabled. The user will
- * be able to save the changes to this customer by clicking the save button at the bottom of the screen or cancel
+ * be able to save the changes to this customer by clicking the update button at the bottom of the screen or cancel
  * changes if the user no longer wants to modify the customer details.
  */
 public class ModifyCustomer implements Initializable {
@@ -73,7 +73,7 @@ public class ModifyCustomer implements Initializable {
      *
      * @param customer The customer represented from the customer model.
      * @throws SQLException The exception to throw if there are errors querying the countries or divisions for the
-     *                      combo boxes.
+     * combo boxes.
      */
     public void sendCustomer(Customer.RegularCustomer customer) throws SQLException {
         modCustomer = customer;
