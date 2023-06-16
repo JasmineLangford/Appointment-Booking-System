@@ -17,12 +17,20 @@ public class Customer {
     private int totalCustomers;
     private String customerType;
 
-    // override format for combo box selection display
-    @Override
-    public String toString() {
-        return (getCustomerName());
-    }
-
+    /**
+     * The constructor represents all customer fields.
+     *
+     * @param countryId       The country ID.
+     * @param customerAddress The customer's address.
+     * @param customerId      The customer ID.
+     * @param customerCountry The customer country that is associated with the country ID.
+     * @param customerName    The customer name.
+     * @param customerPhone   The customer phone.
+     * @param customerPostal  The customer postal.
+     * @param customerType    The customer type - Regular or Corporate.
+     * @param division        The customer state/province that is associated with the ID.
+     * @param divisionId      The customer state/province ID.
+     */
     public Customer(int customerId, String customerName, String customerAddress, String customerPhone,
                     String customerCountry, int countryId, int divisionId, String division, String customerPostal,
                     String customerType) {
@@ -113,50 +121,12 @@ public class Customer {
     public Customer() {
     }
 
-
-    public static class RegularCustomer extends Customer {
-        private int loyaltyPoints;
-        public RegularCustomer(int customerId, String customerName, String customerAddress, String customerPhone, String
-            customerCountry, int countryId, int divisionId, String division, String customerPostal, String customerType,
-                               int loyaltyPoints) {
-                super(customerId, customerName, customerAddress, customerPhone, customerCountry, countryId, divisionId,
-                        division, customerPostal, customerType);
-                this.loyaltyPoints = loyaltyPoints;
-        }
-
-        public RegularCustomer() {
-
-        }
-
-        public int getLoyaltyPoints() {
-            return loyaltyPoints;
-        }
-
-        public void setLoyaltyPoints(int loyaltyPoints) {
-            this.loyaltyPoints = loyaltyPoints;
-        }
+    // override format for combo box selection display
+    @Override
+    public String toString() {
+        return (getCustomerName());
     }
 
-    public static class CorporateAccount extends Customer {
-        private String company;
-        public CorporateAccount(int customerId, String customerName, String customerAddress, String customerPhone, String
-                customerCountry, int countryId, int divisionId, String division, String customerPostal,
-                                String customerType) {
-            super(customerId, customerName, customerAddress, customerPhone, customerCountry, countryId, divisionId,
-                    division, customerPostal, customerType);
-        }
-
-        public CorporateAccount() {
-        }
-
-        public String getCompany() {
-            return company;
-        }
-
-        public void setCompany(String company) {
-            this.company = company;
-        }
-    }
     /**
      * Gets the customer type.
      *
@@ -354,5 +324,110 @@ public class Customer {
     public void setTotalCustomers(int totalCustomers) {
         this.totalCustomers = totalCustomers;
 
+    }
+
+    /**
+     * This class represents a regular customer, which is a type of customer that is associated with loyalty points.
+     * It extends the Customer class and adds an additional field for the number of loyalty points.
+     */
+    public static class RegularCustomer extends Customer {
+        private int loyaltyPoints;
+
+        /**
+         * Constructs a new RegularCustomer object.
+         *
+         * @param customerId      The ID of the customer.
+         * @param loyaltyPoints   The customer loyalty points.
+         * @param customerName    The name of the customer.
+         * @param customerAddress The address of the customer.
+         * @param customerPhone   The phone number of the customer.
+         * @param customerCountry The country of the customer.
+         * @param countryId       The ID of the country.
+         * @param divisionId      The ID of the division.
+         * @param division        The division of the customer.
+         * @param customerPostal  The postal code of the customer.
+         * @param customerType    The type of the customer.
+         */
+        public RegularCustomer(int customerId, String customerName, String customerAddress, String customerPhone, String
+                customerCountry, int countryId, int divisionId, String division, String customerPostal, String customerType,
+                               int loyaltyPoints) {
+            super(customerId, customerName, customerAddress, customerPhone, customerCountry, countryId, divisionId,
+                    division, customerPostal, customerType);
+            this.loyaltyPoints = loyaltyPoints;
+        }
+
+        public RegularCustomer() {
+
+        }
+
+        /**
+         * The number of loyalty points.
+         *
+         * @return An integer representing the number of loyalty points.
+         */
+        public int getLoyaltyPoints() {
+            return loyaltyPoints;
+        }
+
+        /**
+         * Sets the loyalty points.
+         *
+         * @param loyaltyPoints The number of loyalty points.
+         */
+        public void setLoyaltyPoints(int loyaltyPoints) {
+            this.loyaltyPoints = loyaltyPoints;
+        }
+    }
+
+    /**
+     * This class represents a corporate account, which is a type of customer that is associated with a company.
+     * It extends the Customer class and adds an additional field for the company name.
+     */
+    public static class CorporateAccount extends Customer {
+        private String company;
+
+        /**
+         * Constructs a new CorporateAccount object.
+         *
+         * @param customerId      The ID of the customer.
+         * @param company         The name of the company associated with the customer.
+         * @param customerName    The name of the customer.
+         * @param customerAddress The address of the customer.
+         * @param customerPhone   The phone number of the customer.
+         * @param customerCountry The country of the customer.
+         * @param countryId       The ID of the country.
+         * @param divisionId      The ID of the division.
+         * @param division        The division of the customer.
+         * @param customerPostal  The postal code of the customer.
+         * @param customerType    The type of the customer.
+         */
+        public CorporateAccount(int customerId, String company, String customerName, String customerAddress, String customerPhone, String
+                customerCountry, int countryId, int divisionId, String division, String customerPostal,
+                                String customerType) {
+            super(customerId, customerName, customerAddress, customerPhone, customerCountry, countryId, divisionId,
+                    division, customerPostal, customerType);
+            this.company = company;
+        }
+
+        public CorporateAccount() {
+        }
+
+        /**
+         * The company name.
+         *
+         * @return A string containing the company name.
+         */
+        public String getCompany() {
+            return company;
+        }
+
+        /**
+         * Sets the company name
+         *
+         * @param company A string containing the company name.
+         */
+        public void setCompany(String company) {
+            this.company = company;
+        }
     }
 }
