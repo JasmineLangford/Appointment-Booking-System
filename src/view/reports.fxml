@@ -6,107 +6,114 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="1108.0" style="-fx-background-color: #373436;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Reports">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0"
+            prefWidth="1108.0" style="-fx-background-color: #373436;" xmlns="http://javafx.com/javafx/17.0.2-ea"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Reports">
     <Pane layoutX="208.0" layoutY="-1.0" prefHeight="539.0" prefWidth="900.0" style="-fx-background-color: #323232;">
         <TableView fx:id="byContactView" layoutX="52.0" layoutY="121.0" prefHeight="167.0" prefWidth="799.0">
             <columns>
-                <TableColumn fx:id="apptLocationCol" prefWidth="78.0" text="Location" />
-                <TableColumn fx:id="apptTitleCol" prefWidth="139.99996948242188" text="Title" />
-                <TableColumn fx:id="apptDescCol" prefWidth="150.66668701171875" text="Description" />
-                <TableColumn fx:id="apptTypeCol" prefWidth="72.6666259765625" text="Type" />
-                <TableColumn fx:id="apptStartCol" prefWidth="127.0" text="Start Date/Time" />
-                <TableColumn fx:id="apptEndCol" prefWidth="123.0" text="End Date/Time" />
-                <TableColumn fx:id="custIdCol" prefWidth="111.33343505859375" text="Customer" />
+                <TableColumn fx:id="apptLocationCol" prefWidth="78.0" text="Location"/>
+                <TableColumn fx:id="apptTitleCol" prefWidth="139.99996948242188" text="Title"/>
+                <TableColumn fx:id="apptDescCol" prefWidth="150.66668701171875" text="Description"/>
+                <TableColumn fx:id="apptTypeCol" prefWidth="72.6666259765625" text="Type"/>
+                <TableColumn fx:id="apptStartCol" prefWidth="127.0" text="Start Date/Time"/>
+                <TableColumn fx:id="apptEndCol" prefWidth="123.0" text="End Date/Time"/>
+                <TableColumn fx:id="custIdCol" prefWidth="111.33343505859375" text="Customer"/>
             </columns>
         </TableView>
         <Label layoutX="53.0" layoutY="37.0" text="Reports" textFill="WHITE">
             <font>
-                <Font name="Gill Sans MT Bold" size="20.0" />
+                <Font name="Gill Sans MT Bold" size="20.0"/>
             </font>
         </Label>
-        <Line endX="696.0" layoutX="152.0" layoutY="307.0" startX="-100.0" stroke="#f50ca0" strokeWidth="3.0" />
+        <Line endX="696.0" layoutX="152.0" layoutY="307.0" startX="-100.0" stroke="#f50ca0" strokeWidth="3.0"/>
         <Label layoutX="53.0" layoutY="83.0" text="Appointments by Contact" textFill="WHITE">
             <font>
-                <Font name="Gill Sans MT" size="16.0" />
+                <Font name="Gill Sans MT" size="16.0"/>
             </font>
         </Label>
         <Label layoutX="516.0" layoutY="322.0" text="Customer Appointments by Type &amp; Month" textFill="WHITE">
             <font>
-                <Font name="Gill Sans MT" size="16.0" />
+                <Font name="Gill Sans MT" size="16.0"/>
             </font>
         </Label>
-        <ComboBox fx:id="contactCombo" layoutX="656.0" layoutY="78.0" onAction="#selectedContact" prefWidth="150.0" promptText="Select Contact" />
+        <ComboBox fx:id="contactCombo" layoutX="656.0" layoutY="78.0" onAction="#selectedContact" prefWidth="150.0"
+                  promptText="Select Contact"/>
         <TableView fx:id="byStateProvView" layoutX="51.0" layoutY="358.0" prefHeight="142.0" prefWidth="338.0">
             <columns>
-                <TableColumn fx:id="divisionCol" prefWidth="190.99999618530273" text="State/Province" />
-                <TableColumn fx:id="totalCustomersByDivision" prefWidth="144.6666717529297" text="Total Customers" />
+                <TableColumn fx:id="divisionCol" prefWidth="190.99999618530273" text="State/Province"/>
+                <TableColumn fx:id="totalCustomersByDivision" prefWidth="144.6666717529297" text="Total Customers"/>
             </columns>
         </TableView>
         <Label layoutX="53.0" layoutY="322.0" text="Customers by State/Province" textFill="WHITE">
             <font>
-                <Font name="Gill Sans MT" size="16.0" />
+                <Font name="Gill Sans MT" size="16.0"/>
             </font>
         </Label>
-        <Line endX="100.0" layoutX="349.0" layoutY="324.0" startX="100.0" startY="173.33334350585938" stroke="#f50ca0" strokeWidth="3.0" />
-      <TableView fx:id="byTypeMonthView" layoutX="499.0" layoutY="358.0" prefHeight="142.0" prefWidth="352.0">
-        <columns>
-          <TableColumn fx:id="apptMonthCol" prefWidth="119.33334350585938" text="Month" />
-          <TableColumn fx:id="typeByMonthCol" minWidth="8.33331298828125" prefWidth="138.6666259765625" text="Type" />
-            <TableColumn fx:id="totalTypeCol" prefWidth="90.666748046875" text="Total Type" />
-        </columns>
-      </TableView>
-      <Line endX="1.33331298828125" endY="-4.3333282470703125" layoutX="143.0" layoutY="45.0" startX="1.33331298828125" startY="10.666671752929688" stroke="#f50ca0" strokeWidth="5.0" />
+        <Line endX="100.0" layoutX="349.0" layoutY="324.0" startX="100.0" startY="173.33334350585938" stroke="#f50ca0"
+              strokeWidth="3.0"/>
+        <TableView fx:id="byTypeMonthView" layoutX="499.0" layoutY="358.0" prefHeight="142.0" prefWidth="352.0">
+            <columns>
+                <TableColumn fx:id="apptMonthCol" prefWidth="119.33334350585938" text="Month"/>
+                <TableColumn fx:id="typeByMonthCol" minWidth="8.33331298828125" prefWidth="138.6666259765625"
+                             text="Type"/>
+                <TableColumn fx:id="totalTypeCol" prefWidth="90.666748046875" text="Total Type"/>
+            </columns>
+        </TableView>
+        <Line endX="1.33331298828125" endY="-4.3333282470703125" layoutX="143.0" layoutY="45.0"
+              startX="1.33331298828125" startY="10.666671752929688" stroke="#f50ca0" strokeWidth="5.0"/>
     </Pane>
     <Label layoutX="980.0" layoutY="64.0" textAlignment="CENTER" textFill="#fcfefc">
         <font>
-            <Font name="Lucida Bright" size="55.0" />
+            <Font name="Lucida Bright" size="55.0"/>
         </font>
     </Label>
     <Pane onMouseClicked="#toCustomers" prefHeight="539.0" prefWidth="214.0" style="-fx-background-color: black;">
         <Pane layoutX="34.0" layoutY="195.0" onMouseClicked="#toAppointments">
             <Label layoutX="43.0" layoutY="3.0" text="Appointments" textFill="WHITE">
                 <font>
-                    <Font name="Gill Sans MT" size="16.0" />
+                    <Font name="Gill Sans MT" size="16.0"/>
                 </font>
             </Label>
             <ImageView fitHeight="25.0" fitWidth="31.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
-                <Image url="@../resources/appointments.png" />
+                <Image url="@../resources/appointments.png"/>
             </ImageView>
         </Pane>
 
-        <Line endX="55.0" layoutX="77.0" layoutY="349.0" startX="1.33331298828125" stroke="#f50ca0" strokeWidth="5.0" />
+        <Line endX="55.0" layoutX="77.0" layoutY="349.0" startX="1.33331298828125" stroke="#f50ca0" strokeWidth="5.0"/>
         <Pane layoutX="34.0" layoutY="251.0">
             <Label layoutX="42.0" layoutY="3.0" text="Customers" textFill="WHITE">
                 <font>
-                    <Font name="Gill Sans MT" size="16.0" />
+                    <Font name="Gill Sans MT" size="16.0"/>
                 </font>
             </Label>
             <ImageView fitHeight="25.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
-                <Image url="@../resources/customers.png" />
+                <Image url="@../resources/customers.png"/>
             </ImageView>
         </Pane>
         <Pane layoutX="34.0" layoutY="315.0">
             <Label layoutX="43.0" layoutY="3.0" text="Reports" textFill="WHITE">
                 <font>
-                    <Font name="Gill Sans MT" size="16.0" />
+                    <Font name="Gill Sans MT" size="16.0"/>
                 </font>
             </Label>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                <Image url="@../resources/reports.png" />
+                <Image url="@../resources/reports.png"/>
             </ImageView>
         </Pane>
         <Pane layoutX="27.0" layoutY="453.0" onMouseClicked="#toCloseApplication">
             <Label layoutX="48.0" layoutY="10.0" text="Logout" textFill="WHITE">
                 <font>
-                    <Font name="Gill Sans MT" size="16.0" />
+                    <Font name="Gill Sans MT" size="16.0"/>
                 </font>
             </Label>
             <ImageView fitHeight="44.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                <Image url="@../resources/arrow-exit.png" />
+                <Image url="@../resources/arrow-exit.png"/>
             </ImageView>
         </Pane>
-        <ImageView fitHeight="107.0" fitWidth="100.0" layoutX="13.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="@../resources/thecakeshop-logo.png" />
+        <ImageView fitHeight="107.0" fitWidth="100.0" layoutX="13.0" layoutY="8.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <Image url="@../resources/thecakeshop-logo.png"/>
         </ImageView>
     </Pane>
 </AnchorPane>
