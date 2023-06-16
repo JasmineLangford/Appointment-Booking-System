@@ -2,7 +2,6 @@ package controller;
 
 import DAO.AppointmentDAO;
 import DAO.UserDAO;
-import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,8 +17,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
- * This class is the controller for login.fxml. The end-user will sign in with their credentials. The operating system
- * being used by the end-user will also determine the timezone, which is displayed below the login button.
+ * This class is the controller for login.fxml. The user will sign in with their credentials. The operating system
+ * being used by the user will also determine the timezone, which is displayed below the login button.
  */
 public class Login implements Initializable {
     @FXML
@@ -47,22 +46,23 @@ public class Login implements Initializable {
 
         usernameLogin.isFocused();
 
+        // Set language
         ResourceBundle rb = ResourceBundle.getBundle("Nat", Locale.getDefault());
         usernameLabel.setText(rb.getString("usernameLabel"));
         passwordLabel.setText(rb.getString("passwordLabel"));
         timeZoneLabel.setText(rb.getString("timezone"));
         loginButtonLabel.setText(rb.getString("loginButtonLabel"));
 
-        // set input validation
+        // Input validation display set to hide on launch
         validationIcon.setVisible(false);
         validationLabel.setVisible(false);
 
-        // set end-user timezone
+        // Display user timezone
         zoneID.setText(ZoneId.systemDefault().toString());
     }
 
     /**
-     * This method navigates the end-user to the appointments screen upon successful login.
+     * This method navigates the user to the appointments screen upon successful login.
      * Error message is displayed if login is unsuccessful.
      *
      * @param actionEvent Login button is clicked.
@@ -70,11 +70,11 @@ public class Login implements Initializable {
      */
     public void loginButton(ActionEvent actionEvent) throws IOException {
 
-        // end-user input
+        // User input text fields
         String username = usernameLogin.getText();
         String password = passwordLogin.getText();
 
-        // check database for valid user
+        // Check database for valid user
         boolean isValidUser = UserDAO.validateUser(username, password);
 
         if (isValidUser) {
@@ -89,7 +89,7 @@ public class Login implements Initializable {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             boolean fifteenMinAppt = false;
 
-            for(Appointment a : checkAppointments) {
+            for (Appointment a : checkAppointments) {
                 if ((a.getStart().isAfter(currentDT) || a.getStart().isEqual(currentDT)) &&
                         ((a.getStart().isBefore(currentDTFifteen) || a.getStart().isEqual(currentDTFifteen)))) {
                     Alert fifteenAlertTrue = new Alert(Alert.AlertType.INFORMATION, "You have an upcoming " +
@@ -103,7 +103,7 @@ public class Login implements Initializable {
                     break;
                 }
             }
-            if(!fifteenMinAppt){
+            if (!fifteenMinAppt) {
                 Alert fifteenAlertFalse = new Alert(Alert.AlertType.INFORMATION, "There are no upcoming " +
                         "appointments.", ButtonType.OK);
                 fifteenAlertFalse.setTitle("Appointment Booking System");
@@ -125,12 +125,5 @@ public class Login implements Initializable {
             validationLabel.setVisible(true);
             validationLabel.setText("Username and/or password is incorrect.");
         }
-    }
-
-    /**
-     * This method closes the login screen.
-     */
-    public void login_exit() {
-        Platform.exit();
     }
 }
