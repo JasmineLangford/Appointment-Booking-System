@@ -9,16 +9,16 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
 import java.util.Objects;
 
 /**
  * This class creates the appointment booking application.
  */
-
 public class Main extends Application {
 
     /**
-     * This method is called to run the application.
+     * This method is called to run the application and provide database connection.
      */
     public static void main(String[] args) {
 
@@ -42,7 +42,7 @@ public class Main extends Application {
         primaryStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/resources" +
                 "/thecakeshop-launch.png"))));
 
-        // Set login scene
+        // Load login screen
         AnchorPane root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/Login.fxml")));
         Scene scene = new Scene(root, 600, 380);
         primaryStage.initStyle(StageStyle.DECORATED);
@@ -51,7 +51,6 @@ public class Main extends Application {
         scene.setFill(Color.TRANSPARENT);
         root.setStyle("-fx-background-color: transparent;");
         root.setStyle("-fx-background-radius: 30px 30px 30px 30px;");
-
         primaryStage.centerOnScreen();
         primaryStage.setResizable(false);
         primaryStage.show();
